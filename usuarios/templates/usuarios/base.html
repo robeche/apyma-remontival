@@ -1,0 +1,149 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "Apyma Remontival" %}{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'usuarios/estilo.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-modern">
+        <div class="header-main">
+            <div class="container-fluid">
+                <div class="row align-items-center py-3">
+                    <div class="col-auto">
+                        <img src="{{ MEDIA_URL }}logos/layout_set_logo.jpg" alt="Logo CP Remontival" class="logo">
+                    </div>
+                    <div class="col">
+                        <h1 class="mb-1">CP Remontival IP</h1>
+                        <p class="header-subtitle mb-0">{% trans "Apyma - Asociación de Padres y Madres de Alumnos" %}</p>
+                    </div>
+                    <div class="col-auto d-flex align-items-center">
+                        <!-- Selector de idioma -->
+                        <div class="me-3">
+                            <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                                <select name="language" onchange="this.form.submit()" class="form-select form-select-sm" style="width: auto;">
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% for lang_code, lang_name in LANGUAGES %}
+                                        <option value="{{ lang_code }}"{% if lang_code == LANGUAGE_CODE %} selected{% endif %}>
+                                            {{ lang_name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                        
+                        {% if user.is_authenticated %}
+                            <div class="d-flex align-items-center">
+                                <span class="me-3"><i class="bi bi-person-circle"></i> {{ user.username }}</span>
+                                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
+                                    <i class="bi bi-box-arrow-right"></i> {% trans "Salir" %}
+                                </a>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-light">
+                                <i class="bi bi-person-lock"></i> {% trans "Área de Socios/as" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="bi bi-house"></i> {% trans "Inicio" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-people"></i> {% trans "La Apyma" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-newspaper"></i> {% trans "Noticias" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-calendar-event"></i> {% trans "Actividades" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-trophy"></i> {% trans "Extraescolares" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contacto' %}"><i class="bi bi-telephone"></i> {% trans "Contacto" %}</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2"></i> {% trans "Mi Panel" %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="container-fluid px-4 py-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-secondary text-white mt-5">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="bi bi-envelope"></i> {% trans "Contacto" %}</h5>
+                    <p class="mb-1">
+                        <a href="mailto:apyma.remontival@gmail.com" class="text-white">
+                            apyma.remontival@gmail.com
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="bi bi-building"></i> CP Remontival IP</h5>
+                    <p class="mb-1">C/ Remontival 7, 31200 Estella-Lizarra</p>
+                    <p class="mb-1">📞 948 550 545</p>
+                </div>
+                <div class="col-md-4">
+                    <h5><i class="bi bi-link-45deg"></i> {% trans "Enlaces" %}</h5>
+                    <p class="mb-1">
+                        <a href="https://cpremontivalip.web.educacion.navarra.es/" target="_blank" class="text-white">
+                            {% trans "Web oficial del colegio" %}
+                        </a>
+                    </p>
+                    <p class="mb-1">
+                        <a href="https://www.educacion.navarra.es/" target="_blank" class="text-white">
+                            {% trans "Departamento de Educación" %}
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col text-center">
+                    <small>© {% now "Y" %} Apyma Remontival | {% trans "Todos los derechos reservados" %}</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

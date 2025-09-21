@@ -1,0 +1,171 @@
+{% extends 'usuarios/base.html' %}
+{% block title %}Dashboard - Área de Socios{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- Bienvenida -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-modern fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <h1 class="h3 mb-3">
+                        <i class="bi bi-house-heart text-primary"></i> 
+                        ¡Bienvenido/a al área de socios, {{ user.username }}!
+                    </h1>
+                    <p class="lead">Gestiona todos los servicios y actividades para tus hijos en el CP Remontival IP desde aquí.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Servicios disponibles -->
+    <div class="row g-4">
+        <!-- Actividades Extraescolares -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-modern service-card h-100 fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h5 class="card-title">Actividades Extraescolares</h5>
+                    <p class="card-text">Inscribe a tus hijos en actividades extraescolares: deportes, idiomas, música y mucho más.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-success-modern btn-modern">
+                            <i class="bi bi-trophy"></i> Ver actividades
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aula Matinal -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-modern service-card h-100 fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-sunrise"></i>
+                    </div>
+                    <h5 class="card-title">Aula Matinal</h5>
+                    <p class="card-text">Solicita el servicio de aula matinal para facilitar la conciliación familiar.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-warning-modern btn-modern">
+                            <i class="bi bi-clock"></i> Solicitar plaza
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividades Apyma -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-modern service-card h-100 fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <h5 class="card-title">Actividades Apyma</h5>
+                    <p class="card-text">Participa en las actividades organizadas por la Apyma durante el curso escolar.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-info-modern btn-modern">
+                            <i class="bi bi-calendar-heart"></i> Ver calendario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagos y Cuotas -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-modern service-card h-100 fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+                    <h5 class="card-title">Pagos y Cuotas</h5>
+                    <p class="card-text">Consulta y gestiona los pagos de servicios y cuotas de la Apyma de manera fácil y segura.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-secondary-modern btn-modern">
+                            <i class="bi bi-receipt"></i> Ver pagos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentos -->
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-modern service-card h-100 fade-in-up">
+                <div class="card-body card-body-modern text-center">
+                    <div class="service-icon mb-3">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <h5 class="card-title">Documentos</h5>
+                    <p class="card-text">Accede a circulares, autorizaciones y documentos importantes del colegio y la Apyma.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-primary-modern btn-modern">
+                            <i class="bi bi-folder2-open"></i> Ver documentos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimas noticias -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card card-modern fade-in-up">
+                <div class="card-header card-header-modern text-center">
+                    <h4><i class="bi bi-newspaper"></i> Últimas Noticias</h4>
+                </div>
+                <div class="card-body card-body-modern text-center">
+                    <p class="mb-4">Mantente informado/a de todas las novedades del colegio y la Apyma.</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">
+                        <i class="bi bi-list-ul"></i> Ver todas las noticias
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="row mt-4 mb-5">
+        <div class="col-12">
+            <div class="card card-modern fade-in-up">
+                <div class="card-header card-header-modern text-center">
+                    <h4><i class="bi bi-lightning"></i> Acciones Rápidas</h4>
+                </div>
+                <div class="card-body card-body-modern">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-primary btn-modern w-100">
+                                <i class="bi bi-telephone"></i><br>
+                                <small>Contactar colegio</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-success btn-modern w-100">
+                                <i class="bi bi-calendar-check"></i><br>
+                                <small>Calendario escolar</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-warning btn-modern w-100">
+                                <i class="bi bi-question-circle"></i><br>
+                                <small>Ayuda y soporte</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'logout' %}" class="btn btn-outline-secondary btn-modern w-100">
+                                <i class="bi bi-box-arrow-right"></i><br>
+                                <small>Cerrar sesión</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

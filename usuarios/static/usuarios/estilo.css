@@ -1,0 +1,395 @@
+/* Estilos personalizados para la Apyma con Bootstrap */
+
+/* Variables de colores oficiales */
+:root {
+    --primary-white: #ffffff;
+    --primary-green: #4caf50;
+    --dark-gray: #495057;
+    --dark-green: #388e3c;
+    --light-gray: #f8f9fa;
+    --text-gray: #6c757d;
+    --medium-gray: #6c757d;
+    --border-gray: #dee2e6;
+}
+
+/* Header moderno */
+.header-modern {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-top {
+    background: var(--dark-gray);
+    color: white;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.header-main {
+    background: linear-gradient(135deg, var(--primary-white) 0%, var(--light-gray) 100%);
+    color: var(--dark-gray);
+    border-bottom: 2px solid var(--border-gray);
+}
+
+.header-main h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.header-subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    background: white;
+    padding: 5px;
+}
+
+/* Navegación mejorada */
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    transform: translateY(-1px);
+}
+
+/* Cards modernas */
+.card-modern {
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.card-modern:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-header-modern {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+    color: white;
+    border: none;
+    padding: 1.5rem 2rem;
+}
+
+.card-header-modern h2,
+.card-header-modern h3 {
+    color: white;
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-body-modern {
+    padding: 2rem;
+}
+
+/* Servicios grid moderno */
+.service-card {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    padding: 2rem;
+    height: 100%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-green);
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-left-color: var(--dark-gray);
+}
+
+.service-card h3 {
+    color: var(--dark-gray);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.service-card p {
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Botones modernos */
+.btn-modern {
+    border-radius: 25px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-modern {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+    color: white;
+}
+
+.btn-primary-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(73, 80, 87, 0.4);
+    color: white;
+}
+
+.btn-success-modern {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    color: white;
+}
+
+.btn-success-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    color: white;
+}
+
+/* Formularios modernos */
+.form-modern {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-modern .form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-modern .form-control:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.form-modern .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, var(--light-gray) 0%, white 100%);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.hero-section h1 {
+    color: var(--dark-gray);
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Footer moderno */
+footer h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+footer a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Responsive mejoras */
+@media (max-width: 768px) {
+    .header-main h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .service-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-body-modern {
+        padding: 1.5rem;
+    }
+}
+
+/* Utilidades adicionales */
+.text-gradient {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+}
+
+/* Estilos para el carousel en Hero Section */
+#heroCarousel {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin: 0 auto;
+}
+
+#heroCarousel .carousel-item img {
+    transition: transform 0.6s ease;
+}
+
+#heroCarousel .carousel-item.active img {
+    transform: scale(1.02);
+}
+
+#heroCarousel .carousel-caption {
+    background: rgba(0,0,0,0.5);
+    border-radius: 0.25rem;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Slide de texto personalizado */
+.carousel-text-slide {
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-text-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(73, 80, 87, 0.05) 25%, transparent 25%), 
+                linear-gradient(-45deg, rgba(73, 80, 87, 0.05) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, rgba(73, 80, 87, 0.05) 75%), 
+                linear-gradient(-45deg, transparent 75%, rgba(73, 80, 87, 0.05) 75%);
+    background-size: 30px 30px;
+    background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+    opacity: 0.4;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+.carousel-text-slide h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.carousel-text-slide .lead {
+    font-size: 1.2rem;
+    color: #495057;
+    text-shadow: none;
+    line-height: 1.6;
+}
+
+#heroCarousel .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.5);
+    border: 2px solid white;
+}
+
+#heroCarousel .carousel-indicators button.active {
+    background-color: var(--primary-green);
+}
+
+#heroCarousel .carousel-control-prev,
+#heroCarousel .carousel-control-next {
+    width: 5%;
+    background: rgba(0,0,0,0.1);
+    border-radius: 0.25rem;
+    margin: 10px;
+}
+
+#heroCarousel .carousel-control-prev-icon,
+#heroCarousel .carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+/* Responsive adjustments for hero section */
+@media (max-width: 991.98px) {
+    .hero-section .row {
+        flex-direction: column-reverse;
+    }
+    
+    .hero-section .col-lg-6:first-child {
+        margin-top: 2rem;
+        text-align: center;
+    }
+}

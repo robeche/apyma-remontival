@@ -1,0 +1,56 @@
+{% extends 'usuarios/base.html' %}
+{% load form_filters %}
+{% load i18n %}
+{% block title %}{% trans "Área de Socios/as - Apyma Remontival" %}{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card card-modern fade-in-up">
+            <div class="card-header card-header-modern text-center">
+                <h2><i class="bi bi-person-lock"></i> {% trans "Área de Socios/as" %}</h2>
+            </div>
+            <div class="card-body card-body-modern">
+                <p class="text-center mb-4">{% trans "Accede a tu área personal para gestionar las actividades de tus hijos, extraescolares y servicios exclusivos para socios." %}</p>
+                
+                <form method="post" class="form-modern">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            <i class="bi bi-person"></i> {% trans "Nombre de usuario" %}:
+                        </label>
+                        {{ form.username|add_class:"form-control" }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                            <i class="bi bi-key"></i> {% trans "Contraseña" %}:
+                        </label>
+                        {{ form.password|add_class:"form-control" }}
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary-modern btn-modern btn-lg" type="submit">
+                            <i class="bi bi-box-arrow-in-right"></i> {% trans "Acceder al área de socios/as" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-modern fade-in-up mt-4">
+            <div class="card-body text-center">
+                <h3 class="card-title text-gradient">{% trans "¿Todavía no eres socio/a?" %}</h3>
+                <p class="card-text">{% trans "Únete a la Apyma Remontival y disfruta de todos los servicios y ventajas que ofrecemos a nuestros socios." %}</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-success-modern btn-modern">
+                        <i class="bi bi-person-plus"></i> {% trans "Registrarse como nuevo socio/a" %}
+                    </a>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> {% trans "Volver al inicio" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

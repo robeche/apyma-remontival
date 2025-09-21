@@ -1,0 +1,203 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Contacto - Apyma Remontival" %}{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans "Inicio" %}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Contacto" %}</li>
+    </ol>
+</nav>
+
+<!-- Header -->
+<div class="hero-section fade-in-up mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center bg-light p-4 rounded shadow-sm">
+                <h1 class="mb-3"><i class="bi bi-envelope-heart text-primary"></i> {% trans "Contacta con la Apyma" %}</h1>
+                <p class="lead text-muted">{% trans "¿Tienes alguna consulta, sugerencia o quieres más información? ¡Estamos aquí para ayudarte!" %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mensajes de éxito/error -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <!-- Formulario de contacto -->
+    <div class="col-lg-8">
+        <div class="card card-modern fade-in-up">
+            <div class="card-header card-header-modern">
+                <h3><i class="bi bi-chat-left-text"></i> {% trans "Envíanos un mensaje" %}</h3>
+            </div>
+            <div class="card-body card-body-modern">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Nombre y apellidos -->
+                    <div class="mb-3">
+                        <label for="{{ form.nombre_apellidos.id_for_label }}" class="form-label">
+                            <i class="bi bi-person"></i> {{ form.nombre_apellidos.label }}
+                        </label>
+                        {{ form.nombre_apellidos }}
+                        {% if form.nombre_apellidos.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.nombre_apellidos.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Asunto -->
+                    <div class="mb-3">
+                        <label for="{{ form.asunto.id_for_label }}" class="form-label">
+                            <i class="bi bi-tag"></i> {{ form.asunto.label }}
+                        </label>
+                        {{ form.asunto }}
+                        {% if form.asunto.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.asunto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email de contacto -->
+                    <div class="mb-3">
+                        <label for="{{ form.email_contacto.id_for_label }}" class="form-label">
+                            <i class="bi bi-envelope"></i> {{ form.email_contacto.label }}
+                        </label>
+                        {{ form.email_contacto }}
+                        {% if form.email_contacto.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.email_contacto.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if form.email_contacto.help_text %}
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> {{ form.email_contacto.help_text }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Mensaje -->
+                    <div class="mb-3">
+                        <label for="{{ form.mensaje.id_for_label }}" class="form-label">
+                            <i class="bi bi-chat-square-text"></i> {{ form.mensaje.label }}
+                        </label>
+                        {{ form.mensaje }}
+                        {% if form.mensaje.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.mensaje.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i> {% trans "Mínimo 10 caracteres. Sé lo más específico posible para ayudarnos a responder mejor." %}
+                        </div>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary-modern btn-modern btn-lg">
+                            <i class="bi bi-send"></i> {% trans "Enviar mensaje" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información de contacto -->
+    <div class="col-lg-4">
+        <div class="card card-modern fade-in-up">
+            <div class="card-header card-header-modern">
+                <h3><i class="bi bi-info-circle"></i> {% trans "Información de contacto" %}</h3>
+            </div>
+            <div class="card-body card-body-modern">
+                <div class="mb-3">
+                    <h5><i class="bi bi-envelope text-primary"></i> {% trans "Email" %}</h5>
+                    <p class="mb-0">
+                        <a href="mailto:apyma.remontival@gmail.com" class="text-decoration-none">
+                            apyma.remontival@gmail.com
+                        </a>
+                    </p>
+                </div>
+
+                <div class="mb-3">
+                    <h5><i class="bi bi-calendar3 text-success"></i> {% trans "Reuniones" %}</h5>
+                    <p class="mb-0">{% trans "Primer martes de cada mes a las 16:00" %}</p>
+                </div>
+
+                <div class="mb-3">
+                    <h5><i class="bi bi-clock text-info"></i> {% trans "Tiempo de respuesta" %}</h5>
+                    <p class="mb-0">{% trans "Normalmente respondemos en 24-48 horas laborables" %}</p>
+                </div>
+
+                <hr>
+
+                <div class="mb-3">
+                    <h5><i class="bi bi-building text-secondary"></i> CP Remontival IP</h5>
+                    <p class="mb-1">
+                        <i class="bi bi-geo-alt"></i> C/ Remontival 7<br>
+                        31200 Estella-Lizarra, Navarra
+                    </p>
+                    <p class="mb-1">
+                        <i class="bi bi-telephone"></i> 948 550 545
+                    </p>
+                    <p class="mb-0">
+                        <i class="bi bi-envelope"></i> 
+                        <a href="mailto:cpremont@educacion.navarra.es" class="text-decoration-none">
+                            cpremont@educacion.navarra.es
+                        </a>
+                    </p>
+                </div>
+
+                <a href="https://cpremontivalip.web.educacion.navarra.es/" target="_blank" class="btn btn-outline-primary btn-modern w-100">
+                    <i class="bi bi-globe"></i> {% trans "Web oficial del colegio" %}
+                </a>
+            </div>
+        </div>
+
+        <!-- Consejos para el contacto -->
+        <div class="card card-modern fade-in-up mt-3">
+            <div class="card-header card-header-modern">
+                <h4><i class="bi bi-lightbulb"></i> {% trans "Consejos" %}</h4>
+            </div>
+            <div class="card-body card-body-modern">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success"></i>
+                        {% trans "Sé específico/a en tu consulta" %}
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success"></i>
+                        {% trans "Indica si eres socio/a de la Apyma" %}
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check-circle text-success"></i>
+                        {% trans "Para emergencias, contacta directamente con el colegio" %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

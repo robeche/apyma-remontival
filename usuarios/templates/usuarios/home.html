@@ -1,0 +1,194 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Apyma Remontival - CP Remontival IP" %}{% endblock %}
+{% block content %}
+
+<!-- Hero Section with Carousel -->
+<div class="hero-section fade-in-up">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Carousel -->
+            <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="6" aria-label="Slide 7"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="7" aria-label="Slide 8"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="8" aria-label="Slide 9"></button>
+                    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="9" aria-label="Slide 10"></button>
+                </div>
+                <div class="carousel-inner">
+                    <!-- Slide 1: Imagen -->
+                    
+
+                    <div class="carousel-item active">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma1_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma2_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma3_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma4_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma5_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma6_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma7_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/SomosApyma8_noback.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{{ MEDIA_URL }}images_carrousel/APYMA.png" class="d-block w-100 rounded shadow" alt="{% trans 'Apyma Remontival' %}" style="height: 625px; object-fit: contain; background-color: #f8f9fa;">
+                    </div>
+                    
+
+                    <!-- Slide 2: Texto de bienvenida -->
+                    <div class="carousel-item">
+                        <div class="carousel-text-slide d-flex align-items-center justify-content-center" style="height: 625px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border: 1px solid #dee2e6;">
+                            <div class="text-center p-4">
+                                <h1 class="mb-4 text-gradient"> {% trans "Bienvenidos a la Apyma Remontival" %}</h1>
+                                <p class="lead text-dark">{% trans "La Asociación de Padres y Madres de Alumnos del CP Remontival IP trabaja cada día para mejorar la experiencia educativa de nuestros hijos e hijas." %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">{% trans "Anterior" %}</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">{% trans "Siguiente" %}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Servicios -->
+<div class="card card-modern fade-in-up">
+    <div class="card-header card-header-modern">
+        <h2><i class="bi bi-gear-fill"></i> {% trans "Servicios de la Apyma" %}</h2>
+    </div>
+    <div class="card-body card-body-modern">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-trophy-fill text-primary"></i> {% trans "Extraescolares" %}</h3>
+                    <p>{% trans "Amplia oferta de actividades extraescolares: deportes, idiomas, música, informática y mucho más." %}</p>
+                    <p><strong><i class="bi bi-clock"></i> {% trans "Horario" %}:</strong> 16:00 - 17:00 / 17:00 - 18:00</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Ver actividades" %}</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-sunrise-fill text-info"></i> {% trans "Aula Matinal" %}</h3>
+                    <p>{% trans "Servicio de acogida temprana para facilitar la conciliación familiar." %}</p>
+                    <p><strong><i class="bi bi-clock"></i> {% trans "Horario" %}:</strong> 07:30 - 09:00</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Solicitar plaza" %}</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-calendar-event-fill text-success"></i> {% trans "Actividades y Eventos" %}</h3>
+                    <p>{% trans "Organizamos festivales, excursiones, talleres para familias y actividades especiales durante el curso." %}</p>
+                    <p><strong><i class="bi bi-star-fill"></i> {% trans "Próximo evento" %}:</strong> {% trans "Fiesta de Otoño" %}</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Ver calendario" %}</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-book-fill text-secondary"></i> {% trans "Apoyo Educativo" %}</h3>
+                    <p>{% trans "Colaboramos con el centro en proyectos educativos y proporcionamos recursos adicionales para el aprendizaje." %}</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Conocer proyectos" %}</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-people-fill text-secondary"></i> {% trans "Participación Familiar" %}</h3>
+                    <p>{% trans "Fomentamos la participación de las familias en la vida escolar y representamos sus intereses." %}</p>
+                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Únete a nosotros" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Área de Socios -->
+<div class="card card-modern fade-in-up">
+    <div class="card-header card-header-modern">
+        <h2><i class="bi bi-person-lock"></i> {% trans "Área de Socios/as" %}</h2>
+    </div>
+    <div class="card-body card-body-modern text-center">
+        <p class="lead">{% trans "Si ya eres socio/a de la Apyma, accede a tu área personal para gestionar inscripciones, pagos y servicios exclusivos." %}</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+            <a href="{% url 'login' %}" class="btn btn-primary-modern btn-modern btn-lg">
+                <i class="bi bi-box-arrow-in-right"></i> {% trans "Acceder al área de socios/as" %}
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-success-modern btn-modern btn-lg">
+                <i class="bi bi-person-plus"></i> {% trans "Hacerse socio/a" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Contacto -->
+<div class="card card-modern fade-in-up">
+    <div class="card-header card-header-modern">
+        <h2><i class="bi bi-telephone-fill"></i> {% trans "Contacto e información" %}</h2>
+    </div>
+    <div class="card-body card-body-modern">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-envelope-heart text-secondary"></i> {% trans "Datos de contacto de la Apyma" %}</h3>
+                    <p><strong><i class="bi bi-envelope"></i> Email:</strong> 
+                        <a href="mailto:apyma.remontival@gmail.com" class="text-decoration-none">apyma.remontival@gmail.com</a>
+                    </p>
+                    <p><strong><i class="bi bi-calendar3"></i> {% trans "Reuniones" %}:</strong> {% trans "Primer martes de cada mes a las 16:00" %}</p>
+                    <p><strong><i class="bi bi-person-badge"></i> {% trans "Presidente/a" %}:</strong> [{% trans "Nombre del presidente/a" %}]</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="service-card h-100">
+                    <h3><i class="bi bi-building text-primary"></i> CP Remontival IP</h3>
+                    <p><strong><i class="bi bi-geo-alt"></i> {% trans "Dirección" %}:</strong> C/ Remontival 7<br>31200 Estella-Lizarra, Navarra</p>
+                    <p><strong><i class="bi bi-telephone"></i> {% trans "Teléfono" %}:</strong> 948 550 545</p>
+                    <p><strong><i class="bi bi-envelope"></i> {% trans "Email colegio" %}:</strong> 
+                        <a href="mailto:cpremont@educacion.navarra.es" class="text-decoration-none">cpremont@educacion.navarra.es</a>
+                    </p>
+                    <a href="https://cpremontivalip.web.educacion.navarra.es/" target="_blank" class="btn btn-primary-modern btn-modern">
+                        <i class="bi bi-globe"></i> {% trans "Web oficial del colegio" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
