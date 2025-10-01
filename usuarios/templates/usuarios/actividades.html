@@ -1,0 +1,1253 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Actividades" %} - Apyma Remontival{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header de Actividades -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-modern">
+                <div class="card-header card-header-modern text-center">
+                    <h1 class="mb-3">
+                        <i class="bi bi-calendar-event text-primary me-2"></i>
+                        {% trans "Calendario de Actividades" %}
+                    </h1>
+                    <p class="lead mb-0">
+                        {% trans "Consulta todas las actividades, eventos y reuniones programadas" %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón para crear actividad (solo para staff) -->
+    {% if is_staff %}
+    <div class="row mb-4">
+        <div class="col-12 text-end">
+            <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#crearActividadModal">
+                <i class="bi bi-plus-circle me-2"></i>
+                {% trans "Crear Nueva Actividad" %}
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Navegación del Calendario -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card card-modern">
+                <div class="card-body text-center">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="?year={{ prev_year }}&month={{ prev_month }}" 
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-chevron-left"></i> {% trans "Mes anterior" %}
+                        </a>
+                        
+                        <h2 class="mb-0 text-primary">
+                            {{ month_name }} {{ year }}
+                        </h2>
+                        
+                        <a href="?year={{ next_year }}&month={{ next_month }}" 
+                           class="btn btn-outline-primary">
+                            {% trans "Mes siguiente" %} <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendario y Panel de Detalles -->
+    <div class="row">
+        <!-- Calendario (siempre en col-lg-8 para dejar espacio al panel) -->
+        <div class="col-lg-8" id="calendario-container">
+            <div class="card card-modern">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0" style="table-layout: fixed;">
+                            <!-- Encabezado con días de la semana -->
+                            <thead class="table-primary">
+                                <tr>
+                                    {% for day_name in weekday_names %}
+                                    <th class="text-center py-3" style="width: 14.28%;">
+                                        <strong>{{ day_name }}</strong>
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            
+                            <!-- Cuerpo del calendario -->
+                            <tbody>
+                                {% for week in month_days %}
+                                <tr style="height: 120px;">
+                                    {% for day, weekday in week %}
+                                    <td class="p-2 align-top calendar-day {% if day == today.day and month == today.month and year == today.year %}bg-light border-primary border-2{% endif %} {% if day != 0 %}clickable-day{% endif %}" 
+                                        {% if day != 0 %}
+                                        data-day="{{ day }}" 
+                                        data-month="{{ month }}" 
+                                        data-year="{{ year }}"
+                                        data-activities='{% for dia_act, lista_act in actividades.items %}{% if dia_act == day %}{{ lista_act|length }}{% endif %}{% endfor %}'
+                                        style="cursor: pointer;"
+                                        {% endif %}>
+                                        {% if day != 0 %}
+                                            <!-- Número del día -->
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <span class="badge {% if day == today.day and month == today.month and year == today.year %}bg-primary{% else %}bg-secondary{% endif %}">
+                                                    {{ day }}
+                                                </span>
+                                                <!-- Indicador de cantidad de actividades -->
+                                                {% for dia_act, lista_act in actividades.items %}
+                                                    {% if dia_act == day %}
+                                                        {% if lista_act|length > 0 %}
+                                                        <span class="badge bg-info rounded-pill">{{ lista_act|length }}</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            
+                                            <!-- Actividades del día -->
+                                            {% for dia_act, lista_act in actividades.items %}
+                                                {% if dia_act == day %}
+                                                    <div class="actividades-del-dia">
+                                                    {% for actividad in lista_act %}
+                                                    <div class="mb-1">
+                                                        <div class="badge {% if actividad.tipo == 'taller' %}bg-success{% elif actividad.tipo == 'excursion' %}bg-info{% elif actividad.tipo == 'reunion' %}bg-warning text-dark{% elif actividad.tipo == 'festival' %}bg-danger{% else %}bg-secondary{% endif %} w-100 text-start small" 
+                                                             style="font-size: 0.7rem; white-space: normal;">
+                                                            <div class="fw-bold">{{ actividad.titulo }}</div>
+                                                            <div><i class="bi bi-clock"></i> {{ actividad.hora }}</div>
+                                                        </div>
+                                                    </div>
+                                                    {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Detalles (siempre visible) -->
+        <div class="col-lg-4" id="panel-detalles">
+            <div class="card card-modern">
+                <div class="card-header card-header-modern d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-calendar-day me-2"></i>
+                        <span id="fecha-seleccionada">Detalles del día</span>
+                    </h5>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" id="cerrar-panel">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+                <div class="card-body" id="contenido-detalles">
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-hand-index" style="font-size: 3rem;"></i>
+                        <p class="mt-2 mb-0">Haz clic en un día del calendario para ver sus actividades</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leyenda de tipos de actividades -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card card-modern">
+                <div class="card-header card-header-modern">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        {% trans "Tipos de Actividades" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-success me-2">●</span>
+                            {% trans "Talleres" %}
+                        </div>
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-info me-2">●</span>
+                            {% trans "Excursiones" %}
+                        </div>
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-warning me-2">●</span>
+                            {% trans "Reuniones" %}
+                        </div>
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-danger me-2">●</span>
+                            {% trans "Festivales" %}
+                        </div>
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-secondary me-2">●</span>
+                            {% trans "Eventos sociales" %}
+                        </div>
+                        <div class="col-md-2 col-6 mb-2">
+                            <span class="badge bg-primary me-2">●</span>
+                            {% trans "Día actual" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card card-modern">
+                <div class="card-body text-center">
+                    <p class="mb-2">
+                        <i class="bi bi-envelope me-2 text-primary"></i>
+                        {% trans "¿Tienes alguna sugerencia para una actividad?" %}
+                    </p>
+                    <a href="{% url 'contacto' %}" class="btn btn-primary-modern btn-modern">
+                        <i class="bi bi-chat-dots me-2"></i>
+                        {% trans "Contactanos" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para la funcionalidad del calendario -->
+<script>
+// Variable global de actividades (disponible para todas las funciones)
+const actividades = {{ actividades_json|safe }};
+
+// Variables globales del DOM
+let calendario, panelDetalles, fechaSeleccionada, contenidoDetalles, cerrarPanel;
+
+// Nombres de los meses en español
+const meses = [
+    '', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
+
+// Función global para mostrar detalles del día
+function mostrarDetallesDia(day, month, year) {
+    const fechaKey = `${year},${month},${day}`;
+    const actividadesDelDia = actividades[fechaKey] || [];
+    
+    // Actualizar título
+    fechaSeleccionada.textContent = `${day} de ${meses[month]} ${year}`;
+    
+    // Crear contenido
+    let contenido = '';
+    
+    if (actividadesDelDia.length === 0) {
+        contenido = `
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-calendar-x" style="font-size: 3rem;"></i>
+                <p class="mt-2 mb-0">No hay actividades programadas para este día</p>
+            </div>
+        `;
+    } else {
+        contenido = `<div class="actividades-lista">`;
+        
+        actividadesDelDia.forEach(actividad => {
+            const tipoColor = {
+                'taller': 'success',
+                'excursion': 'info', 
+                'reunion': 'warning',
+                'festival': 'danger',
+                'evento_social': 'secondary'
+            };
+            
+            const tipoTexto = {
+                'taller': 'Taller',
+                'excursion': 'Excursión', 
+                'reunion': 'Reunión',
+                'festival': 'Festival',
+                'evento_social': 'Evento Social'
+            };
+            
+            const color = tipoColor[actividad.tipo] || 'secondary';
+            const tipo = tipoTexto[actividad.tipo] || actividad.tipo;
+            
+            contenido += `
+                <div class="card mb-3 actividad-item" data-actividad-id="${actividad.id}" style="cursor: pointer;" title="Haz clic para ver detalles">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">${actividad.titulo}</h6>
+                            <span class="badge bg-${color}">${tipo}</span>
+                        </div>
+                        <p class="card-text text-muted mb-2">
+                            <i class="bi bi-clock me-1"></i> ${actividad.hora}
+                            ${actividad.hora_fin ? ` - ${actividad.hora_fin}` : ''}
+                        </p>
+                        ${actividad.donde ? `
+                            <p class="card-text text-muted mb-2">
+                                <i class="bi bi-geo-alt me-1"></i> ${actividad.donde}
+                            </p>
+                        ` : ''}
+                        ${actividad.descripcion ? `
+                            <p class="card-text small">${actividad.descripcion}</p>
+                        ` : ''}
+                        <div class="text-end">
+                            <small class="text-muted">
+                                <i class="bi bi-eye me-1"></i> Clic para ver detalles
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        contenido += '</div>';
+    }
+    
+    contenidoDetalles.innerHTML = contenido;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar elementos del DOM
+    calendario = document.getElementById('calendario-container');
+    panelDetalles = document.getElementById('panel-detalles');
+    fechaSeleccionada = document.getElementById('fecha-seleccionada');
+    contenidoDetalles = document.getElementById('contenido-detalles');
+    cerrarPanel = document.getElementById('cerrar-panel');
+    
+    // Función para cerrar el panel
+    function cerrarPanelDetalles() {
+        // No ocultar el panel, solo restaurar el contenido por defecto
+        fechaSeleccionada.textContent = 'Detalles del día';
+        contenidoDetalles.innerHTML = `
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-hand-index" style="font-size: 3rem;"></i>
+                <p class="mt-2 mb-0">Haz clic en un día del calendario para ver sus actividades</p>
+            </div>
+        `;
+        
+        // Quitar selección visual de días
+        document.querySelectorAll('.calendar-day.selected').forEach(day => {
+            day.classList.remove('selected');
+        });
+    }
+    
+    // Event listeners para días clickeables
+    document.querySelectorAll('.clickable-day').forEach(day => {
+        day.addEventListener('click', function() {
+            const dayNum = this.dataset.day;
+            const month = this.dataset.month;
+            const year = this.dataset.year;
+            
+            // Quitar selección anterior
+            document.querySelectorAll('.calendar-day.selected').forEach(d => {
+                d.classList.remove('selected');
+            });
+            
+            // Marcar día seleccionado
+            this.classList.add('selected');
+            
+            // Mostrar detalles
+            mostrarDetallesDia(dayNum, month, year);
+        });
+        
+        // Efecto hover
+        day.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '#f8f9fa';
+            }
+        });
+        
+        day.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '';
+            }
+        });
+    });
+    
+    // Event listener para cerrar panel
+    cerrarPanel.addEventListener('click', cerrarPanelDetalles);
+    
+    // Event listener para cerrar con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !panelDetalles.classList.contains('d-none')) {
+            cerrarPanelDetalles();
+        }
+    });
+    
+    // Seleccionar automáticamente el día de hoy si estamos en el mes actual
+    const today = new Date();
+    const currentYear = {{ year }};
+    const currentMonth = {{ month }};
+    
+    if (today.getFullYear() === currentYear && (today.getMonth() + 1) === currentMonth) {
+        const todayDay = today.getDate();
+        const todayElement = document.querySelector(`[data-day="${todayDay}"][data-month="${currentMonth}"][data-year="${currentYear}"]`);
+        
+        if (todayElement) {
+            // Marcar como seleccionado
+            todayElement.classList.add('selected');
+            
+            // Mostrar detalles del día actual
+            mostrarDetallesDia(todayDay, currentMonth, currentYear);
+        }
+    }
+});
+
+// Función global para mostrar toasts (disponible para todos)
+function showToast(type, message) {
+    // Crear toast simple (puedes mejorarlo con Bootstrap toast)
+    const alertType = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alertHtml = `
+        <div class="alert ${alertType} alert-dismissible fade show position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', alertHtml);
+    
+    // Auto-remover después de 3 segundos
+    setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.remove();
+        }
+    }, 3000);
+}
+
+// Función global para eliminar actividad del calendario (disponible para todos)
+function eliminarActividadDelCalendario(actividad) {
+    console.log('Eliminando actividad del calendario:', actividad);
+    
+    // Parsear la fecha
+    const fechaParts = actividad.fecha.split('/'); // formato: DD/MM/YYYY
+    const dia = parseInt(fechaParts[0]);
+    const mes = parseInt(fechaParts[1]);
+    const año = parseInt(fechaParts[2]);
+    
+    console.log(`Fecha parseada: ${dia}/${mes}/${año}`);
+    
+    // Actualizar la variable global actividades
+    const claveActividad = `${año},${mes},${dia}`;
+    console.log('Clave actividad:', claveActividad);
+    console.log('Actividades antes:', actividades);
+    
+    if (actividades[claveActividad]) {
+        // Filtrar la actividad eliminada
+        const actividadesOriginales = actividades[claveActividad].length;
+        actividades[claveActividad] = actividades[claveActividad].filter(
+            act => act.id !== actividad.id
+        );
+        console.log(`Actividades filtradas: ${actividadesOriginales} -> ${actividades[claveActividad].length}`);
+        
+        // Si no quedan actividades, eliminar la clave
+        if (actividades[claveActividad].length === 0) {
+            delete actividades[claveActividad];
+            console.log('Clave eliminada (sin actividades)');
+        }
+    }
+    
+    // Encontrar y actualizar la celda del calendario
+    const currentYear = {{ year }};
+    const currentMonth = {{ month }};
+    
+    // Solo actualizar si estamos viendo el mes de la actividad
+    if (año === currentYear && mes === currentMonth) {
+        // Buscar la celda por el atributo data-day
+        const celdasDia = document.querySelectorAll(`[data-day="${dia}"]`);
+        console.log('Celdas encontradas:', celdasDia.length);
+        
+        celdasDia.forEach(celda => {
+            console.log('Procesando celda:', celda);
+            
+            // Remover todas las actividades de la celda
+            const actividadesContainer = celda.querySelector('.actividades-del-dia');
+            if (actividadesContainer) {
+                console.log('Removiendo contenedor de actividades');
+                actividadesContainer.remove();
+            }
+            
+            // Actualizar el badge de cantidad
+            const badgeCantidad = celda.querySelector('.badge.bg-info.rounded-pill');
+            const actividadesRestantes = actividades[claveActividad] || [];
+            
+            if (badgeCantidad) {
+                if (actividadesRestantes.length === 0) {
+                    console.log('Removiendo badge de cantidad');
+                    badgeCantidad.remove();
+                } else {
+                    console.log(`Actualizando badge: ${actividadesRestantes.length}`);
+                    badgeCantidad.textContent = actividadesRestantes.length;
+                }
+            }
+            
+            // Recrear las actividades restantes
+            if (actividadesRestantes.length > 0) {
+                console.log('Recreando actividades restantes');
+                let htmlActividades = '<div class="actividades-del-dia">';
+                
+                actividadesRestantes.forEach(act => {
+                    const tipoColor = {
+                        'taller': 'bg-success',
+                        'excursion': 'bg-info',
+                        'reunion': 'bg-warning text-dark',
+                        'festival': 'bg-danger',
+                        'evento_social': 'bg-secondary'
+                    };
+                    
+                    const color = tipoColor[act.tipo] || 'bg-secondary';
+                    
+                    htmlActividades += `
+                        <div class="mb-1">
+                            <div class="badge ${color} w-100 text-start small" 
+                                 style="font-size: 0.7rem; white-space: normal;">
+                                <div class="fw-bold">${act.titulo}</div>
+                                <div><i class="bi bi-clock"></i> ${act.hora}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                htmlActividades += '</div>';
+                celda.insertAdjacentHTML('beforeend', htmlActividades);
+            }
+        });
+        
+        // Actualizar el panel de detalles si está mostrando ese día
+        const fechaSeleccionada = document.getElementById('fecha-seleccionada').textContent;
+        if (fechaSeleccionada.includes(`${dia} de`)) {
+            console.log('Actualizando panel de detalles');
+            mostrarDetallesDia(dia, mes, año);
+        }
+    }
+    
+    console.log('Actividades después de eliminar:', actividades);
+}
+
+// JavaScript para manejar el formulario de creación de actividades
+{% if is_staff %}
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('crearActividadForm');
+    const modal = document.getElementById('crearActividadModal');
+    const modalInstance = new bootstrap.Modal(modal);
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Limpiar errores previos
+        clearFormErrors();
+        
+        // Crear FormData con todos los campos del formulario
+        const formData = new FormData(form);
+        
+        // Mostrar spinner en el botón
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creando...';
+        submitBtn.disabled = true;
+        
+        // Enviar datos via AJAX
+        fetch('{% url "crear_actividad" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Éxito: cerrar modal y mostrar mensaje
+                modalInstance.hide();
+                form.reset();
+                
+                // Mostrar mensaje de éxito
+                showToast('success', 'Actividad creada exitosamente');
+                
+                // Recargar la página para mostrar la nueva actividad
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+                
+            } else {
+                // Error: mostrar errores en el formulario
+                if (data.errors) {
+                    showFormErrors(data.errors);
+                } else {
+                    showToast('error', data.error || 'Error al crear la actividad');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Error de conexión. Inténtalo de nuevo.');
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+    
+    function clearFormErrors() {
+        const errorElements = form.querySelectorAll('.invalid-feedback');
+        const formControls = form.querySelectorAll('.form-control, .form-select');
+        
+        errorElements.forEach(el => {
+            el.textContent = '';
+        });
+        
+        formControls.forEach(el => {
+            el.classList.remove('is-invalid');
+        });
+    }
+    
+    function showFormErrors(errors) {
+        for (const [field, messages] of Object.entries(errors)) {
+            const errorElement = document.getElementById(`error-${field}`);
+            const fieldElement = document.getElementById(`id_${field}`);
+            
+            if (errorElement && fieldElement) {
+                errorElement.textContent = messages.join(', ');
+                fieldElement.classList.add('is-invalid');
+            }
+        }
+    }
+    
+    // Función para actualizar el calendario después de crear una actividad
+    function actualizarCalendarioDespuesDeCreacion(nuevaActividad) {
+        const fechaActividad = new Date(nuevaActividad.fecha);
+        const diaActividad = fechaActividad.getDate();
+        const mesActividad = fechaActividad.getMonth() + 1;
+        const añoActividad = fechaActividad.getFullYear();
+        
+        // Solo actualizar si la actividad es del mes actual que se está mostrando
+        const currentYear = {{ year }};
+        const currentMonth = {{ month }};
+        
+        if (añoActividad === currentYear && mesActividad === currentMonth) {
+            // Actualizar la variable global de actividades
+            const claveActividad = `${añoActividad},${mesActividad},${diaActividad}`;
+            
+            if (!actividades[claveActividad]) {
+                actividades[claveActividad] = [];
+            }
+            
+            // Agregar la nueva actividad (con estructura completa simulada)
+            const actividadCompleta = {
+                id: nuevaActividad.id,
+                titulo: nuevaActividad.titulo,
+                hora: nuevaActividad.hora,
+                tipo: nuevaActividad.tipo || 'taller', // Valor por defecto
+                descripcion: nuevaActividad.descripcion
+            };
+            
+            actividades[claveActividad].push(actividadCompleta);
+            
+            // Actualizar la celda del calendario
+            const celdaCalendario = document.querySelector(`[data-day="${diaActividad}"][data-month="${mesActividad}"][data-year="${añoActividad}"]`);
+            if (celdaCalendario) {
+                actualizarCeldaCalendario(celdaCalendario, diaActividad, actividades[claveActividad]);
+            }
+        }
+    }
+    
+    // Función para actualizar el calendario después de editar una actividad
+    function actualizarCalendarioDespuesDeEdicion(actividadEditada) {
+        // Esta función es más compleja porque la fecha puede haber cambiado
+        // Por simplicidad, recargar la página para ediciones
+        // En una implementación más avanzada, se podría manejar dinámicamente
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
+});
+{% endif %}
+
+// JavaScript para manejar clics en actividades y mostrar detalles
+document.addEventListener('DOMContentLoaded', function() {
+    // Variables de los modales
+    const detalleModal = document.getElementById('detalleActividadModal');
+    const editarModal = document.getElementById('editarActividadModal');
+    const detalleModalInstance = new bootstrap.Modal(detalleModal);
+    const editarModalInstance = new bootstrap.Modal(editarModal);
+    
+    // Variable global para almacenar la actividad actual
+    let actividadActual = null;
+    
+    // Manejar clics en actividades del panel de detalles
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.actividad-item')) {
+            e.preventDefault();
+            const actividadElement = e.target.closest('.actividad-item');
+            const actividadId = actividadElement.dataset.actividadId;
+            
+            if (actividadId) {
+                mostrarDetalleActividad(actividadId);
+            }
+        }
+    });
+    
+    // Función para mostrar el detalle de una actividad
+    function mostrarDetalleActividad(actividadId) {
+        // Mostrar modal con spinner
+        document.getElementById('detalle-contenido').innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        `;
+        
+        detalleModalInstance.show();
+        
+        // Hacer petición AJAX
+        fetch(`{% url "detalle_actividad" 0 %}`.replace('0', actividadId))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                actividadActual = data.actividad;
+                mostrarContenidoDetalle(data.actividad, data.is_staff);
+            } else {
+                document.getElementById('detalle-contenido').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        ${data.error || 'Error al cargar la actividad'}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('detalle-contenido').innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Error de conexión. Inténtalo de nuevo.
+                </div>
+            `;
+        });
+    }
+    
+    // Función para mostrar el contenido del detalle
+    function mostrarContenidoDetalle(actividad, isStaff) {
+        const tipoColors = {
+            'taller': 'success',
+            'excursion': 'info', 
+            'reunion': 'warning',
+            'festival': 'danger',
+            'evento_social': 'secondary'
+        };
+        
+        const color = tipoColors[actividad.tipo_actividad] || 'secondary';
+        
+        let contenido = `
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <span class="badge bg-${color} fs-6 mb-2">${actividad.tipo_actividad_display}</span>
+                        <h4 class="mb-0">${actividad.descripcion}</h4>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <strong><i class="bi bi-calendar me-2"></i>Fecha:</strong><br>
+                            <span class="text-muted">${actividad.fecha}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <strong><i class="bi bi-clock me-2"></i>Hora:</strong><br>
+                            <span class="text-muted">${actividad.hora_completa}</span>
+                            ${actividad.duracion ? `<small class="text-muted"> (${actividad.duracion})</small>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${actividad.donde ? `
+                    <div class="mb-3">
+                        <strong><i class="bi bi-geo-alt me-2"></i>Lugar:</strong><br>
+                        <span class="text-muted">${actividad.donde}</span>
+                    </div>
+                    ` : ''}
+                    
+                    ${actividad.link ? `
+                    <div class="mb-3">
+                        <strong><i class="bi bi-link-45deg me-2"></i>Más información:</strong><br>
+                        <a href="${actividad.link}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            Visitar enlace <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        </a>
+                    </div>
+                    ` : ''}
+                    
+                    ${actividad.es_hoy ? '<div class="alert alert-info"><i class="bi bi-calendar-check me-2"></i>Esta actividad es hoy</div>' : ''}
+                    ${actividad.es_pasada ? '<div class="alert alert-secondary"><i class="bi bi-clock-history me-2"></i>Esta actividad ya pasó</div>' : ''}
+                </div>
+                
+                ${actividad.imagen_url ? `
+                <div class="col-md-4">
+                    <img src="${actividad.imagen_url}" class="img-fluid rounded" alt="Imagen de la actividad">
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        document.getElementById('detalle-contenido').innerHTML = contenido;
+        document.getElementById('detalle-titulo').textContent = actividad.tipo_actividad_display;
+        
+        // Mostrar botones de staff solo si es staff
+        const btnEditar = document.getElementById('btn-editar-actividad');
+        const btnEliminar = document.getElementById('btn-eliminar-actividad');
+        
+        if (isStaff) {
+            btnEditar.classList.remove('d-none');
+            btnEliminar.classList.remove('d-none');
+        } else {
+            btnEditar.classList.add('d-none');
+            btnEliminar.classList.add('d-none');
+        }
+    }
+    
+    // Manejar clic en botón de editar
+    document.getElementById('btn-editar-actividad').addEventListener('click', function() {
+        if (actividadActual) {
+            cargarFormularioEdicion(actividadActual);
+            detalleModalInstance.hide();
+            editarModalInstance.show();
+        }
+    });
+    
+    // Manejar clic en botón de eliminar
+    document.getElementById('btn-eliminar-actividad').addEventListener('click', function() {
+        if (actividadActual) {
+            mostrarConfirmacionEliminacion(actividadActual);
+        }
+    });
+    
+    // Función para mostrar confirmación de eliminación
+    function mostrarConfirmacionEliminacion(actividad) {
+        const confirmacion = confirm(
+            `¿Estás seguro de que quieres eliminar la actividad "${actividad.descripcion}"?\n\n` +
+            `Fecha: ${actividad.fecha}\n` +
+            `Hora: ${actividad.hora_completa}\n\n` +
+            `Esta acción no se puede deshacer.`
+        );
+        
+        if (confirmacion) {
+            eliminarActividad(actividad.id);
+        }
+    }
+    
+    // Función para eliminar la actividad
+    function eliminarActividad(actividadId) {
+        // Mostrar indicador de carga en el botón
+        const btnEliminar = document.getElementById('btn-eliminar-actividad');
+        const originalText = btnEliminar.innerHTML;
+        btnEliminar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Eliminando...';
+        btnEliminar.disabled = true;
+        
+        // Hacer petición AJAX
+        fetch(`{% url "eliminar_actividad" 0 %}`.replace('0', actividadId), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Éxito: cerrar modal y mostrar mensaje
+                detalleModalInstance.hide();
+                showToast('success', 'Actividad eliminada exitosamente');
+                
+                // Actualizar el calendario dinámicamente SIN recargar la página
+                eliminarActividadDelCalendario(actividadActual);
+                
+            } else {
+                showToast('error', data.error || 'Error al eliminar la actividad');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Error de conexión. Inténtalo de nuevo.');
+        })
+        .finally(() => {
+            // Restaurar botón
+            btnEliminar.innerHTML = originalText;
+            btnEliminar.disabled = false;
+        });
+    }
+    
+    // Función para actualizar el calendario después de eliminar una actividad
+    function actualizarCalendarioDespuesDeEliminacion(actividadEliminada) {
+        // Esta función ya no se usa, mantenida por compatibilidad
+        console.log('Función obsoleta llamada');
+    }
+    
+    // Función para actualizar una celda específica del calendario
+    function actualizarCeldaCalendario(celda, dia, actividadesDelDia) {
+        // Esta función ya no se usa, mantenida por compatibilidad
+        console.log('Función obsoleta de actualización de celda');
+    }
+    
+    // Función para cargar el formulario de edición
+    function cargarFormularioEdicion(actividad) {
+        document.getElementById('edit-actividad-id').value = actividad.id;
+        document.getElementById('edit-fecha').value = actividad.fecha_iso;
+        document.getElementById('edit-tipo_actividad').value = actividad.tipo_actividad;
+        document.getElementById('edit-hora_comienzo').value = actividad.hora_comienzo;
+        document.getElementById('edit-hora_finalizacion').value = actividad.hora_finalizacion || '';
+        document.getElementById('edit-descripcion').value = actividad.descripcion;
+        document.getElementById('edit-donde').value = actividad.donde || '';
+        document.getElementById('edit-link').value = actividad.link || '';
+        
+        // Mostrar imagen actual si existe
+        const imagenActual = document.getElementById('imagen-actual');
+        if (actividad.imagen_url) {
+            imagenActual.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>Imagen actual:</strong><br>
+                    <img src="${actividad.imagen_url}" class="img-thumbnail mt-2" style="max-height: 100px;">
+                    <br><small class="text-muted">Selecciona una nueva imagen para reemplazarla</small>
+                </div>
+            `;
+        } else {
+            imagenActual.innerHTML = '';
+        }
+        
+        // Limpiar errores
+        clearEditFormErrors();
+    }
+    
+    // Manejar envío del formulario de edición
+    document.getElementById('editarActividadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const actividadId = document.getElementById('edit-actividad-id').value;
+        const formData = new FormData(this);
+        
+        // Limpiar errores previos
+        clearEditFormErrors();
+        
+        // Mostrar spinner en el botón
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Actualizando...';
+        submitBtn.disabled = true;
+        
+        // Enviar datos via AJAX
+        fetch(`{% url "actualizar_actividad" 0 %}`.replace('0', actividadId), {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Éxito: cerrar modal y mostrar mensaje
+                editarModalInstance.hide();
+                showToast('success', 'Actividad actualizada exitosamente');
+                
+                // Actualizar el calendario dinámicamente
+                actualizarCalendarioDespuesDeEdicion(data.actividad);
+                
+            } else {
+                // Error: mostrar errores en el formulario
+                if (data.errors) {
+                    showEditFormErrors(data.errors);
+                } else {
+                    showToast('error', data.error || 'Error al actualizar la actividad');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('error', 'Error de conexión. Inténtalo de nuevo.');
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+    
+    function clearEditFormErrors() {
+        const errorElements = document.querySelectorAll('#editarActividadForm .invalid-feedback');
+        const formControls = document.querySelectorAll('#editarActividadForm .form-control, #editarActividadForm .form-select');
+        
+        errorElements.forEach(el => {
+            el.textContent = '';
+        });
+        
+        formControls.forEach(el => {
+            el.classList.remove('is-invalid');
+        });
+    }
+    
+    function showEditFormErrors(errors) {
+        for (const [field, messages] of Object.entries(errors)) {
+            const errorElement = document.getElementById(`edit-error-${field}`);
+            const fieldElement = document.getElementById(`edit-${field}`);
+            
+            if (errorElement && fieldElement) {
+                errorElement.textContent = messages.join(', ');
+                fieldElement.classList.add('is-invalid');
+            }
+        }
+    }
+});
+</script>
+
+<!-- Estilos CSS adicionales -->
+<style>
+.calendar-day.selected {
+    background-color: #e3f2fd !important;
+    border: 2px solid #2196f3 !important;
+}
+
+.clickable-day:hover {
+    transition: background-color 0.2s ease;
+}
+
+.actividades-lista .card {
+    border: 1px solid #e9ecef;
+    transition: box-shadow 0.2s ease;
+}
+
+.actividades-lista .card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.actividad-item:hover {
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+@media (max-width: 991.98px) {
+    #panel-detalles {
+        margin-top: 1rem;
+    }
+}
+</style>
+
+<!-- Modal para crear actividad -->
+{% if is_staff %}
+<div class="modal fade" id="crearActividadModal" tabindex="-1" aria-labelledby="crearActividadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearActividadModalLabel">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    {% trans "Crear Nueva Actividad" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="crearActividadForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.fecha.id_for_label }}" class="form-label">{{ form.fecha.label }}</label>
+                                {{ form.fecha }}
+                                <div class="invalid-feedback" id="error-fecha"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.tipo_actividad.id_for_label }}" class="form-label">{{ form.tipo_actividad.label }}</label>
+                                {{ form.tipo_actividad }}
+                                <div class="invalid-feedback" id="error-tipo_actividad"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.hora_comienzo.id_for_label }}" class="form-label">{{ form.hora_comienzo.label }}</label>
+                                {{ form.hora_comienzo }}
+                                <div class="invalid-feedback" id="error-hora_comienzo"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.hora_finalizacion.id_for_label }}" class="form-label">{{ form.hora_finalizacion.label }}</label>
+                                {{ form.hora_finalizacion }}
+                                <div class="invalid-feedback" id="error-hora_finalizacion"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.descripcion.id_for_label }}" class="form-label">{{ form.descripcion.label }}</label>
+                        {{ form.descripcion }}
+                        <div class="invalid-feedback" id="error-descripcion"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.donde.id_for_label }}" class="form-label">{{ form.donde.label }}</label>
+                        {{ form.donde }}
+                        <div class="invalid-feedback" id="error-donde"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.link.id_for_label }}" class="form-label">{{ form.link.label }}</label>
+                        {{ form.link }}
+                        <div class="invalid-feedback" id="error-link"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.imagen.id_for_label }}" class="form-label">{{ form.imagen.label }}</label>
+                        {{ form.imagen }}
+                        <div class="invalid-feedback" id="error-imagen"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {% trans "Cancelar" %}
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {% trans "Crear Actividad" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Modal para ver detalle de actividad -->
+<div class="modal fade" id="detalleActividadModal" tabindex="-1" aria-labelledby="detalleActividadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleActividadModalLabel">
+                    <i class="bi bi-eye me-2"></i>
+                    <span id="detalle-titulo">Detalle de Actividad</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalle-contenido">
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="detalle-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {% trans "Cerrar" %}
+                </button>
+                <button type="button" class="btn btn-danger d-none" id="btn-eliminar-actividad">
+                    <i class="bi bi-trash me-2"></i>
+                    {% trans "Eliminar Actividad" %}
+                </button>
+                <button type="button" class="btn btn-primary d-none" id="btn-editar-actividad">
+                    <i class="bi bi-pencil me-2"></i>
+                    {% trans "Editar Actividad" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar actividad -->
+<div class="modal fade" id="editarActividadModal" tabindex="-1" aria-labelledby="editarActividadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarActividadModalLabel">
+                    <i class="bi bi-pencil me-2"></i>
+                    {% trans "Editar Actividad" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editarActividadForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="edit-actividad-id" name="actividad_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-fecha" class="form-label">{% trans "Fecha" %}</label>
+                                <input type="date" class="form-control" id="edit-fecha" name="fecha" required>
+                                <div class="invalid-feedback" id="edit-error-fecha"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-tipo_actividad" class="form-label">{% trans "Tipo de actividad" %}</label>
+                                <select class="form-select" id="edit-tipo_actividad" name="tipo_actividad" required>
+                                    <option value="taller">{% trans "Taller" %}</option>
+                                    <option value="excursion">{% trans "Excursión" %}</option>
+                                    <option value="reunion">{% trans "Reunión" %}</option>
+                                    <option value="festival">{% trans "Festival" %}</option>
+                                    <option value="evento_social">{% trans "Evento social" %}</option>
+                                </select>
+                                <div class="invalid-feedback" id="edit-error-tipo_actividad"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-hora_comienzo" class="form-label">{% trans "Hora de comienzo" %}</label>
+                                <input type="time" class="form-control" id="edit-hora_comienzo" name="hora_comienzo" required>
+                                <div class="invalid-feedback" id="edit-error-hora_comienzo"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="edit-hora_finalizacion" class="form-label">{% trans "Hora de finalización" %}</label>
+                                <input type="time" class="form-control" id="edit-hora_finalizacion" name="hora_finalizacion">
+                                <div class="invalid-feedback" id="edit-error-hora_finalizacion"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit-descripcion" class="form-label">{% trans "Descripción" %}</label>
+                        <textarea class="form-control" id="edit-descripcion" name="descripcion" rows="4" required></textarea>
+                        <div class="invalid-feedback" id="edit-error-descripcion"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit-donde" class="form-label">{% trans "Dónde" %}</label>
+                        <input type="text" class="form-control" id="edit-donde" name="donde">
+                        <div class="invalid-feedback" id="edit-error-donde"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit-link" class="form-label">{% trans "Enlace" %}</label>
+                        <input type="url" class="form-control" id="edit-link" name="link">
+                        <div class="invalid-feedback" id="edit-error-link"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit-imagen" class="form-label">{% trans "Imagen" %}</label>
+                        <input type="file" class="form-control" id="edit-imagen" name="imagen" accept="image/*">
+                        <div id="imagen-actual" class="mt-2"></div>
+                        <div class="invalid-feedback" id="edit-error-imagen"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {% trans "Cancelar" %}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {% trans "Actualizar Actividad" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

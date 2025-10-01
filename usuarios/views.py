@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
-from .forms import ContactoForm
-from .models import Contacto
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .forms import ContactoForm, ActividadForm
+from .models import Contacto, Actividad
 
 def home(request):
     """Página de inicio pública con información de la Apyma"""
@@ -91,3 +93,224 @@ ID del mensaje: {contacto_obj.id}
 		form = ContactoForm()
 	
 	return render(request, 'usuarios/contacto.html', {'form': form})
+
+
+def logout_view(request):
+    """Vista personalizada para cerrar sesión"""
+    if request.user.is_authenticated:
+        username = request.user.get_full_name() or request.user.username
+        logout(request)
+        messages.success(request, _('Has cerrado sesión correctamente, {}. ¡Hasta pronto!').format(username))
+    return redirect('home')
+
+
+def actividades(request):
+    """Vista para mostrar el calendario de actividades"""
+    from datetime import datetime, timedelta
+    import calendar
+    import json
+    
+    # Obtener el mes y año actual o desde los parámetros GET
+    today = datetime.now()
+    year = int(request.GET.get('year', today.year))
+    month = int(request.GET.get('month', today.month))
+    
+    # Calcular mes anterior y siguiente para navegación
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+    
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
+    
+    # Crear el calendario del mes
+    cal = calendar.Calendar(firstweekday=0)  # Lunes como primer día
+    month_days = cal.monthdays2calendar(year, month)
+    
+    # Obtener actividades reales de la base de datos para el mes actual
+    from datetime import date
+    first_day = date(year, month, 1)
+    if month == 12:
+        last_day = date(year + 1, 1, 1) - timedelta(days=1)
+    else:
+        last_day = date(year, month + 1, 1) - timedelta(days=1)
+    
+    # Consultar actividades del mes
+    actividades_mes = Actividad.objects.filter(
+        fecha__gte=first_day,
+        fecha__lte=last_day,
+        activa=True
+    ).order_by('fecha', 'hora_comienzo')
+    
+    # Organizar actividades por día
+    actividades_por_dia = {}
+    for actividad in actividades_mes:
+        dia = actividad.fecha.day
+        if dia not in actividades_por_dia:
+            actividades_por_dia[dia] = []
+        
+        actividades_por_dia[dia].append({
+            'id': actividad.id,
+            'titulo': f"{actividad.get_tipo_actividad_display()}",
+            'hora': actividad.hora_comienzo.strftime('%H:%M'),
+            'hora_fin': actividad.hora_finalizacion.strftime('%H:%M') if actividad.hora_finalizacion else None,
+            'tipo': actividad.tipo_actividad,
+            'descripcion': actividad.descripcion,
+            'donde': actividad.donde,
+            'link': actividad.link,
+            'imagen_url': actividad.imagen.url if actividad.imagen else ''
+        })
+    
+    # Convertir actividades a formato JSON para JavaScript
+    actividades_json = {}
+    for dia, lista_actividades in actividades_por_dia.items():
+        key = f"{year},{month},{dia}"
+        actividades_json[key] = lista_actividades
+    
+    # Crear formulario para nuevas actividades (solo para staff)
+    form = None
+    if request.user.is_staff:
+        form = ActividadForm()
+    
+    context = {
+        'year': year,
+        'month': month,
+        'month_name': calendar.month_name[month],
+        'month_days': month_days,
+        'prev_year': prev_year,
+        'prev_month': prev_month,
+        'next_year': next_year,
+        'next_month': next_month,
+        'today': today,
+        'actividades': actividades_por_dia,
+        'actividades_json': json.dumps(actividades_json),
+        'weekday_names': ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        'form': form,
+        'is_staff': request.user.is_staff
+    }
+    
+    return render(request, 'usuarios/actividades.html', context)
+
+
+@login_required
+@require_POST
+def crear_actividad(request):
+    """Vista para crear una nueva actividad via AJAX (solo staff)"""
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No tienes permisos para crear actividades'})
+    
+    form = ActividadForm(request.POST, request.FILES)
+    if form.is_valid():
+        actividad = form.save()
+        return JsonResponse({
+            'success': True, 
+            'message': 'Actividad creada exitosamente',
+            'actividad': {
+                'id': actividad.id,
+                'fecha': actividad.fecha.strftime('%Y-%m-%d'),
+                'titulo': actividad.get_tipo_actividad_display(),
+                'hora': actividad.hora_comienzo.strftime('%H:%M'),
+                'descripcion': actividad.descripcion
+            }
+        })
+    else:
+        errors = {}
+        for field, field_errors in form.errors.items():
+            errors[field] = field_errors
+        return JsonResponse({'success': False, 'errors': errors})
+
+
+@login_required
+def detalle_actividad(request, actividad_id):
+    """Vista para obtener los detalles de una actividad via AJAX"""
+    try:
+        actividad = Actividad.objects.get(id=actividad_id, activa=True)
+        
+        return JsonResponse({
+            'success': True,
+            'actividad': {
+                'id': actividad.id,
+                'fecha': actividad.fecha.strftime('%d/%m/%Y'),
+                'fecha_iso': actividad.fecha.strftime('%Y-%m-%d'),
+                'hora_comienzo': actividad.hora_comienzo.strftime('%H:%M'),
+                'hora_finalizacion': actividad.hora_finalizacion.strftime('%H:%M') if actividad.hora_finalizacion else None,
+                'hora_completa': actividad.get_hora_completa(),
+                'duracion': actividad.get_duracion(),
+                'tipo_actividad': actividad.tipo_actividad,
+                'tipo_actividad_display': actividad.get_tipo_actividad_display(),
+                'descripcion': actividad.descripcion,
+                'donde': actividad.donde,
+                'link': actividad.link,
+                'imagen_url': actividad.imagen.url if actividad.imagen else None,
+                'es_hoy': actividad.es_hoy(),
+                'es_pasada': actividad.es_pasada()
+            },
+            'is_staff': request.user.is_staff
+        })
+        
+    except Actividad.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
+
+
+@login_required
+@require_POST
+def actualizar_actividad(request, actividad_id):
+    """Vista para actualizar una actividad via AJAX (solo staff)"""
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No tienes permisos para editar actividades'})
+    
+    try:
+        actividad = Actividad.objects.get(id=actividad_id, activa=True)
+        form = ActividadForm(request.POST, request.FILES, instance=actividad)
+        
+        if form.is_valid():
+            actividad_actualizada = form.save()
+            return JsonResponse({
+                'success': True, 
+                'message': 'Actividad actualizada exitosamente',
+                'actividad': {
+                    'id': actividad_actualizada.id,
+                    'fecha': actividad_actualizada.fecha.strftime('%Y-%m-%d'),
+                    'titulo': actividad_actualizada.get_tipo_actividad_display(),
+                    'hora': actividad_actualizada.hora_comienzo.strftime('%H:%M'),
+                    'descripcion': actividad_actualizada.descripcion
+                }
+            })
+        else:
+            errors = {}
+            for field, field_errors in form.errors.items():
+                errors[field] = field_errors
+            return JsonResponse({'success': False, 'errors': errors})
+            
+    except Actividad.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
+
+
+@login_required
+@require_POST
+def eliminar_actividad(request, actividad_id):
+    """Vista para eliminar una actividad via AJAX (solo staff)"""
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'No tienes permisos para eliminar actividades'})
+    
+    try:
+        actividad = Actividad.objects.get(id=actividad_id, activa=True)
+        
+        # En lugar de eliminar completamente, marcamos como inactiva
+        actividad.activa = False
+        actividad.save()
+        
+        return JsonResponse({
+            'success': True, 
+            'message': 'Actividad eliminada exitosamente'
+        })
+        
+    except Actividad.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})

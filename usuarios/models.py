@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 class Contacto(models.Model):
@@ -63,3 +64,280 @@ class Contacto(models.Model):
     def get_asunto_display_value(self):
         """Retorna el valor legible del asunto"""
         return dict(self.ASUNTOS_CHOICES).get(self.asunto, self.asunto)
+
+
+class Socio(models.Model):
+    MODELO_ESTUDIOS_CHOICES = [
+        ('modelo_d', _('Modelo D')),
+        ('pai', _('PAI (Programa de Aprendizaje en Inglés)')),
+    ]
+    
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.CASCADE, 
+        verbose_name=_('Usuario')
+    )
+    
+    numero_socio = models.CharField(
+        max_length=10, 
+        unique=True, 
+        verbose_name=_('Número de socio'),
+        help_text=_('Número único de identificación del socio')
+    )
+    
+    fecha_alta = models.DateField(
+        auto_now_add=True, 
+        verbose_name=_('Fecha de alta')
+    )
+    
+    telefono_1 = models.CharField(
+        max_length=15, 
+        blank=True, 
+        verbose_name=_('Teléfono 1'),
+        help_text=_('Teléfono principal de contacto')
+    )
+    
+    telefono_2 = models.CharField(
+        max_length=15, 
+        blank=True, 
+        verbose_name=_('Teléfono 2'),
+        help_text=_('Teléfono secundario de contacto')
+    )
+    
+    activo = models.BooleanField(
+        default=True, 
+        verbose_name=_('Socio activo'),
+        help_text=_('Indica si el socio está actualmente activo')
+    )
+    
+    apellidos_familia = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name=_('Apellidos de la familia'),
+        help_text=_('Apellidos familiares')
+    )
+    
+    poblacion = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=_('Población'),
+        help_text=_('Ciudad o pueblo de residencia')
+    )
+    
+    direccion = models.TextField(
+        blank=True,
+        verbose_name=_('Dirección'),
+        help_text=_('Dirección del domicilio del socio')
+    )
+    
+    dni = models.CharField(
+        max_length=9,
+        blank=True,
+        verbose_name=_('DNI/NIE'),
+        help_text=_('Documento Nacional de Identidad o NIE')
+    )
+    
+    numero_hijos = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('Número de hijos'),
+        help_text=_('Cantidad total de hijos')
+    )
+    
+    # Nuevos campos solicitados
+    nombre_padre = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name=_('Nombre del padre')
+    )
+    
+    nombre_madre = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name=_('Nombre de la madre')
+    )
+    
+    correo_contacto_1 = models.EmailField(
+        blank=True,
+        verbose_name=_('Correo de contacto 1'),
+        help_text=_('Email principal de contacto')
+    )
+    
+    correo_contacto_2 = models.EmailField(
+        blank=True,
+        verbose_name=_('Correo de contacto 2'),
+        help_text=_('Email secundario de contacto')
+    )
+    
+    nombre_alumnos = models.TextField(
+        blank=True,
+        verbose_name=_('Nombre de los alumnos'),
+        help_text=_('Nombres de los hijos/alumnos (uno por línea)')
+    )
+    
+    iban = models.CharField(
+        max_length=34,
+        blank=True,
+        verbose_name=_('IBAN'),
+        help_text=_('Número de cuenta bancaria (IBAN)')
+    )
+    
+    bic = models.CharField(
+        max_length=11,
+        blank=True,
+        verbose_name=_('BIC/SWIFT'),
+        help_text=_('Código BIC/SWIFT del banco')
+    )
+    
+    modelo_estudios = models.CharField(
+        max_length=20,
+        choices=MODELO_ESTUDIOS_CHOICES,
+        blank=True,
+        verbose_name=_('Modelo de estudios'),
+        help_text=_('Modelo educativo del centro')
+    )
+    
+    class Meta:
+        verbose_name = _('Socio')
+        verbose_name_plural = _('Socios')
+        ordering = ['numero_socio']
+    
+    def __str__(self):
+        nombre_completo = self.user.get_full_name() or self.user.username
+        return f"{nombre_completo} - {self.numero_socio}"
+    
+    def get_nombre_completo(self):
+        """Retorna el nombre completo del socio"""
+        return self.user.get_full_name() or self.user.username
+    
+    def get_alumnos_lista(self):
+        """Retorna una lista con los nombres de los alumnos"""
+        if self.nombre_alumnos:
+            return [nombre.strip() for nombre in self.nombre_alumnos.split('\n') if nombre.strip()]
+        return []
+    
+    def get_modelo_estudios_display_value(self):
+        """Retorna el valor legible del modelo de estudios"""
+        return dict(self.MODELO_ESTUDIOS_CHOICES).get(self.modelo_estudios, self.modelo_estudios)
+
+
+class Actividad(models.Model):
+    TIPO_ACTIVIDAD_CHOICES = [
+        ('taller', _('Taller')),
+        ('excursion', _('Excursión')),
+        ('reunion', _('Reunión')),
+        ('festival', _('Festival')),
+        ('evento_social', _('Evento social')),
+    ]
+    
+    fecha = models.DateField(
+        verbose_name=_('Fecha'),
+        help_text=_('Fecha en la que se realizará la actividad')
+    )
+    
+    hora_comienzo = models.TimeField(
+        verbose_name=_('Hora de comienzo'),
+        help_text=_('Hora de inicio de la actividad')
+    )
+    
+    hora_finalizacion = models.TimeField(
+        blank=True,
+        null=True,
+        verbose_name=_('Hora de finalización'),
+        help_text=_('Hora de finalización de la actividad (opcional)')
+    )
+    
+    descripcion = models.TextField(
+        verbose_name=_('Descripción'),
+        help_text=_('Descripción detallada de la actividad')
+    )
+    
+    donde = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name=_('Dónde'),
+        help_text=_('Lugar donde se realizará la actividad')
+    )
+    
+    imagen = models.ImageField(
+        upload_to='actividades/imagenes/',
+        blank=True,
+        null=True,
+        verbose_name=_('Imagen'),
+        help_text=_('Imagen representativa de la actividad')
+    )
+    
+    link = models.URLField(
+        blank=True,
+        verbose_name=_('Enlace'),
+        help_text=_('Enlace web relacionado con la actividad (opcional)')
+    )
+    
+    tipo_actividad = models.CharField(
+        max_length=20,
+        choices=TIPO_ACTIVIDAD_CHOICES,
+        verbose_name=_('Tipo de actividad'),
+        help_text=_('Categoría de la actividad')
+    )
+    
+    # Campos de auditoría
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Fecha de creación')
+    )
+    
+    fecha_actualizacion = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Fecha de actualización')
+    )
+    
+    activa = models.BooleanField(
+        default=True,
+        verbose_name=_('Actividad activa'),
+        help_text=_('Indica si la actividad está visible y activa')
+    )
+    
+    class Meta:
+        verbose_name = _('Actividad')
+        verbose_name_plural = _('Actividades')
+        ordering = ['fecha', 'hora_comienzo']
+    
+    def __str__(self):
+        return f"{self.get_tipo_actividad_display()} - {self.descripcion[:50]} ({self.fecha})"
+    
+    def get_duracion(self):
+        """Retorna la duración de la actividad si tiene hora de finalización"""
+        if self.hora_finalizacion:
+            from datetime import datetime, timedelta
+            inicio = datetime.combine(self.fecha, self.hora_comienzo)
+            fin = datetime.combine(self.fecha, self.hora_finalizacion)
+            
+            # Si la hora de fin es menor que la de inicio, asumimos que es al día siguiente
+            if fin < inicio:
+                fin += timedelta(days=1)
+            
+            duracion = fin - inicio
+            horas = duracion.seconds // 3600
+            minutos = (duracion.seconds % 3600) // 60
+            
+            if horas > 0:
+                return f"{horas}h {minutos}m" if minutos > 0 else f"{horas}h"
+            else:
+                return f"{minutos}m"
+        return None
+    
+    def get_hora_completa(self):
+        """Retorna la hora de inicio y fin si está disponible"""
+        if self.hora_finalizacion:
+            return f"{self.hora_comienzo.strftime('%H:%M')} - {self.hora_finalizacion.strftime('%H:%M')}"
+        return self.hora_comienzo.strftime('%H:%M')
+    
+    def es_hoy(self):
+        """Verifica si la actividad es hoy"""
+        from datetime import date
+        return self.fecha == date.today()
+    
+    def es_pasada(self):
+        """Verifica si la actividad ya pasó"""
+        from datetime import date
+        return self.fecha < date.today()
