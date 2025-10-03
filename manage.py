@@ -10,9 +10,11 @@ def main():
     if 'pythonanywhere.com' in os.environ.get('SERVER_NAME', '') or \
        os.environ.get('PYTHONANYWHERE_DOMAIN'):
         # Estamos en PythonAnywhere (producción)
+        print("Cargando configuración de producción...")
         default_settings = "apyma_site.settings.production"
     else:
         # Estamos en desarrollo local
+        print("Cargando configuración de desarrollo...")
         default_settings = "apyma_site.settings.development"
     
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", default_settings)
