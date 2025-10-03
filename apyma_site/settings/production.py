@@ -70,7 +70,7 @@ DEFAULT_FROM_EMAIL = f'Apyma Remontival <{config("EMAIL_HOST_USER")}>'
 # Configuración de seguridad para producción
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # Permitir iframes del mismo dominio para PDFs
 
 # HTTPS settings (descomenta cuando tengas SSL)
 # SECURE_SSL_REDIRECT = True
