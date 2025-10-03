@@ -6,7 +6,16 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "apyma_site.settings.development")
+    # Detectar si estamos en PythonAnywhere (producción) o desarrollo local
+    if 'pythonanywhere.com' in os.environ.get('SERVER_NAME', '') or \
+       os.environ.get('PYTHONANYWHERE_DOMAIN'):
+        # Estamos en PythonAnywhere (producción)
+        default_settings = "apyma_site.settings.production"
+    else:
+        # Estamos en desarrollo local
+        default_settings = "apyma_site.settings.development"
+    
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", default_settings)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
