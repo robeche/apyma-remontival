@@ -7,10 +7,14 @@ from django.utils.translation import gettext as _
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.http import require_POST
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.cache import cache_control
 from .forms import ContactoForm, ActividadForm
 from .models import Contacto, Actividad
+import os
+import mimetypes
 
 def home(request):
     """Página de inicio pública con información de la Apyma"""
@@ -314,3 +318,68 @@ def eliminar_actividad(request, actividad_id):
         
     except Actividad.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
+
+def comedor(request):
+    """Vista para mostrar información del comedor escolar"""
+    # Información simplificada del comedor
+    menu_info = {
+        'mes_actual': 'Septiembre 2025',
+        'empresa': 'El Gusto de Crecer',
+        'descripcion': 'Empresa especializada en catering escolar con más de 15 años de experiencia. Elaboramos menús equilibrados y adaptados a las necesidades nutricionales de los escolares.',
+        'contacto_empresa': {
+            'nombre': 'El Gusto de Crecer',
+            'telefono': '986 123 456',
+            'email': 'info@elgustodecrecer.es',
+            'web': 'www.elgustodecrecer.es'
+        },
+        'menus_disponibles': [
+            {
+                'titulo': 'Menú Septiembre 2025 (Castellano)',
+                'archivo': 'menu_septiembre_castellano.pdf',
+                'idioma': 'Castellano'
+            },
+            {
+                'titulo': 'Menú Septiembre 2025 (Euskera)',
+                'archivo': 'menu_septiembre_euskera.pdf',
+                'idioma': 'Euskera'
+            }
+        ]
+    }
+    
+    return render(request, 'usuarios/comedor.html', {'menu_info': menu_info})
+
+@xframe_options_exempt
+@cache_control(max_age=3600)  # Cache por 1 hora
+def serve_pdf(request, filename):
+    """Vista personalizada para servir PDFs sin restricciones de X-Frame-Options"""
+    # Verificar que el archivo tenga extensión PDF
+    if not filename.endswith('.pdf'):
+        raise Http404("Archivo no encontrado")
+    
+    # Construir la ruta completa del archivo
+    file_path = os.path.join(settings.MEDIA_ROOT, 'comedor', filename)
+    
+    # Verificar que el archivo existe
+    if not os.path.exists(file_path):
+        raise Http404("Archivo no encontrado")
+    
+    # Verificar que el archivo está dentro del directorio permitido (seguridad)
+    allowed_dir = os.path.join(settings.MEDIA_ROOT, 'comedor')
+    if not os.path.commonpath([file_path, allowed_dir]) == allowed_dir:
+        raise Http404("Acceso denegado")
+    
+    try:
+        with open(file_path, 'rb') as pdf_file:
+            content = pdf_file.read()
+        
+        # Crear respuesta HTTP con el contenido del PDF
+        response = HttpResponse(content, content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="{filename}"'
+        
+        # Importante: NO establecer X-Frame-Options para permitir iframe
+        # El decorador @xframe_options_exempt ya se encarga de esto
+        
+        return response
+        
+    except Exception as e:
+        raise Http404("Error al leer el archivo")
