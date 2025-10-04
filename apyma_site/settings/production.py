@@ -31,6 +31,14 @@ ALLOWED_HOSTS = config(
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
+# CSRF Trusted Origins (necesario para Django 4.0+)
+CSRF_TRUSTED_ORIGINS = [
+    'https://apymaremontival.pythonanywhere.com',
+    'https://www.apymaremontival.com',
+    'https://apymaremontival.com',
+    'http://apymaremontival.pythonanywhere.com',  # Para desarrollo si no hay SSL
+]
+
 # Database para producción (PostgreSQL recomendado)
 # Configuración de PostgreSQL si están disponibles las variables
 DB_NAME = config('DB_NAME', default='')
