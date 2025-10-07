@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
@@ -15,6 +15,27 @@ from .forms import ContactoForm, ActividadForm
 from .models import Contacto, Actividad
 import os
 import mimetypes
+
+def debug_admin_user(request):
+    """Vista temporal para debuggear usuario admin"""
+    from django.contrib.auth.models import User
+    
+    info = []
+    
+    # Listar todos los usuarios
+    users = User.objects.all()
+    info.append(f"Total usuarios: {users.count()}")
+    
+    for user in users:
+        info.append(f"Usuario: {user.username}")
+        info.append(f"  - Email: {user.email}")
+        info.append(f"  - is_active: {user.is_active}")
+        info.append(f"  - is_staff: {user.is_staff}")
+        info.append(f"  - is_superuser: {user.is_superuser}")
+        info.append(f"  - last_login: {user.last_login}")
+        info.append("---")
+    
+    return HttpResponse("<br>".join(info))
 
 def home(request):
     """Página de inicio pública con información de la Apyma"""
