@@ -19,5 +19,4 @@ urlpatterns = [
     path('actividades/<int:actividad_id>/editar/', views.actualizar_actividad, name='actualizar_actividad'),
     path('actividades/<int:actividad_id>/eliminar/', views.eliminar_actividad, name='eliminar_actividad'),
     path('debug-redirect/', views.debug_redirect, name='debug_redirect'),
-    path('simple-set-language/', views.simple_set_language, name='simple_set_language'),
 ]
