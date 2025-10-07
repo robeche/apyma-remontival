@@ -16,6 +16,13 @@ from .models import Contacto, Actividad
 import os
 import mimetypes
 
+def admin_redirect_view(request):
+    """Redirigir admin a pythonanywhere donde funciona"""
+    # Construir la URL completa manteniendo el path
+    path = request.get_full_path()
+    redirect_url = f"https://robeche.pythonanywhere.com{path}"
+    return redirect(redirect_url)
+
 def debug_admin_user(request):
     """Vista temporal para debuggear usuario admin"""
     from django.contrib.auth.models import User

@@ -27,7 +27,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     'ALLOWED_HOSTS',
-    default='apymaremontival.pythonanywhere.com,www.apymaremontival.com,apymaremontival.com',
+    default='apymaremontival.pythonanywhere.com,www.apymaremontival.com,apymaremontival.com,robeche.pythonanywhere.com',
     cast=lambda v: [s.strip() for s in v.split(',')]
 )
 
@@ -80,15 +80,19 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # Permitir iframes del mismo dominio para PDFs
 
-# HTTPS settings (descomenta cuando tengas SSL)
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+# HTTPS settings para Cloudflare
+SECURE_SSL_REDIRECT = False  # Cloudflare maneja esto
+SESSION_COOKIE_SECURE = True  # Cookies solo por HTTPS
+CSRF_COOKIE_SECURE = True     # CSRF solo por HTTPS
 
-# Configuración de cookies para que funcionen específicamente en el dominio principal
-# Comentamos SESSION_COOKIE_DOMAIN para usar el dominio actual automáticamente
-# SESSION_COOKIE_DOMAIN = '.apymaremontival.com'  
-# CSRF_COOKIE_DOMAIN = '.apymaremontival.com'
+# Configuración específica para Cloudflare
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Configuración de cookies para que funcionen con Cloudflare
+SESSION_COOKIE_DOMAIN = None  # Usar el dominio de la request actual
+CSRF_COOKIE_DOMAIN = None     # Usar el dominio de la request actual
 
 SESSION_COOKIE_NAME = 'apyma_sessionid'
 CSRF_COOKIE_NAME = 'apyma_csrftoken'
