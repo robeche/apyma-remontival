@@ -388,35 +388,44 @@ def serve_pdf(request, filename):
 def debug_redirect(request):
     """Vista de debug para probar redirecciones simples"""
     if request.method == 'POST':
-        language = request.POST.get('language', 'es')
+        language = request.POST.get('language', 'NO_LANGUAGE_FOUND')
         
-        # Debug info
+        # Debug info detallado
         debug_info = {
             'method': request.method,
-            'post_data': dict(request.POST),
+            'post_data_raw': dict(request.POST),
+            'post_language': language,
             'current_path': request.path,
             'full_path': request.get_full_path(),
             'host': request.get_host(),
             'is_secure': request.is_secure(),
-            'language_requested': language,
+            'META_info': {
+                'REQUEST_METHOD': request.META.get('REQUEST_METHOD'),
+                'CONTENT_TYPE': request.META.get('CONTENT_TYPE'),
+                'CONTENT_LENGTH': request.META.get('CONTENT_LENGTH'),
+            }
         }
         
-        # Simple HTML response with JavaScript redirect
+        # NO hacer redirección automática, solo mostrar info
         html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Debug Redirect</title>
+            <title>Debug POST Result</title>
         </head>
         <body>
-            <h2>Debug Info:</h2>
-            <pre>{debug_info}</pre>
-            <p>Redirecting to /{language}/ in 3 seconds...</p>
-            <script>
-                setTimeout(function() {{
-                    window.location.href = '/{language}/';
-                }}, 3000);
-            </script>
+            <h2>POST recibido!</h2>
+            <h3>Debug Info:</h3>
+            <pre style="background: #f0f0f0; padding: 10px;">{debug_info}</pre>
+            
+            <h3>¿Qué debería pasar?</h3>
+            <p>Idioma seleccionado: <strong>{language}</strong></p>
+            <p>Debería redirigir a: <strong>/{language}/</strong></p>
+            
+            <h3>Pruebas manuales:</h3>
+            <p><a href="/es/">Ir a /es/ manualmente</a></p>
+            <p><a href="/eu/">Ir a /eu/ manualmente</a></p>
+            <p><a href="/debug-redirect/">Volver al formulario</a></p>
         </body>
         </html>
         """
@@ -432,13 +441,22 @@ def debug_redirect(request):
     </head>
     <body>
         <h2>Debug Language Selector</h2>
+        <p>Selecciona un idioma y veremos qué pasa:</p>
         <form method="post">
             <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
-            <select name="language" onchange="this.form.submit()">
-                <option value="es">Español</option>
-                <option value="eu">Euskera</option>
-            </select>
+            <label>
+                <input type="radio" name="language" value="es" checked> Español
+            </label><br>
+            <label>
+                <input type="radio" name="language" value="eu"> Euskera  
+            </label><br><br>
+            <button type="submit">Cambiar idioma</button>
         </form>
+        
+        <h3>Info actual:</h3>
+        <p>Path actual: {current_path}</p>
+        <p>Host: {host}</p>
+        <p>Protocolo: {'HTTPS' if is_secure else 'HTTP'}</p>
     </body>
     </html>
     """
@@ -446,4 +464,9 @@ def debug_redirect(request):
     from django.middleware.csrf import get_token
     csrf_token = get_token(request)
     
-    return HttpResponse(html.format(csrf_token=csrf_token))
+    return HttpResponse(html.format(
+        csrf_token=csrf_token,
+        current_path=request.get_full_path(),
+        host=request.get_host(),
+        is_secure=request.is_secure()
+    ))
