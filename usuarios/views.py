@@ -22,7 +22,10 @@ def home(request):
 
 @login_required
 def dashboard(request):
-	return render(request, 'usuarios/dashboard.html')
+    # Si es un usuario staff (admin), redirigir al panel de administración
+    if request.user.is_staff:
+        return redirect('/admin/')
+    return render(request, 'usuarios/dashboard.html')
 
 def register(request):
 	if request.method == 'POST':

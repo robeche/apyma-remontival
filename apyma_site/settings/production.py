@@ -121,9 +121,3 @@ LOGGING = {
         },
     },
 }
-
-# Override admin site settings para evitar conflictos con LOGIN_REDIRECT_URL
-from django.contrib import admin
-
-# Configurar el admin para que no use LOGIN_REDIRECT_URL
-admin.site.login_url = '/admin/login/'
