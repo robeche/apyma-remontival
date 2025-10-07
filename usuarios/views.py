@@ -383,3 +383,67 @@ def serve_pdf(request, filename):
         
     except Exception as e:
         raise Http404("Error al leer el archivo")
+
+
+def debug_redirect(request):
+    """Vista de debug para probar redirecciones simples"""
+    if request.method == 'POST':
+        language = request.POST.get('language', 'es')
+        
+        # Debug info
+        debug_info = {
+            'method': request.method,
+            'post_data': dict(request.POST),
+            'current_path': request.path,
+            'full_path': request.get_full_path(),
+            'host': request.get_host(),
+            'is_secure': request.is_secure(),
+            'language_requested': language,
+        }
+        
+        # Simple HTML response with JavaScript redirect
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Debug Redirect</title>
+        </head>
+        <body>
+            <h2>Debug Info:</h2>
+            <pre>{debug_info}</pre>
+            <p>Redirecting to /{language}/ in 3 seconds...</p>
+            <script>
+                setTimeout(function() {{
+                    window.location.href = '/{language}/';
+                }}, 3000);
+            </script>
+        </body>
+        </html>
+        """
+        
+        return HttpResponse(html)
+    
+    # GET request - show form
+    html = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Debug Language Selector</title>
+    </head>
+    <body>
+        <h2>Debug Language Selector</h2>
+        <form method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
+            <select name="language" onchange="this.form.submit()">
+                <option value="es">Español</option>
+                <option value="eu">Euskera</option>
+            </select>
+        </form>
+    </body>
+    </html>
+    """
+    
+    from django.middleware.csrf import get_token
+    csrf_token = get_token(request)
+    
+    return HttpResponse(html.format(csrf_token=csrf_token))
