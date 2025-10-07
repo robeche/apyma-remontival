@@ -23,6 +23,22 @@ def admin_redirect_view(request):
     redirect_url = f"https://robeche.pythonanywhere.com{path}"
     return redirect(redirect_url)
 
+def test_session(request):
+    """Vista temporal para probar creación de sesiones"""
+    # Forzar creación de sesión
+    request.session['test_key'] = 'test_value'
+    request.session.save()
+    
+    info = []
+    info.append(f"<h2>Session Test</h2>")
+    info.append(f"Session key after save: {request.session.session_key}<br>")
+    info.append(f"Session test_key: {request.session.get('test_key', 'NOT FOUND')}<br>")
+    info.append(f"Session is empty: {request.session.is_empty()}<br>")
+    info.append(f"Host: {request.get_host()}<br>")
+    info.append("<br><a href='/es/debug-headers/'>Ver debug headers</a>")
+    
+    return HttpResponse("".join(info))
+
 def debug_headers_cookies(request):
     """Vista para debuggear headers y cookies en producción"""
     info = []
