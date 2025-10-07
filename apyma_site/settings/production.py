@@ -10,7 +10,6 @@ from .base import *
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Añadido para producción
-    "usuarios.middleware.OriginalHostMiddleware",  # Convertir X-Original-Host a X-Forwarded-Host
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
