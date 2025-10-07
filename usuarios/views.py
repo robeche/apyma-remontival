@@ -394,13 +394,29 @@ def simple_set_language(request):
         if language not in ['es', 'eu']:
             language = 'es'
         
-        # Redirección HTTP simple y directa
-        from django.http import HttpResponseRedirect
+        # Usar JavaScript para redirección más confiable
         redirect_url = f'/{language}/'
         
-        return HttpResponseRedirect(redirect_url)
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Redirigiendo...</title>
+        </head>
+        <body>
+            <p>Cambiando idioma...</p>
+            <script>
+                window.location.replace('{redirect_url}');
+            </script>
+        </body>
+        </html>
+        """
+        
+        return HttpResponse(html)
     
-    # Si no es POST, redirigir a home
+    # Si no es POST, redirigir a home español
+    from django.http import HttpResponseRedirect
     return HttpResponseRedirect('/es/')
 
 
