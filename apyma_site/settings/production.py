@@ -9,6 +9,7 @@ from .base import *
 # Añadir whitenoise para archivos estáticos
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "usuarios.cloudflare_middleware.CloudflareHostMiddleware",  # Convertir X-Original-Host a X-Forwarded-Host
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Añadido para producción
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
