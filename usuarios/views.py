@@ -385,6 +385,25 @@ def serve_pdf(request, filename):
         raise Http404("Error al leer el archivo")
 
 
+def simple_set_language(request):
+    """Vista simple que REEMPLAZA a /i18n/setlang/"""
+    if request.method == 'POST':
+        language = request.POST.get('language', 'es')
+        
+        # Validar idioma
+        if language not in ['es', 'eu']:
+            language = 'es'
+        
+        # Redirección HTTP simple y directa
+        from django.http import HttpResponseRedirect
+        redirect_url = f'/{language}/'
+        
+        return HttpResponseRedirect(redirect_url)
+    
+    # Si no es POST, redirigir a home
+    return HttpResponseRedirect('/es/')
+
+
 def debug_redirect(request):
     """Vista de debug para probar redirecciones simples"""
     if request.method == 'POST':
