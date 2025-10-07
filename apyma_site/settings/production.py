@@ -8,8 +8,8 @@ from .base import *
 
 # Añadir whitenoise para archivos estáticos
 MIDDLEWARE = [
+    "usuarios.cloudflare_middleware.CloudflareHostMiddleware",  # PRIMERO - antes que SecurityMiddleware
     "django.middleware.security.SecurityMiddleware",
-    "usuarios.cloudflare_middleware.CloudflareHostMiddleware",  # Convertir X-Original-Host a X-Forwarded-Host
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Añadido para producción
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -26,11 +26,13 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='apymaremontival.pythonanywhere.com,www.apymaremontival.com,apymaremontival.com,robeche.pythonanywhere.com',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+ALLOWED_HOSTS = [
+    'apymaremontival.pythonanywhere.com',
+    'www.apymaremontival.com',
+    'apymaremontival.com',
+    'robeche.pythonanywhere.com',
+    '*.apymaremontival.com',  # Comodín para subdominios
+]
 
 # CSRF Trusted Origins (necesario para Django 4.0+)
 CSRF_TRUSTED_ORIGINS = [
