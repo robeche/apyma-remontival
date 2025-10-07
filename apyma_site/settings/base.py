@@ -9,9 +9,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Redirigir al dashboard tras login
+# Redirigir al dashboard tras login (excepto admin)
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGIN_URL = '/area-socios/'
+
+# Para admin, configuramos redirección específica
+ADMIN_LOGIN_REDIRECT_URL = '/admin/'
 
 # Application definition
 INSTALLED_APPS = [
