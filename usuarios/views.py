@@ -394,7 +394,7 @@ def simple_set_language(request):
         if language not in ['es', 'eu']:
             language = 'es'
         
-        # Usar JavaScript para redirección más confiable
+        # Crear HTML con JavaScript para redirección Y establecer cookie
         redirect_url = f'/{language}/'
         
         html = f"""
@@ -407,13 +407,29 @@ def simple_set_language(request):
         <body>
             <p>Cambiando idioma...</p>
             <script>
+                // Establecer cookie de idioma
+                document.cookie = "django_language={language}; path=/; max-age=31536000; SameSite=Lax";
+                // Redirigir inmediatamente
                 window.location.replace('{redirect_url}');
             </script>
         </body>
         </html>
         """
         
-        return HttpResponse(html)
+        response = HttpResponse(html)
+        
+        # También establecer cookie desde el servidor por si acaso
+        response.set_cookie(
+            'django_language',
+            language,
+            max_age=365 * 24 * 60 * 60,  # 1 año
+            path='/',
+            secure=False,  # Temporal para que funcione
+            httponly=False,  # Permitir acceso desde JavaScript
+            samesite='Lax'
+        )
+        
+        return response
     
     # Si no es POST, redirigir a home español
     from django.http import HttpResponseRedirect
