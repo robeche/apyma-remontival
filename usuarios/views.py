@@ -37,15 +37,27 @@ def debug_admin_user(request):
     
     return HttpResponse("<br>".join(info))
 
+def admin_login_view(request):
+    """Vista de login personalizada para admin que evita LOGIN_REDIRECT_URL"""
+    from django.contrib.auth.views import LoginView
+    from django.contrib.admin.forms import AdminAuthenticationForm
+    
+    class CustomAdminLoginView(LoginView):
+        template_name = 'admin/login.html'
+        authentication_form = AdminAuthenticationForm
+        
+        def get_success_url(self):
+            # Forzar redirección al admin, ignorando LOGIN_REDIRECT_URL
+            return '/admin/'
+    
+    return CustomAdminLoginView.as_view()(request)
+
 def home(request):
     """Página de inicio pública con información de la Apyma"""
     return render(request, 'usuarios/home.html')
 
 @login_required
 def dashboard(request):
-    # Si es un usuario staff (admin), redirigir al panel de administración
-    if request.user.is_staff:
-        return redirect('/admin/')
     return render(request, 'usuarios/dashboard.html')
 
 def register(request):

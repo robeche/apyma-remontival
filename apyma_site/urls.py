@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
-from usuarios.views import simple_set_language
+from usuarios.views import simple_set_language, admin_login_view
 
 # Personalizar el admin site
 admin.site.site_header = 'Administración APYMA Remontival'
@@ -28,7 +28,8 @@ admin.site.site_title = 'APYMA Admin'
 admin.site.index_title = 'Panel de Administración'
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/login/", admin_login_view, name='admin_login'),  # Vista personalizada ANTES
+    path("admin/", admin.site.urls),  # Admin normal DESPUÉS
     path('i18n/', include('django.conf.urls.i18n')),
     path('set-language/', simple_set_language, name='simple_set_language'),
 ]
