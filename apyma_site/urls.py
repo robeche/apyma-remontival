@@ -22,10 +22,15 @@ from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 from usuarios.views import simple_set_language
 
+# Personalizar el admin site
+admin.site.site_header = 'Administración APYMA Remontival'
+admin.site.site_title = 'APYMA Admin'
+admin.site.index_title = 'Panel de Administración'
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('set-language/', simple_set_language, name='simple_set_language'),  # FUERA de i18n_patterns
+    path('set-language/', simple_set_language, name='simple_set_language'),
 ]
 
 urlpatterns += i18n_patterns(
