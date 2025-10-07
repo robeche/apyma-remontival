@@ -19,5 +19,6 @@ urlpatterns = [
     path('actividades/<int:actividad_id>/editar/', views.actualizar_actividad, name='actualizar_actividad'),
     path('actividades/<int:actividad_id>/eliminar/', views.eliminar_actividad, name='eliminar_actividad'),
     path('debug-redirect/', views.debug_redirect, name='debug_redirect'),
+    path('debug-headers/', views.debug_headers_cookies, name='debug_headers'),  # TEMPORAL DEBUG
     # path('debug-admin-user/', views.debug_admin_user, name='debug_admin_user'),  # TEMPORAL - DESACTIVADO
 ]

@@ -23,6 +23,58 @@ def admin_redirect_view(request):
     redirect_url = f"https://robeche.pythonanywhere.com{path}"
     return redirect(redirect_url)
 
+def debug_headers_cookies(request):
+    """Vista para debuggear headers y cookies en producción"""
+    info = []
+    
+    # Información básica de la request
+    info.append(f"<h2>Request Info</h2>")
+    info.append(f"Host: {request.get_host()}")
+    info.append(f"Full path: {request.get_full_path()}")
+    info.append(f"Is secure: {request.is_secure()}")
+    info.append(f"Method: {request.method}")
+    info.append("<br>")
+    
+    # Headers importantes
+    info.append(f"<h2>Headers</h2>")
+    important_headers = [
+        'HTTP_HOST', 'HTTP_X_FORWARDED_HOST', 'HTTP_X_ORIGINAL_HOST', 
+        'HTTP_X_FORWARDED_PROTO', 'HTTP_X_FORWARDED_FOR',
+        'HTTP_COOKIE', 'HTTP_USER_AGENT'
+    ]
+    
+    for header in important_headers:
+        value = request.META.get(header, 'NOT SET')
+        info.append(f"{header}: {value}<br>")
+    
+    # Cookies de la request
+    info.append(f"<h2>Request Cookies</h2>")
+    for key, value in request.COOKIES.items():
+        info.append(f"{key}: {value}<br>")
+    
+    # Información de sesión
+    info.append(f"<h2>Session Info</h2>")
+    info.append(f"Session key: {request.session.session_key}<br>")
+    info.append(f"Session is empty: {request.session.is_empty()}<br>")
+    info.append(f"Session items: {dict(request.session)}<br>")
+    
+    # Usuario
+    info.append(f"<h2>User Info</h2>")
+    info.append(f"Is authenticated: {request.user.is_authenticated}<br>")
+    if request.user.is_authenticated:
+        info.append(f"Username: {request.user.username}<br>")
+        info.append(f"Is staff: {request.user.is_staff}<br>")
+    
+    # Configuración de Django
+    from django.conf import settings
+    info.append(f"<h2>Django Settings</h2>")
+    info.append(f"SESSION_COOKIE_NAME: {getattr(settings, 'SESSION_COOKIE_NAME', 'NOT SET')}<br>")
+    info.append(f"SESSION_COOKIE_DOMAIN: {getattr(settings, 'SESSION_COOKIE_DOMAIN', 'NOT SET')}<br>")
+    info.append(f"SESSION_COOKIE_SECURE: {getattr(settings, 'SESSION_COOKIE_SECURE', 'NOT SET')}<br>")
+    info.append(f"USE_X_FORWARDED_HOST: {getattr(settings, 'USE_X_FORWARDED_HOST', 'NOT SET')}<br>")
+    
+    return HttpResponse("".join(info))
+
 def debug_admin_user(request):
     """Vista temporal para debuggear usuario admin"""
     from django.contrib.auth.models import User
