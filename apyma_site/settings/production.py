@@ -85,8 +85,8 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # Permitir iframes del mismo dominio para PDFs
 
 # HTTPS settings para Cloudflare
 SECURE_SSL_REDIRECT = False  # Cloudflare maneja esto
-SESSION_COOKIE_SECURE = False  # Temporal - para debugging
-CSRF_COOKIE_SECURE = False     # Temporal - para debugging
+SESSION_COOKIE_SECURE = True  # Reactivar cookies seguras
+CSRF_COOKIE_SECURE = True     # Reactivar CSRF seguras
 
 # Configuración específica para Cloudflare
 USE_X_FORWARDED_HOST = True

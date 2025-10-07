@@ -21,5 +21,6 @@ urlpatterns = [
     path('debug-redirect/', views.debug_redirect, name='debug_redirect'),
     path('debug-headers/', views.debug_headers_cookies, name='debug_headers'),  # TEMPORAL DEBUG
     path('test-session/', views.test_session, name='test_session'),  # TEMPORAL SESSION TEST
+    path('debug-login/', views.debug_login, name='debug_login'),  # TEMPORAL LOGIN DEBUG
     # path('debug-admin-user/', views.debug_admin_user, name='debug_admin_user'),  # TEMPORAL - DESACTIVADO
 ]

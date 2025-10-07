@@ -23,6 +23,61 @@ def admin_redirect_view(request):
     redirect_url = f"https://robeche.pythonanywhere.com{path}"
     return redirect(redirect_url)
 
+def debug_login(request):
+    """Vista para debuggear el proceso de login"""
+    from django.contrib.auth import authenticate
+    
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        
+        info = []
+        info.append(f"<h2>Login Debug - POST</h2>")
+        info.append(f"Username received: '{username}'<br>")
+        info.append(f"Password length: {len(password) if password else 0}<br>")
+        
+        # Intentar autenticación
+        user = authenticate(request, username=username, password=password)
+        info.append(f"Authentication result: {user}<br>")
+        
+        if user:
+            info.append(f"User is active: {user.is_active}<br>")
+            info.append(f"User is staff: {user.is_staff}<br>")
+            info.append(f"User is superuser: {user.is_superuser}<br>")
+            
+            # Intentar login
+            from django.contrib.auth import login as auth_login
+            try:
+                auth_login(request, user)
+                info.append(f"Login successful!<br>")
+                info.append(f"User is authenticated now: {request.user.is_authenticated}<br>")
+                info.append(f"Session key: {request.session.session_key}<br>")
+            except Exception as e:
+                info.append(f"Login failed with error: {e}<br>")
+        else:
+            info.append("Authentication failed - check username/password<br>")
+        
+        info.append("<br><a href='/es/debug-login/'>Try again</a><br>")
+        info.append("<a href='/es/debug-headers/'>Check headers</a>")
+        
+        return HttpResponse("".join(info))
+    
+    # GET request - show form
+    html = """
+    <h2>Debug Login Form</h2>
+    <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{csrf_token}">
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+        <input type="submit" value="Test Login">
+    </form>
+    <br><a href="/es/debug-headers/">Check headers</a>
+    """.format(csrf_token=request.META.get('CSRF_COOKIE', ''))
+    
+    return HttpResponse(html)
+
 def test_session(request):
     """Vista temporal para probar creación de sesiones"""
     # Forzar creación de sesión
