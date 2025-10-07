@@ -85,6 +85,19 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # Permitir iframes del mismo dominio para PDFs
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 
+# Configuración de cookies para que funcionen específicamente en el dominio principal
+# Comentamos SESSION_COOKIE_DOMAIN para usar el dominio actual automáticamente
+# SESSION_COOKIE_DOMAIN = '.apymaremontival.com'  
+# CSRF_COOKIE_DOMAIN = '.apymaremontival.com'
+
+SESSION_COOKIE_NAME = 'apyma_sessionid'
+CSRF_COOKIE_NAME = 'apyma_csrftoken'
+
+# Para asegurar compatibilidad cross-domain
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = True  # Seguridad adicional
+
 # Static files para producción
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
