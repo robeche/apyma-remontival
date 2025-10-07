@@ -10,6 +10,7 @@ from .base import *
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Añadido para producción
+    "usuarios.middleware.OriginalHostMiddleware",  # Convertir X-Original-Host a X-Forwarded-Host
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -89,6 +90,10 @@ CSRF_COOKIE_SECURE = True     # CSRF solo por HTTPS
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Como Cloudflare Worker envía X-Original-Host en lugar de X-Forwarded-Host
+# Necesitamos un middleware personalizado o forzar el uso
+FORCE_HOST_FROM_X_ORIGINAL = True
 
 # Configuración de cookies para que funcionen con Cloudflare
 SESSION_COOKIE_DOMAIN = None  # Usar el dominio de la request actual

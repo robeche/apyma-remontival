@@ -1,6 +1,24 @@
 from django.conf import settings
 from django.http import HttpResponsePermanentRedirect
 
+class OriginalHostMiddleware:
+    """
+    Middleware para usar X-Original-Host del Cloudflare Worker
+    como si fuera X-Forwarded-Host
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Si viene X-Original-Host, copiarlo a X-Forwarded-Host
+        if 'HTTP_X_ORIGINAL_HOST' in request.META:
+            original_host = request.META['HTTP_X_ORIGINAL_HOST']
+            request.META['HTTP_X_FORWARDED_HOST'] = original_host
+            request.META['HTTP_X_FORWARDED_PROTO'] = 'https'
+            
+        response = self.get_response(request)
+        return response
+
 class DomainRedirectMiddleware:
     """
     Middleware para redirigir automáticamente al dominio principal
