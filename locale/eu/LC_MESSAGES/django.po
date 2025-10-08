@@ -144,9 +144,6 @@ msgstr "Jarduera baterako iradokizunik al duzu?"
 msgid "Contactanos"
 msgstr "Jarri gurekin harremanetan"
 
-msgid "Cancelar"
-msgstr "Utzi"
-
 msgid "Crear Actividad"
 msgstr "Jarduera Sortu"
 
