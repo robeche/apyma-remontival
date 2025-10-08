@@ -894,6 +894,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function cargarFormularioEdicion(actividad) {
         document.getElementById('edit-actividad-id').value = actividad.id;
         document.getElementById('edit-fecha').value = actividad.fecha_iso;
+        document.getElementById('edit-titulo').value = actividad.titulo;
         document.getElementById('edit-tipo_actividad').value = actividad.tipo_actividad;
         document.getElementById('edit-hora_comienzo').value = actividad.hora_comienzo;
         document.getElementById('edit-hora_finalizacion').value = actividad.hora_finalizacion || '';
@@ -1065,6 +1066,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     
+                    <div class="mb-3">
+                        <label for="{{ form.titulo.id_for_label }}" class="form-label">{{ form.titulo.label }}</label>
+                        {{ form.titulo }}
+                        <div class="invalid-feedback" id="error-titulo"></div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -1192,6 +1199,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="invalid-feedback" id="edit-error-tipo_actividad"></div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="edit-titulo" class="form-label">{% trans "Título" %}</label>
+                        <input type="text" class="form-control" id="edit-titulo" name="titulo">
+                        <div class="invalid-feedback" id="edit-error-titulo"></div>
                     </div>
                     
                     <div class="row">

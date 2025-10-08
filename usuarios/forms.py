@@ -61,11 +61,15 @@ class ContactoForm(forms.Form):
 class ActividadForm(forms.ModelForm):
     class Meta:
         model = Actividad
-        fields = ['fecha', 'hora_comienzo', 'hora_finalizacion', 'descripcion', 'donde', 'imagen', 'link', 'tipo_actividad']
+        fields = ['fecha', 'titulo', 'hora_comienzo', 'hora_finalizacion', 'descripcion', 'donde', 'imagen', 'link', 'tipo_actividad']
         widgets = {
             'fecha': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
+            }),
+            'titulo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Título de la actividad')
             }),
             'hora_comienzo': forms.TimeInput(attrs={
                 'class': 'form-control',

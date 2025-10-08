@@ -43,16 +43,16 @@ class SocioAdmin(admin.ModelAdmin):
 
 @admin.register(Actividad)
 class ActividadAdmin(admin.ModelAdmin):
-    list_display = ('descripcion_corta', 'fecha', 'get_hora_completa', 'tipo_actividad', 'activa', 'fecha_creacion')
+    list_display = ('titulo', 'fecha', 'get_hora_completa', 'tipo_actividad', 'activa', 'fecha_creacion')
     list_filter = ('tipo_actividad', 'activa', 'fecha', 'fecha_creacion')
-    search_fields = ('descripcion', 'donde', 'tipo_actividad')
+    search_fields = ('titulo', 'descripcion', 'donde', 'tipo_actividad')
     readonly_fields = ('fecha_creacion', 'fecha_actualizacion')
     list_editable = ('activa',)
     date_hierarchy = 'fecha'
     
     fieldsets = (
         ('Información básica', {
-            'fields': ('descripcion', 'donde', 'tipo_actividad', 'activa')
+            'fields': ('titulo', 'descripcion', 'donde', 'tipo_actividad', 'activa')
         }),
         ('Fecha y hora', {
             'fields': ('fecha', 'hora_comienzo', 'hora_finalizacion')
@@ -66,10 +66,6 @@ class ActividadAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
-    def descripcion_corta(self, obj):
-        return obj.descripcion[:50] + '...' if len(obj.descripcion) > 50 else obj.descripcion
-    descripcion_corta.short_description = 'Descripción'
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

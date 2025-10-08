@@ -334,7 +334,7 @@ def actividades(request):
         
         actividades_por_dia[dia].append({
             'id': actividad.id,
-            'titulo': f"{actividad.get_tipo_actividad_display()}",
+            'titulo': actividad.titulo or f"{actividad.get_tipo_actividad_display()}",
             'hora': actividad.hora_comienzo.strftime('%H:%M'),
             'hora_fin': actividad.hora_finalizacion.strftime('%H:%M') if actividad.hora_finalizacion else None,
             'tipo': actividad.tipo_actividad,
@@ -391,7 +391,7 @@ def crear_actividad(request):
             'actividad': {
                 'id': actividad.id,
                 'fecha': actividad.fecha.strftime('%Y-%m-%d'),
-                'titulo': actividad.get_tipo_actividad_display(),
+                'titulo': actividad.titulo or actividad.get_tipo_actividad_display(),
                 'hora': actividad.hora_comienzo.strftime('%H:%M'),
                 'descripcion': actividad.descripcion
             }
@@ -413,6 +413,7 @@ def detalle_actividad(request, actividad_id):
             'success': True,
             'actividad': {
                 'id': actividad.id,
+                'titulo': actividad.titulo or actividad.get_tipo_actividad_display(),
                 'fecha': actividad.fecha.strftime('%d/%m/%Y'),
                 'fecha_iso': actividad.fecha.strftime('%Y-%m-%d'),
                 'hora_comienzo': actividad.hora_comienzo.strftime('%H:%M'),
@@ -454,7 +455,7 @@ def actualizar_actividad(request, actividad_id):
                 'actividad': {
                     'id': actividad_actualizada.id,
                     'fecha': actividad_actualizada.fecha.strftime('%Y-%m-%d'),
-                    'titulo': actividad_actualizada.get_tipo_actividad_display(),
+                    'titulo': actividad_actualizada.titulo or actividad_actualizada.get_tipo_actividad_display(),
                     'hora': actividad_actualizada.hora_comienzo.strftime('%H:%M'),
                     'descripcion': actividad_actualizada.descripcion
                 }

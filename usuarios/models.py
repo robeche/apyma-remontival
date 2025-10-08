@@ -236,6 +236,14 @@ class Actividad(models.Model):
         help_text=_('Fecha en la que se realizará la actividad')
     )
     
+    titulo = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name=_('Título'),
+        help_text=_('Título de la actividad')
+    )
+    
     hora_comienzo = models.TimeField(
         verbose_name=_('Hora de comienzo'),
         help_text=_('Hora de inicio de la actividad')
@@ -304,7 +312,8 @@ class Actividad(models.Model):
         ordering = ['fecha', 'hora_comienzo']
     
     def __str__(self):
-        return f"{self.get_tipo_actividad_display()} - {self.descripcion[:50]} ({self.fecha})"
+        titulo = self.titulo or f"{self.get_tipo_actividad_display()} - {self.descripcion[:30]}"
+        return f"{titulo} ({self.fecha})"
     
     def get_duracion(self):
         """Retorna la duración de la actividad si tiene hora de finalización"""
