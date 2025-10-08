@@ -37,6 +37,10 @@ urlpatterns += i18n_patterns(
     path("", include("usuarios.urls")),
 )
 
-# Servir archivos de media en desarrollo
+# Servir archivos de media
+# En desarrollo y también en producción simple (PythonAnywhere)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Servir archivos estáticos adicionales si es necesario
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

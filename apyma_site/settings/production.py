@@ -114,8 +114,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Configuración de media files para producción
-# En producción, los archivos media deberían servirse desde un CDN
-# o servicio de almacenamiento externo, pero para simplificar los dejamos locales
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Configuración adicional de seguridad
 SECURE_HSTS_SECONDS = 31536000  # 1 año
