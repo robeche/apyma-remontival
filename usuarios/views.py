@@ -819,6 +819,16 @@ def eliminar_noticia(request, noticia_id):
     try:
         noticia = Noticia.objects.get(id=noticia_id)
         titulo = noticia.titulo
+        
+        # Eliminar imagen asociada si existe
+        if noticia.imagen:
+            try:
+                if os.path.exists(noticia.imagen.path):
+                    os.remove(noticia.imagen.path)
+            except Exception as e:
+                # Log del error pero continuar con la eliminación
+                print(f"Error eliminando imagen: {e}")
+        
         noticia.delete()
         return JsonResponse({
             'success': True,
@@ -826,6 +836,8 @@ def eliminar_noticia(request, noticia_id):
         })
     except Noticia.DoesNotExist:
         return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': f'Error inesperado: {str(e)}'}, status=500)
 
 
 @login_required

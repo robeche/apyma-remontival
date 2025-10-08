@@ -593,12 +593,17 @@ document.getElementById('formCrearNoticia')?.addEventListener('submit', function
 // Editar noticia
 function editarNoticia(noticiaId) {
     // Obtener datos de la noticia
-    fetch(`/noticias/${noticiaId}/obtener/`, {
+    fetch(`{% url 'obtener_noticia' 0 %}`.replace('0', noticiaId), {
         headers: {
             'X-CSRFToken': getCookie('csrftoken')
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.error) {
             mostrarToast(data.error, 'danger');
@@ -639,14 +644,19 @@ document.getElementById('formEditarNoticia')?.addEventListener('submit', functio
     const formData = new FormData(this);
     const noticiaId = document.getElementById('editarNoticiaId').value;
     
-    fetch(`/noticias/${noticiaId}/editar/`, {
+    fetch(`{% url 'editar_noticia' 0 %}`.replace('0', noticiaId), {
         method: 'POST',
         body: formData,
         headers: {
             'X-CSRFToken': getCookie('csrftoken')
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             mostrarToast('Noticia actualizada exitosamente', 'success');
@@ -670,14 +680,18 @@ document.getElementById('formEditarNoticia')?.addEventListener('submit', functio
 // Eliminar noticia
 function eliminarNoticia(noticiaId, titulo) {
     if (confirm(`¿Estás seguro de que quieres eliminar la noticia "${titulo}"? Esta acción no se puede deshacer.`)) {
-        fetch(`/noticias/${noticiaId}/eliminar/`, {
+        fetch(`{% url 'eliminar_noticia' 0 %}`.replace('0', noticiaId), {
             method: 'POST',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-                'Content-Type': 'application/json'
+                'X-CSRFToken': getCookie('csrftoken')
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 mostrarToast('Noticia eliminada exitosamente', 'success');
