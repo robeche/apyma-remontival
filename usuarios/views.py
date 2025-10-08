@@ -11,8 +11,8 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.cache import cache_control
-from .forms import ContactoForm, ActividadForm
-from .models import Contacto, Actividad
+from .forms import ContactoForm, ActividadForm, NoticiaForm
+from .models import Contacto, Actividad, Noticia
 import os
 import mimetypes
 
@@ -685,3 +685,168 @@ def debug_redirect(request):
     """
     
     return HttpResponse(html)
+
+
+def noticias_lista(request):
+    """Vista para mostrar la lista de noticias"""
+    from django.core.paginator import Paginator
+    
+    # Obtener solo noticias publicadas
+    noticias = Noticia.objects.filter(publicada=True)
+    
+    # Obtener idioma actual
+    language = request.LANGUAGE_CODE
+    
+    # Añadir campos localizados a cada noticia
+    for noticia in noticias:
+        noticia.titulo_localizado = noticia.get_titulo_localized(language)
+        noticia.resumen_localizado = noticia.get_resumen_localized(language)
+        noticia.contenido_localizado = noticia.get_contenido_localized(language)
+    
+    # Paginación
+    paginator = Paginator(noticias, 6)  # 6 noticias por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # También añadir los campos localizados a las noticias paginadas
+    for noticia in page_obj:
+        noticia.titulo_localizado = noticia.get_titulo_localized(language)
+        noticia.resumen_localizado = noticia.get_resumen_localized(language)
+        noticia.contenido_localizado = noticia.get_contenido_localized(language)
+    
+    context = {
+        'noticias': page_obj,  # Para compatibilidad con la plantilla
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'language': language,
+        'total_noticias': noticias.count(),
+    }
+    
+    return render(request, 'usuarios/noticias_lista.html', context)
+
+
+# Vista de detalle no necesaria con el modal
+# def noticia_detalle(request, slug):
+#     """Vista para mostrar el detalle de una noticia en modal"""
+#     from django.shortcuts import get_object_or_404
+#     
+#     # Obtener la noticia por slug, solo si está publicada
+#     noticia = get_object_or_404(Noticia, slug=slug, publicada=True)
+#     
+#     # Obtener idioma actual
+#     language = request.LANGUAGE_CODE
+#     
+#     # Añadir campos localizados a la noticia
+#     noticia.titulo_localizado = noticia.get_titulo_localized(language)
+#     noticia.resumen_localizado = noticia.get_resumen_localized(language)
+#     noticia.contenido_localizado = noticia.get_contenido_localized(language)
+#     
+#     # Obtener noticias relacionadas (las 3 más recientes, excluyendo la actual)
+#     noticias_relacionadas = Noticia.objects.filter(
+#         publicada=True
+#     ).exclude(id=noticia.id)[:3]
+#     
+#     # Añadir campos localizados a las noticias relacionadas
+#     for noticia_rel in noticias_relacionadas:
+#         noticia_rel.titulo_localizado = noticia_rel.get_titulo_localized(language)
+#         noticia_rel.resumen_localizado = noticia_rel.get_resumen_localized(language)
+#         noticia_rel.contenido_localizado = noticia_rel.get_contenido_localized(language)
+#     
+#     context = {
+#         'noticia': noticia,
+#         'language': language,
+#         'noticias_relacionadas': noticias_relacionadas,
+#     }
+#     
+#     return render(request, 'usuarios/noticia_detalle.html', context)
+
+
+@require_POST
+@login_required
+def crear_noticia(request):
+    """Vista para crear una nueva noticia vía AJAX"""
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'No tienes permisos para crear noticias'}, status=403)
+    
+    form = NoticiaForm(request.POST, request.FILES)
+    if form.is_valid():
+        noticia = form.save()
+        return JsonResponse({
+            'success': True,
+            'message': 'Noticia creada exitosamente',
+            'noticia_id': noticia.id
+        })
+    else:
+        return JsonResponse({
+            'success': False,
+            'errors': form.errors
+        })
+
+
+@require_POST
+@login_required
+def editar_noticia(request, noticia_id):
+    """Vista para editar una noticia existente vía AJAX"""
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'No tienes permisos para editar noticias'}, status=403)
+    
+    try:
+        noticia = Noticia.objects.get(id=noticia_id)
+    except Noticia.DoesNotExist:
+        return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
+    
+    form = NoticiaForm(request.POST, request.FILES, instance=noticia)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({
+            'success': True,
+            'message': 'Noticia actualizada exitosamente'
+        })
+    else:
+        return JsonResponse({
+            'success': False,
+            'errors': form.errors
+        })
+
+
+@require_POST
+@login_required
+def eliminar_noticia(request, noticia_id):
+    """Vista para eliminar una noticia vía AJAX"""
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'No tienes permisos para eliminar noticias'}, status=403)
+    
+    try:
+        noticia = Noticia.objects.get(id=noticia_id)
+        titulo = noticia.titulo
+        noticia.delete()
+        return JsonResponse({
+            'success': True,
+            'message': f'Noticia "{titulo}" eliminada exitosamente'
+        })
+    except Noticia.DoesNotExist:
+        return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
+
+
+@login_required
+def obtener_noticia(request, noticia_id):
+    """Vista para obtener los datos de una noticia para edición vía AJAX"""
+    if not request.user.is_staff:
+        return JsonResponse({'error': 'No tienes permisos'}, status=403)
+    
+    try:
+        noticia = Noticia.objects.get(id=noticia_id)
+        data = {
+            'id': noticia.id,
+            'titulo': noticia.titulo,
+            'titulo_eu': noticia.titulo_eu or '',
+            'resumen': noticia.resumen,
+            'resumen_eu': noticia.resumen_eu or '',
+            'contenido': noticia.contenido,
+            'contenido_eu': noticia.contenido_eu or '',
+            'publicada': noticia.publicada,
+            'imagen_url': noticia.imagen.url if noticia.imagen else ''
+        }
+        return JsonResponse(data)
+    except Noticia.DoesNotExist:
+        return JsonResponse({'error': 'Noticia no encontrada'}, status=404)

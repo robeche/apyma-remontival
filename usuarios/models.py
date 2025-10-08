@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 class Contacto(models.Model):
     ASUNTOS_CHOICES = [
@@ -341,3 +342,124 @@ class Actividad(models.Model):
         """Verifica si la actividad ya pasó"""
         from datetime import date
         return self.fecha < date.today()
+
+
+class Noticia(models.Model):
+    """Modelo para las noticias de la APYMA"""
+    
+    titulo = models.CharField(
+        max_length=200,
+        verbose_name=_('Título')
+    )
+    
+    titulo_eu = models.CharField(
+        max_length=200,
+        verbose_name=_('Título (Euskera)'),
+        help_text=_('Título en euskera')
+    )
+    
+    resumen = models.TextField(
+        max_length=300,
+        verbose_name=_('Resumen'),
+        help_text=_('Breve descripción que aparecerá en la lista de noticias')
+    )
+    
+    resumen_eu = models.TextField(
+        max_length=300,
+        verbose_name=_('Resumen (Euskera)'),
+        help_text=_('Resumen en euskera')
+    )
+    
+    contenido = models.TextField(
+        verbose_name=_('Contenido completo')
+    )
+    
+    contenido_eu = models.TextField(
+        verbose_name=_('Contenido completo (Euskera)'),
+        help_text=_('Contenido completo en euskera')
+    )
+    
+    imagen = models.ImageField(
+        upload_to='noticias/',
+        blank=True,
+        null=True,
+        verbose_name=_('Imagen destacada'),
+        help_text=_('Imagen opcional para la noticia')
+    )
+    
+    fecha_publicacion = models.DateTimeField(
+        default=timezone.now,
+        verbose_name=_('Fecha de publicación'),
+        help_text=_('Fecha en que se publicará la noticia')
+    )
+    
+    fecha_creacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Fecha de creación')
+    )
+    
+    fecha_modificacion = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Última modificación')
+    )
+    
+    publicada = models.BooleanField(
+        default=True,
+        verbose_name=_('Publicada'),
+        help_text=_('Si está marcado, la noticia será visible para todos')
+    )
+    
+    destacada = models.BooleanField(
+        default=False,
+        verbose_name=_('Noticia destacada'),
+        help_text=_('Las noticias destacadas aparecen primero')
+    )
+    
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name=_('URL amigable'),
+        help_text=_('Se genera automáticamente del título')
+    )
+    
+    class Meta:
+        verbose_name = _('Noticia')
+        verbose_name_plural = _('Noticias')
+        ordering = ['-destacada', '-fecha_publicacion']
+    
+    def __str__(self):
+        return self.titulo
+    
+    def get_titulo_localized(self, language='es'):
+        """Obtiene el título en el idioma especificado"""
+        if language == 'eu':
+            return self.titulo_eu
+        return self.titulo
+    
+    def get_resumen_localized(self, language='es'):
+        """Obtiene el resumen en el idioma especificado"""
+        if language == 'eu':
+            return self.resumen_eu
+        return self.resumen
+    
+    def get_contenido_localized(self, language='es'):
+        """Obtiene el contenido en el idioma especificado"""
+        if language == 'eu':
+            return self.contenido_eu
+        return self.contenido
+    
+    def save(self, *args, **kwargs):
+        """Genera el slug automáticamente si no existe"""
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.titulo)
+            slug = base_slug
+            counter = 1
+            
+            while Noticia.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            
+            self.slug = slug
+        
+        super().save(*args, **kwargs)

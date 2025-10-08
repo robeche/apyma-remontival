@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Actividad
+from .models import Actividad, Noticia
 
 class ContactoForm(forms.Form):
     ASUNTOS_CHOICES = [
@@ -104,3 +104,54 @@ class ActividadForm(forms.ModelForm):
         self.fields['donde'].required = False
         self.fields['imagen'].required = False
         self.fields['link'].required = False
+
+
+class NoticiaForm(forms.ModelForm):
+    class Meta:
+        model = Noticia
+        fields = ['titulo', 'titulo_eu', 'resumen', 'resumen_eu', 'contenido', 'contenido_eu', 'imagen', 'publicada']
+        widgets = {
+            'titulo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Título en español')
+            }),
+            'titulo_eu': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Título en euskera')
+            }),
+            'resumen': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Resumen en español')
+            }),
+            'resumen_eu': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Resumen en euskera')
+            }),
+            'contenido': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 8,
+                'placeholder': _('Contenido completo en español')
+            }),
+            'contenido_eu': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 8,
+                'placeholder': _('Contenido completo en euskera')
+            }),
+            'imagen': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'publicada': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            })
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hacer campos opcionales
+        self.fields['titulo_eu'].required = False
+        self.fields['resumen_eu'].required = False
+        self.fields['contenido_eu'].required = False
+        self.fields['imagen'].required = False

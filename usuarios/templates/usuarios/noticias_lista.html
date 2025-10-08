@@ -1,0 +1,697 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Noticias" %} - APYMA Remontival{% endblock %}
+
+{% block extra_css %}
+<style>
+.image-container {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.card {
+    min-height: 280px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+@media (max-width: 768px) {
+    .image-container {
+        height: 200px !important;
+        border-radius: 0.375rem 0.375rem 0 0;
+    }
+    
+    .col-md-5, .col-md-7 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">
+                    <i class="fas fa-newspaper me-2"></i>
+                    {% trans "Noticias" %}
+                </h1>
+                {% if user.is_staff %}
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrearNoticia">
+                        <i class="fas fa-plus me-2"></i>{% trans "Crear Noticia" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if noticias %}
+        <div class="row justify-content-center">
+            {% for noticia in noticias %}
+                <div class="col-lg-10 col-md-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="row g-0">
+                            {% if noticia.imagen %}
+                                <div class="col-md-5">
+                                    <div class="image-container" style="height: 300px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
+                                        <img src="{{ noticia.imagen.url }}" class="img-fluid" alt="{{ noticia.titulo_localizado }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                            {% else %}
+                                <div class="col-12">
+                            {% endif %}
+                                <div class="card-body d-flex flex-column h-100">
+                                    <h5 class="card-title">
+                                        {% if noticia.destacada %}
+                                            <span class="badge bg-warning text-dark me-2">
+                                                <i class="fas fa-star"></i> {% trans "Destacada" %}
+                                            </span>
+                                        {% endif %}
+                                        {{ noticia.titulo_localizado }}
+                                    </h5>
+                                    {% if noticia.resumen_localizado %}
+                                        <p class="card-text">{{ noticia.resumen_localizado }}</p>
+                                    {% else %}
+                                        <p class="card-text">{{ noticia.contenido_localizado|truncatewords:30 }}</p>
+                                    {% endif %}
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>
+                                                {{ noticia.fecha_publicacion|date:"d/m/Y" }}
+                                            </small>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user me-1"></i>
+                                                APYMA Remontival
+                                            </small>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNoticia{{ noticia.id }}">
+                                            {% trans "Leer más" %} <i class="fas fa-arrow-right ms-1"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Modales para cada noticia -->
+        {% for noticia in noticias %}
+            <div class="modal fade" id="modalNoticia{{ noticia.id }}" tabindex="-1" aria-labelledby="modalLabel{{ noticia.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel{{ noticia.id }}">
+                                {% if noticia.destacada %}
+                                    <span class="badge bg-warning text-dark me-2">
+                                        <i class="fas fa-star"></i> {% trans "Destacada" %}
+                                    </span>
+                                {% endif %}
+                                {{ noticia.titulo_localizado }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {% if noticia.imagen %}
+                                <div class="text-center mb-3">
+                                    <img src="{{ noticia.imagen.url }}" class="img-fluid rounded" alt="{{ noticia.titulo_localizado }}" style="max-height: 300px; object-fit: contain;">
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <div class="d-flex flex-wrap align-items-center text-muted mb-3">
+                                    <span class="me-3">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        {{ noticia.fecha_publicacion|date:"d F Y" }}
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="fas fa-user me-1"></i>
+                                        APYMA Remontival
+                                    </span>
+                                </div>
+                            </div>
+
+                            {% if noticia.resumen_localizado %}
+                                <div class="alert alert-info">
+                                    <strong>{{ noticia.resumen_localizado }}</strong>
+                                </div>
+                            {% endif %}
+
+                            <div class="content">
+                                {{ noticia.contenido_localizado|linebreaks }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex gap-2">
+                                    <!-- Botones de compartir -->
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="compartirFacebook('{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Compartir en Facebook' %}">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="compartirTwitter('{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Compartir en Twitter' %}">
+                                        <i class="fab fa-twitter"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="compartirWhatsApp('{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Compartir en WhatsApp' %}">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="compartirInstagram('{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Compartir en Instagram' %}">
+                                        <i class="fab fa-instagram"></i>
+                                    </button>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    {% if user.is_staff %}
+                                        <!-- Botones de administración -->
+                                        <button class="btn btn-outline-warning btn-sm" onclick="editarNoticia({{ noticia.id }})" title="{% trans 'Editar noticia' %}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="eliminarNoticia({{ noticia.id }}, '{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Eliminar noticia' %}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        {% trans "Cerrar" %}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Paginación -->
+        {% if is_paginated %}
+            <nav aria-label="{% trans 'Navegación de noticias' %}">
+                <ul class="pagination justify-content-center mt-4">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="{% trans 'Primera página' %}">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="{% trans 'Página anterior' %}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="{% trans 'Página siguiente' %}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="{% trans 'Última página' %}">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">{% trans "No hay noticias disponibles" %}</h4>
+                    <p class="text-muted">{% trans "Pronto publicaremos nuevas noticias de la asociación." %}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal para crear nueva noticia -->
+{% if user.is_staff %}
+<div class="modal fade" id="modalCrearNoticia" tabindex="-1" aria-labelledby="modalCrearNoticiaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCrearNoticiaLabel">
+                    <i class="fas fa-plus me-2"></i>{% trans "Crear Nueva Noticia" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formCrearNoticia" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="titulo" class="form-label">{% trans "Título (Español)" %} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="titulo" name="titulo" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="titulo_eu" class="form-label">{% trans "Título (Euskera)" %}</label>
+                                <input type="text" class="form-control" id="titulo_eu" name="titulo_eu">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="resumen" class="form-label">{% trans "Resumen (Español)" %} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="resumen" name="resumen" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="resumen_eu" class="form-label">{% trans "Resumen (Euskera)" %}</label>
+                                <textarea class="form-control" id="resumen_eu" name="resumen_eu" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contenido" class="form-label">{% trans "Contenido (Español)" %} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="contenido" name="contenido" rows="8" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="contenido_eu" class="form-label">{% trans "Contenido (Euskera)" %}</label>
+                                <textarea class="form-control" id="contenido_eu" name="contenido_eu" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">{% trans "Imagen" %}</label>
+                                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="publicada" name="publicada" checked>
+                                    <label class="form-check-label" for="publicada">
+                                        {% trans "Publicar inmediatamente" %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancelar" %}</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>{% trans "Crear Noticia" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para editar noticia -->
+<div class="modal fade" id="modalEditarNoticia" tabindex="-1" aria-labelledby="modalEditarNoticiaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarNoticiaLabel">
+                    <i class="fas fa-edit me-2"></i>{% trans "Editar Noticia" %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEditarNoticia" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="editarNoticiaId" name="noticia_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarTitulo" class="form-label">{% trans "Título (Español)" %} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editarTitulo" name="titulo" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarTituloEu" class="form-label">{% trans "Título (Euskera)" %}</label>
+                                <input type="text" class="form-control" id="editarTituloEu" name="titulo_eu">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarResumen" class="form-label">{% trans "Resumen (Español)" %} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="editarResumen" name="resumen" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarResumenEu" class="form-label">{% trans "Resumen (Euskera)" %}</label>
+                                <textarea class="form-control" id="editarResumenEu" name="resumen_eu" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarContenido" class="form-label">{% trans "Contenido (Español)" %} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="editarContenido" name="contenido" rows="8" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarContenidoEu" class="form-label">{% trans "Contenido (Euskera)" %}</label>
+                                <textarea class="form-control" id="editarContenidoEu" name="contenido_eu" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="editarImagen" class="form-label">{% trans "Imagen" %}</label>
+                                <input type="file" class="form-control" id="editarImagen" name="imagen" accept="image/*">
+                                <div id="imagenActual" class="mt-2"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="editarPublicada" name="publicada">
+                                    <label class="form-check-label" for="editarPublicada">
+                                        {% trans "Publicada" %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancelar" %}</button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-save me-2"></i>{% trans "Guardar Cambios" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+function compartirFacebook(titulo) {
+    const url = encodeURIComponent(window.location.href);
+    const popup = window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+    
+    if (!popup) {
+        mostrarToast('No se pudo abrir la ventana de Facebook. El enlace se ha copiado al portapapeles.', 'warning');
+        navigator.clipboard.writeText(window.location.href);
+    }
+}
+
+function compartirTwitter(titulo) {
+    const url = encodeURIComponent(window.location.href);
+    const texto = encodeURIComponent(titulo);
+    const popup = window.open(`https://twitter.com/intent/tweet?url=${url}&text=${texto}`, '_blank', 'width=600,height=400');
+    
+    if (!popup) {
+        mostrarToast('No se pudo abrir la ventana de Twitter. El enlace se ha copiado al portapapeles.', 'warning');
+        navigator.clipboard.writeText(window.location.href);
+    }
+}
+
+function compartirWhatsApp(titulo) {
+    const url = encodeURIComponent(window.location.href);
+    const texto = encodeURIComponent(titulo + ' - ');
+    const popup = window.open(`https://wa.me/?text=${texto}${url}`, '_blank');
+    
+    if (!popup) {
+        mostrarToast('No se pudo abrir WhatsApp. El enlace se ha copiado al portapapeles.', 'warning');
+        navigator.clipboard.writeText(titulo + ' - ' + window.location.href);
+    }
+}
+
+function compartirInstagram(titulo) {
+    // Instagram no tiene una URL directa para compartir enlaces
+    // Usamos la Web Share API si está disponible, sino copiamos el enlace
+    const url = window.location.href;
+    const texto = titulo + ' - ' + url;
+    
+    if (navigator.share) {
+        // Si el navegador soporta Web Share API (móviles principalmente)
+        navigator.share({
+            title: titulo,
+            text: titulo,
+            url: url
+        }).catch(err => {
+            console.log('Error sharing:', err);
+            // Fallback: copiar al portapapeles
+            copiarEnlaceInstagram(texto);
+        });
+    } else {
+        // Fallback para navegadores de escritorio
+        copiarEnlaceInstagram(texto);
+    }
+}
+
+function copiarEnlaceInstagram(texto) {
+    // Copiar al portapapeles
+    navigator.clipboard.writeText(texto).then(function() {
+        // Mostrar toast de éxito
+        mostrarToast('✓ Enlace copiado al portapapeles. Puedes pegarlo en Instagram.', 'success');
+    }).catch(function() {
+        // Fallback si no funciona el clipboard
+        prompt('Copia este enlace para compartir en Instagram:', texto);
+    });
+}
+
+function mostrarToast(mensaje, tipo = 'info') {
+    // Crear toast dinámicamente
+    const toastContainer = document.getElementById('toast-container') || crearToastContainer();
+    
+    const toastId = 'toast-' + Date.now();
+    const toastHTML = `
+        <div class="toast align-items-center text-bg-${tipo} border-0" role="alert" aria-live="assertive" aria-atomic="true" id="${toastId}">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${mensaje}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+    
+    // Eliminar el toast después de que se oculte
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        toastElement.remove();
+    });
+}
+
+function crearToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+    container.style.zIndex = '11';
+    document.body.appendChild(container);
+    return container;
+}
+
+// Gestión de noticias para usuarios staff
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Crear nueva noticia
+document.getElementById('formCrearNoticia')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('{% url "crear_noticia" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            mostrarToast('Noticia creada exitosamente', 'success');
+            document.getElementById('modalCrearNoticia').querySelector('.btn-close').click();
+            document.getElementById('formCrearNoticia').reset();
+            // Recargar la página para mostrar la nueva noticia
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            let errorMsg = 'Error al crear la noticia';
+            if (data.errors) {
+                errorMsg += ': ' + Object.values(data.errors).join(', ');
+            }
+            mostrarToast(errorMsg, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarToast('Error de conexión al crear la noticia', 'danger');
+    });
+});
+
+// Editar noticia
+function editarNoticia(noticiaId) {
+    // Obtener datos de la noticia
+    fetch(`/noticias/${noticiaId}/obtener/`, {
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            mostrarToast(data.error, 'danger');
+            return;
+        }
+        
+        // Llenar el formulario de edición
+        document.getElementById('editarNoticiaId').value = data.id;
+        document.getElementById('editarTitulo').value = data.titulo;
+        document.getElementById('editarTituloEu').value = data.titulo_eu;
+        document.getElementById('editarResumen').value = data.resumen;
+        document.getElementById('editarResumenEu').value = data.resumen_eu;
+        document.getElementById('editarContenido').value = data.contenido;
+        document.getElementById('editarContenidoEu').value = data.contenido_eu;
+        document.getElementById('editarPublicada').checked = data.publicada;
+        
+        // Mostrar imagen actual si existe
+        const imagenActual = document.getElementById('imagenActual');
+        if (data.imagen_url) {
+            imagenActual.innerHTML = `<small class="text-muted">Imagen actual:</small><br><img src="${data.imagen_url}" alt="Imagen actual" class="img-thumbnail" style="max-width: 200px;">`;
+        } else {
+            imagenActual.innerHTML = '<small class="text-muted">No hay imagen actual</small>';
+        }
+        
+        // Mostrar modal
+        new bootstrap.Modal(document.getElementById('modalEditarNoticia')).show();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarToast('Error al cargar los datos de la noticia', 'danger');
+    });
+}
+
+// Guardar cambios de edición
+document.getElementById('formEditarNoticia')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const noticiaId = document.getElementById('editarNoticiaId').value;
+    
+    fetch(`/noticias/${noticiaId}/editar/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            mostrarToast('Noticia actualizada exitosamente', 'success');
+            document.getElementById('modalEditarNoticia').querySelector('.btn-close').click();
+            // Recargar la página para mostrar los cambios
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            let errorMsg = 'Error al actualizar la noticia';
+            if (data.errors) {
+                errorMsg += ': ' + Object.values(data.errors).join(', ');
+            }
+            mostrarToast(errorMsg, 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarToast('Error de conexión al actualizar la noticia', 'danger');
+    });
+});
+
+// Eliminar noticia
+function eliminarNoticia(noticiaId, titulo) {
+    if (confirm(`¿Estás seguro de que quieres eliminar la noticia "${titulo}"? Esta acción no se puede deshacer.`)) {
+        fetch(`/noticias/${noticiaId}/eliminar/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                mostrarToast('Noticia eliminada exitosamente', 'success');
+                // Recargar la página
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                mostrarToast(data.error || 'Error al eliminar la noticia', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarToast('Error de conexión al eliminar la noticia', 'danger');
+        });
+    }
+}
+</script>
+{% endblock %}

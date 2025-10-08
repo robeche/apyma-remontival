@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contacto, Socio, Actividad
+from .models import Contacto, Socio, Actividad, Noticia
 
 @admin.register(Contacto)
 class ContactoAdmin(admin.ModelAdmin):
@@ -70,6 +70,35 @@ class ActividadAdmin(admin.ModelAdmin):
     def descripcion_corta(self, obj):
         return obj.descripcion[:50] + '...' if len(obj.descripcion) > 50 else obj.descripcion
     descripcion_corta.short_description = 'Descripción'
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(Noticia)
+class NoticiaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'fecha_publicacion', 'publicada', 'destacada')
+    list_filter = ('publicada', 'destacada', 'fecha_publicacion')
+    search_fields = ('titulo', 'titulo_eu', 'resumen', 'resumen_eu', 'contenido')
+    readonly_fields = ('fecha_creacion', 'fecha_modificacion', 'slug')
+    list_editable = ('publicada', 'destacada')
+    date_hierarchy = 'fecha_publicacion'
+    
+    fieldsets = (
+        ('Información básica', {
+            'fields': ('titulo', 'titulo_eu')
+        }),
+        ('Contenido', {
+            'fields': ('resumen', 'resumen_eu', 'contenido', 'contenido_eu', 'imagen')
+        }),
+        ('Configuración', {
+            'fields': ('publicada', 'destacada', 'fecha_publicacion')
+        }),
+        ('Información adicional', {
+            'fields': ('slug', 'fecha_creacion', 'fecha_modificacion'),
+            'classes': ('collapse',)
+        }),
+    )
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

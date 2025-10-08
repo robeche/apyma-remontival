@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Apyma Remontival"
+msgstr "Apyma Remontival"
+
+msgid "Apyma - Asociación de Padres y Madres de Alumnos"
+msgstr "Apyma - Gurasoen Elkartea"
+
+msgid "Mi Perfil"
+msgstr "Nire Profila"
+
+msgid "Cerrar Sesión"
+msgstr "Saioa Itxi"
+
+msgid "Login"
+msgstr "Saioa Hasi"
+
+msgid "Inicio"
+msgstr "Hasiera"
+
+msgid "Noticias"
+msgstr "Albisteak"
+
+msgid "Actividades"
+msgstr "Jarduerak"
+
+msgid "Comedor"
+msgstr "Jangela"
+
+msgid "Extraescolares"
+msgstr "Eskolaz Kanpokoak"
+
+msgid "Contacto"
+msgstr "Kontaktua"
+
+msgid "Destacada"
+msgstr "Nabarmena"
+
+msgid "Leer más"
+msgstr "Gehiago irakurri"
+
+msgid "No hay noticias disponibles"
+msgstr "Ez dago albistegirik eskuragarri"
+
+msgid "Pronto publicaremos nuevas noticias de la asociación."
+msgstr "Laster elkartearen albiste berriak argitaratuko ditugu."
+
+msgid "Volver a noticias"
+msgstr "Albisteetara itzuli"
+
+msgid "Noticias relacionadas"
+msgstr "Albiste erlazionatuak"
+
+msgid "¿Quieres ver más noticias?"
+msgstr "Albiste gehiago ikusi nahi dituzu?"
+
+msgid "Ver todas las noticias"
+msgstr "Albiste guztiak ikusi"
+
+msgid "Navegación de noticias"
+msgstr "Albisteen nabigazioa"
+
+msgid "Primera página"
+msgstr "Lehen orrialdea"
+
+msgid "Página anterior"
+msgstr "Aurreko orrialdea"
+
+msgid "Página siguiente"
+msgstr "Hurrengo orrialdea"
+
+msgid "Última página"
+msgstr "Azken orrialdea"
+
+msgid "Compartir en Facebook"
+msgstr "Facebooken partekatu"
+
+msgid "Compartir en Twitter"
+msgstr "Twitterren partekatu"
+
+msgid "Compartir en WhatsApp"
+msgstr "WhatsApp-en partekatu"
+
+msgid "Copiar enlace"
+msgstr "Esteka kopiatu"
+
+msgid "Calendario de Actividades"
+msgstr "Jardueren Egutegia"
+
+msgid "Consulta todas las actividades, eventos y reuniones programadas"
+msgstr "Ikusi programatutako jarduera, ekitaldi eta bilera guztiak"
+
+msgid "Crear Nueva Actividad"
+msgstr "Jarduera Berri Sortu"
+
+msgid "Mes anterior"
+msgstr "Aurreko hilabetea"
+
+msgid "Mes siguiente"
+msgstr "Hurrengo hilabetea"
+
+msgid "Tipos de Actividades"
+msgstr "Jarduera Motak"
+
+msgid "Talleres"
+msgstr "Tailerrak"
+
+msgid "Excursiones"
+msgstr "Txangoak"
+
+msgid "Reuniones"
+msgstr "Bilerak"
+
+msgid "Festivales"
+msgstr "Jaiak"
+
+msgid "Eventos sociales"
+msgstr "Gizarte ekitaldiak"
+
+msgid "Día actual"
+msgstr "Gaur"
+
+msgid "¿Tienes alguna sugerencia para una actividad?"
+msgstr "Jarduera baterako iradokizunik al duzu?"
+
+msgid "Contactanos"
+msgstr "Jarri gurekin harremanetan"
+
+msgid "Cancelar"
+msgstr "Utzi"
+
+msgid "Crear Actividad"
+msgstr "Jarduera Sortu"
+
+msgid "Cerrar"
+msgstr "Itxi"
+
+msgid "Eliminar Actividad"
+msgstr "Jarduera Ezabatu"
+
+msgid "Editar Actividad"
+msgstr "Jarduera Editatu"
+
+msgid "Compartir en Instagram"
+msgstr "Instagramen partekatu"
+
+msgid "Crear Noticia"
+msgstr "Albistea Sortu"
+
+msgid "Crear Nueva Noticia"
+msgstr "Albiste Berria Sortu"
+
+msgid "Título (Español)"
+msgstr "Izenburua (Gaztelaniaz)"
+
+msgid "Título (Euskera)"
+msgstr "Izenburua (Euskeraz)"
+
+msgid "Resumen (Español)"
+msgstr "Laburpena (Gaztelaniaz)"
+
+msgid "Resumen (Euskera)"
+msgstr "Laburpena (Euskeraz)"
+
+msgid "Contenido (Español)"
+msgstr "Edukia (Gaztelaniaz)"
+
+msgid "Contenido (Euskera)"
+msgstr "Edukia (Euskeraz)"
+
+msgid "Imagen"
+msgstr "Irudia"
+
+msgid "Publicar inmediatamente"
+msgstr "Berehala argitaratu"
+
+msgid "Cancelar"
+msgstr "Ezeztatu"
+
+msgid "Editar Noticia"
+msgstr "Albistea Editatu"
+
+msgid "Guardar Cambios"
+msgstr "Aldaketak Gorde"
+
+msgid "Publicada"
+msgstr "Argitaratua"
+
+msgid "Editar noticia"
+msgstr "Albistea editatu"
+
+msgid "Eliminar noticia"
+msgstr "Albistea ezabatu"
