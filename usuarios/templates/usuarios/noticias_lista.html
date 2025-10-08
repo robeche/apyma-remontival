@@ -727,14 +727,16 @@ function eliminarNoticia(noticiaId, titulo) {
             return;
         }
         
+        // Usar FormData como en editar_noticia (que funciona)
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        
         fetch(`{% url 'eliminar_noticia' 0 %}`.replace('0', noticiaId), {
             method: 'POST',
+            body: formData,
             headers: {
                 'X-CSRFToken': csrfToken
-            },
-            body: new URLSearchParams({
-                'csrfmiddlewaretoken': csrfToken
-            })
+            }
         })
         .then(response => {
             console.log(`Response status: ${response.status}`);

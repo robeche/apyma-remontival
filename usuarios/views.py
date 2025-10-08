@@ -810,12 +810,9 @@ def editar_noticia(request, noticia_id):
 
 
 @login_required
+@require_POST
 def eliminar_noticia(request, noticia_id):
     """Vista para eliminar una noticia vía AJAX"""
-    
-    # Verificar que sea método POST
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
     
     # Diagnóstico detallado
     print(f"DEBUG - Usuario: {request.user}")
@@ -823,6 +820,8 @@ def eliminar_noticia(request, noticia_id):
     print(f"DEBUG - Is staff: {request.user.is_staff}")
     print(f"DEBUG - Method: {request.method}")
     print(f"DEBUG - CSRF token present: {'csrftoken' in request.COOKIES}")
+    print(f"DEBUG - POST data: {request.POST}")
+    print(f"DEBUG - Headers: {dict(request.headers)}")
     
     if not request.user.is_staff:
         error_msg = f'No tienes permisos para eliminar noticias. Usuario: {request.user.username if request.user.is_authenticated else "Anónimo"}, Staff: {request.user.is_staff}'
