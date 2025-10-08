@@ -4,6 +4,10 @@
 
 {% block title %}{% trans "Noticias" %} - APYMA Remontival{% endblock %}
 
+{% block extra_head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+{% endblock %}
+
 {% block extra_css %}
 <style>
 .image-container {
@@ -192,6 +196,11 @@
                                         <button class="btn btn-outline-danger btn-sm" onclick="eliminarNoticia({{ noticia.id }}, '{{ noticia.titulo_localizado|escapejs }}')" title="{% trans 'Eliminar noticia' %}">
                                             <i class="fas fa-trash"></i>
                                         </button>
+                                        <!-- Debug info -->
+                                        <small class="text-muted ms-2">Staff: ✓</small>
+                                    {% else %}
+                                        <!-- Debug info -->
+                                        <small class="text-muted ms-2">No staff: {{ user.is_authenticated|yesno:"Auth,NoAuth" }}</small>
                                     {% endif %}
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         {% trans "Cerrar" %}
@@ -555,6 +564,28 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function getCSRFToken() {
+    // Intentar obtener de cookie primero
+    let token = getCookie('csrftoken');
+    if (token) {
+        return token;
+    }
+    
+    // Fallback: buscar en meta tag
+    const metaToken = document.querySelector('meta[name=csrf-token]');
+    if (metaToken) {
+        return metaToken.getAttribute('content');
+    }
+    
+    // Fallback: buscar en input hidden
+    const hiddenToken = document.querySelector('input[name=csrfmiddlewaretoken]');
+    if (hiddenToken) {
+        return hiddenToken.value;
+    }
+    
+    return null;
+}
+
 // Crear nueva noticia
 document.getElementById('formCrearNoticia')?.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -679,17 +710,31 @@ document.getElementById('formEditarNoticia')?.addEventListener('submit', functio
 
 // Eliminar noticia
 function eliminarNoticia(noticiaId, titulo) {
+    // Diagnóstico del usuario
+    console.log('=== Diagnóstico de Usuario ===');
+    console.log('User authenticated:', {{ user.is_authenticated|yesno:"true,false" }});
+    console.log('User is staff:', {{ user.is_staff|yesno:"true,false" }});
+    console.log('Username:', '{{ user.username|escapejs }}');
+    console.log('==============================');
+    
     if (confirm(`¿Estás seguro de que quieres eliminar la noticia "${titulo}"? Esta acción no se puede deshacer.`)) {
-        const csrfToken = getCookie('csrftoken');
+        const csrfToken = getCSRFToken();
         console.log('CSRF Token:', csrfToken); // Debug
+        console.log('CSRF Token length:', csrfToken ? csrfToken.length : 'null');
+        
+        if (!csrfToken) {
+            mostrarToast('Error: No se pudo obtener el token de seguridad', 'danger');
+            return;
+        }
         
         fetch(`{% url 'eliminar_noticia' 0 %}`.replace('0', noticiaId), {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
             },
-            body: 'csrfmiddlewaretoken=' + encodeURIComponent(csrfToken)
+            body: new URLSearchParams({
+                'csrfmiddlewaretoken': csrfToken
+            })
         })
         .then(response => {
             console.log(`Response status: ${response.status}`);

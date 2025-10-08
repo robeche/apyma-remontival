@@ -809,10 +809,13 @@ def editar_noticia(request, noticia_id):
         })
 
 
-@require_POST
 @login_required
 def eliminar_noticia(request, noticia_id):
     """Vista para eliminar una noticia vía AJAX"""
+    
+    # Verificar que sea método POST
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
     
     # Diagnóstico detallado
     print(f"DEBUG - Usuario: {request.user}")
