@@ -680,15 +680,27 @@ document.getElementById('formEditarNoticia')?.addEventListener('submit', functio
 // Eliminar noticia
 function eliminarNoticia(noticiaId, titulo) {
     if (confirm(`¿Estás seguro de que quieres eliminar la noticia "${titulo}"? Esta acción no se puede deshacer.`)) {
+        const csrfToken = getCookie('csrftoken');
+        console.log('CSRF Token:', csrfToken); // Debug
+        
         fetch(`{% url 'eliminar_noticia' 0 %}`.replace('0', noticiaId), {
             method: 'POST',
             headers: {
-                'X-CSRFToken': getCookie('csrftoken')
-            }
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'csrfmiddlewaretoken=' + encodeURIComponent(csrfToken)
         })
         .then(response => {
+            console.log(`Response status: ${response.status}`);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                if (response.status === 403) {
+                    throw new Error(`Sin permisos para eliminar la noticia. Status: ${response.status}`);
+                } else if (response.status === 404) {
+                    throw new Error(`Noticia no encontrada. Status: ${response.status}`);
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
             }
             return response.json();
         })
@@ -702,8 +714,8 @@ function eliminarNoticia(noticiaId, titulo) {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            mostrarToast('Error de conexión al eliminar la noticia', 'danger');
+            console.error('Error completo:', error);
+            mostrarToast(error.message || 'Error de conexión al eliminar la noticia', 'danger');
         });
     }
 }

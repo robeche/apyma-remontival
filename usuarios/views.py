@@ -813,8 +813,18 @@ def editar_noticia(request, noticia_id):
 @login_required
 def eliminar_noticia(request, noticia_id):
     """Vista para eliminar una noticia vía AJAX"""
+    
+    # Diagnóstico detallado
+    print(f"DEBUG - Usuario: {request.user}")
+    print(f"DEBUG - Is authenticated: {request.user.is_authenticated}")
+    print(f"DEBUG - Is staff: {request.user.is_staff}")
+    print(f"DEBUG - Method: {request.method}")
+    print(f"DEBUG - CSRF token present: {'csrftoken' in request.COOKIES}")
+    
     if not request.user.is_staff:
-        return JsonResponse({'error': 'No tienes permisos para eliminar noticias'}, status=403)
+        error_msg = f'No tienes permisos para eliminar noticias. Usuario: {request.user.username if request.user.is_authenticated else "Anónimo"}, Staff: {request.user.is_staff}'
+        print(f"DEBUG - Error: {error_msg}")
+        return JsonResponse({'error': error_msg}, status=403)
     
     try:
         noticia = Noticia.objects.get(id=noticia_id)
@@ -830,14 +840,19 @@ def eliminar_noticia(request, noticia_id):
                 print(f"Error eliminando imagen: {e}")
         
         noticia.delete()
+        print(f"DEBUG - Noticia eliminada exitosamente: {titulo}")
         return JsonResponse({
             'success': True,
             'message': f'Noticia "{titulo}" eliminada exitosamente'
         })
     except Noticia.DoesNotExist:
-        return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
+        error_msg = 'Noticia no encontrada'
+        print(f"DEBUG - Error: {error_msg}")
+        return JsonResponse({'error': error_msg}, status=404)
     except Exception as e:
-        return JsonResponse({'error': f'Error inesperado: {str(e)}'}, status=500)
+        error_msg = f'Error inesperado: {str(e)}'
+        print(f"DEBUG - Error: {error_msg}")
+        return JsonResponse({'error': error_msg}, status=500)
 
 
 @login_required

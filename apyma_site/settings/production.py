@@ -39,8 +39,15 @@ CSRF_TRUSTED_ORIGINS = [
     'https://apymaremontival.pythonanywhere.com',
     'https://www.apymaremontival.com',
     'https://apymaremontival.com',
+    'https://apyma-remontival.org',
+    'https://www.apyma-remontival.org',
     'http://apymaremontival.pythonanywhere.com',  # Para desarrollo si no hay SSL
 ]
+
+# Configuración adicional de CSRF para Cloudflare
+CSRF_COOKIE_HTTPONLY = False  # Permitir acceso desde JavaScript
+CSRF_USE_SESSIONS = False  # Usar cookies en lugar de sesiones para CSRF
+CSRF_COOKIE_AGE = 31449600  # 1 año
 
 # Database para producción (PostgreSQL recomendado)
 # Configuración de PostgreSQL si están disponibles las variables
