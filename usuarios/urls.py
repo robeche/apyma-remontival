@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('area-socios/', auth_views.LoginView.as_view(template_name='usuarios/login.html', success_url=reverse_lazy('dashboard')), name='login'),
+    path('area-socios/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),  # Sin success_url
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
     path('dashboard/', views.dashboard, name='dashboard'),
