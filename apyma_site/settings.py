@@ -1,5 +1,5 @@
-# Redirigir al dashboard tras login
-LOGIN_REDIRECT_URL = '/dashboard/'
+# Redirigir a la página de inicio tras login
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/area-socios/'
 """
 Django settings for apyma_site project.

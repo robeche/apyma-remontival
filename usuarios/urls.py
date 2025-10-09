@@ -9,7 +9,7 @@ urlpatterns = [
     path('area-socios/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),  # Sin success_url
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),  # Temporalmente deshabilitado
     path('contacto/', views.contacto, name='contacto'),
     path('comedor/', views.comedor, name='comedor'),
     path('comedor/pdf/<str:filename>/', views.serve_pdf, name='serve_pdf'),

@@ -157,8 +157,9 @@ LOGGING = {
 WHITENOISE_USE_FINDERS = True
 WHITENOISE_AUTOREFRESH = True
 
-# Configuración de cache para archivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Configuración de cache para archivos estáticos - TEMPORALMENTE SIN CACHE
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Headers de cache para archivos estáticos
-WHITENOISE_MAX_AGE = 0  # Deshabilitar cache por completo (solo para debug)
+# Headers de cache para archivos estáticos - TOTALMENTE DESHABILITADO
+WHITENOISE_MAX_AGE = 0
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = []
