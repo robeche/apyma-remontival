@@ -69,9 +69,76 @@
 /* Logo responsivo para móviles */
 @media (max-width: 768px) {
     .logo {
-        height: 50px;
-        padding: 3px;
-        border-radius: 5px;
+        height: 40px;
+        padding: 2px;
+        border-radius: 4px;
+    }
+}
+
+/* Para pantallas medianas móviles (400px - 768px) */
+@media (min-width: 401px) and (max-width: 768px) {
+    .mobile-select {
+        font-size: 0.75rem !important;
+        padding: 0.3rem 0.6rem !important;
+    }
+}
+
+/* Para pantallas muy pequeñas (menos de 400px) */
+@media (max-width: 400px) {
+    .logo {
+        height: 35px;
+        padding: 2px;
+        border-radius: 3px;
+    }
+    
+    /* Hacer los selectores más pequeños en móviles */
+    .mobile-select {
+        font-size: 0.65rem !important;
+        padding: 0.2rem 0.4rem !important;
+        min-width: auto !important;
+    }
+    
+    /* Reducir el padding del encabezado en móviles pequeños */
+    .header-main .row {
+        margin: 0 !important;
+    }
+    
+    .header-main .col-auto {
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+    }
+    
+    /* Hacer el gap más pequeño en móviles */
+    .mobile-selectors {
+        gap: 0.25rem !important;
+    }
+    
+    /* Hacer el texto del usuario más pequeño */
+    .mobile-selectors .bi {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* Para pantallas extremadamente pequeñas (menos de 350px) */
+@media (max-width: 350px) {
+    .logo {
+        height: 30px;
+        padding: 1px;
+    }
+    
+    .mobile-select {
+        font-size: 0.6rem !important;
+        padding: 0.15rem 0.3rem !important;
+    }
+    
+    /* Ocultar texto en pantallas muy pequeñas, solo mostrar iconos */
+    .d-sm-none {
+        display: none !important;
+    }
+    
+    .mobile-selectors .bi {
+        font-size: 0.7rem !important;
+        margin-right: 0 !important;
     }
 }
 

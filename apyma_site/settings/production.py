@@ -152,3 +152,13 @@ LOGGING = {
         },
     },
 }
+
+# Configuración de WhiteNoise para evitar cache excesivo
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+
+# Configuración de cache para archivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Headers de cache para archivos estáticos
+WHITENOISE_MAX_AGE = 0  # Deshabilitar cache por completo (solo para debug)
