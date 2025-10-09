@@ -37,6 +37,19 @@
     letter-spacing: 1px;
 }
 
+/* Header responsivo para móviles */
+@media (max-width: 768px) {
+    .header-main h1 {
+        font-size: 1.2rem;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+    }
+    
+    .header-main {
+        padding: 0.5rem 0;
+    }
+}
+
 .header-subtitle {
     color: rgba(255,255,255,0.9);
     font-size: 1.1rem;
@@ -51,6 +64,15 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     background: white;
     padding: 5px;
+}
+
+/* Logo responsivo para móviles */
+@media (max-width: 768px) {
+    .logo {
+        height: 50px;
+        padding: 3px;
+        border-radius: 5px;
+    }
 }
 
 /* Navegación mejorada */
@@ -393,5 +415,41 @@ footer a:hover {
     .hero-section .col-lg-6:first-child {
         margin-top: 2rem;
         text-align: center;
+    }
+}
+
+/* Responsive adjustments for mobile full-width */
+@media (max-width: 768px) {
+    /* Paneles ocupando todo el ancho en móviles */
+    main.container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    .card.card-modern {
+        border-radius: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .card-body.card-body-modern {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    .hero-section {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Ajustar servicios en móvil */
+    .service-card {
+        margin-bottom: 1rem;
     }
 }
