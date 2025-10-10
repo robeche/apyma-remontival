@@ -120,6 +120,10 @@ local_settings.py
 secret_key.txt
 secrets.json
 
+# Menu download credentials
+.menu_credentials.json
+descargar_menus.bat
+
 # Translation files (optional - you might want to include these)
 # *.mo
 # *.pot

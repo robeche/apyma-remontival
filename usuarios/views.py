@@ -492,11 +492,119 @@ def eliminar_actividad(request, actividad_id):
     except Actividad.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Actividad no encontrada'})
 
+def get_latest_menus():
+    """Busca automáticamente los menús más recientes disponibles"""
+    import os
+    from datetime import datetime
+    import re
+    
+    # Directorio donde están los menús
+    media_root = getattr(settings, 'MEDIA_ROOT', '')
+    comedor_dir = os.path.join(media_root, 'comedor')
+    
+    menus_disponibles = []
+    mes_actual = None
+    fecha_actualizacion = None
+    
+    if os.path.exists(comedor_dir):
+        # Obtener todos los archivos PDF del directorio
+        pdf_files = [f for f in os.listdir(comedor_dir) if f.endswith('.pdf')]
+        
+        # Diccionario para agrupar menús por mes e idioma
+        menus_por_mes = {}
+        
+        for pdf_file in pdf_files:
+            # Extraer información del nombre del archivo
+            # Formatos esperados: menu_[mes]_castellano.pdf, menu_[mes]_euskera.pdf
+            match = re.match(r'menu_(\w+)_(castellano|euskera)\.pdf', pdf_file, re.IGNORECASE)
+            
+            if match:
+                mes, idioma = match.groups()
+                
+                # Normalizar el nombre del mes
+                mes_normalized = mes.lower()
+                idioma_normalized = idioma.lower()
+                
+                if mes_normalized not in menus_por_mes:
+                    menus_por_mes[mes_normalized] = {}
+                
+                # Obtener fecha de modificación del archivo
+                file_path = os.path.join(comedor_dir, pdf_file)
+                file_mtime = os.path.getmtime(file_path)
+                file_date = datetime.fromtimestamp(file_mtime)
+                
+                menus_por_mes[mes_normalized][idioma_normalized] = {
+                    'archivo': pdf_file,
+                    'fecha_mod': file_mtime,
+                    'fecha_formateada': file_date.strftime('%d/%m/%Y %H:%M'),
+                    'titulo': f"Menú {mes.title()} ({idioma.title()})"
+                }
+        
+        # Encontrar el mes más reciente
+        if menus_por_mes:
+            # Ordenar por fecha de modificación más reciente
+            mes_mas_reciente = None
+            fecha_mas_reciente = 0
+            
+            for mes, idiomas in menus_por_mes.items():
+                # Obtener la fecha más reciente de los archivos de este mes
+                max_fecha = max(info['fecha_mod'] for info in idiomas.values())
+                if max_fecha > fecha_mas_reciente:
+                    fecha_mas_reciente = max_fecha
+                    mes_mas_reciente = mes
+            
+            if mes_mas_reciente:
+                mes_actual = mes_mas_reciente.title()
+                fecha_actualizacion = datetime.fromtimestamp(fecha_mas_reciente)
+                
+                # Agregar menús del mes más reciente
+                idiomas_info = menus_por_mes[mes_mas_reciente]
+                
+                # Orden preferido: castellano primero, luego euskera
+                orden_idiomas = ['castellano', 'euskera']
+                
+                for idioma in orden_idiomas:
+                    if idioma in idiomas_info:
+                        info = idiomas_info[idioma]
+                        menus_disponibles.append({
+                            'titulo': info['titulo'],
+                            'archivo': info['archivo'],
+                            'idioma': idioma.title(),
+                            'fecha_actualizacion': info['fecha_formateada']
+                        })
+    
+    # Si no se encuentran menús, usar valores por defecto
+    if not menus_disponibles:
+        current_month = datetime.now().strftime('%B').lower()
+        month_translations = {
+            'january': 'enero', 'february': 'febrero', 'march': 'marzo',
+            'april': 'abril', 'may': 'mayo', 'june': 'junio',
+            'july': 'julio', 'august': 'agosto', 'september': 'septiembre',
+            'october': 'octubre', 'november': 'noviembre', 'december': 'diciembre'
+        }
+        mes_actual = month_translations.get(current_month, 'Mes actual').title()
+        
+        menus_disponibles = [
+            {
+                'titulo': f'Menú {mes_actual} (No disponible)',
+                'archivo': 'no_disponible.pdf',
+                'idioma': 'No disponible',
+                'fecha_actualizacion': 'N/A'
+            }
+        ]
+    
+    return mes_actual, menus_disponibles, fecha_actualizacion
+
 def comedor(request):
     """Vista para mostrar información del comedor escolar"""
-    # Información simplificada del comedor
+    
+    # Obtener menús dinámicamente
+    mes_actual, menus_disponibles, fecha_actualizacion = get_latest_menus()
+    
+    # Información del comedor
     menu_info = {
-        'mes_actual': 'Septiembre 2025',
+        'mes_actual': mes_actual,
+        'fecha_actualizacion': fecha_actualizacion.strftime('%d/%m/%Y %H:%M') if fecha_actualizacion else None,
         'empresa': 'El Gusto de Crecer',
         'descripcion': 'Empresa especializada en catering escolar con más de 15 años de experiencia. Elaboramos menús equilibrados y adaptados a las necesidades nutricionales de los escolares.',
         'contacto_empresa': {
@@ -505,18 +613,7 @@ def comedor(request):
             'email': 'info@elgustodecrecer.es',
             'web': 'www.elgustodecrecer.es'
         },
-        'menus_disponibles': [
-            {
-                'titulo': 'Menú Septiembre 2025 (Castellano)',
-                'archivo': 'menu_septiembre_castellano.pdf',
-                'idioma': 'Castellano'
-            },
-            {
-                'titulo': 'Menú Septiembre 2025 (Euskera)',
-                'archivo': 'menu_septiembre_euskera.pdf',
-                'idioma': 'Euskera'
-            }
-        ]
+        'menus_disponibles': menus_disponibles
     }
     
     return render(request, 'usuarios/comedor.html', {'menu_info': menu_info})
