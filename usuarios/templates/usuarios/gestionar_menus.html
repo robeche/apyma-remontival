@@ -1,0 +1,299 @@
+{% extends 'usuarios/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Gestionar Menús del Comedor" %} - {% trans "Apyma Remontival" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 mb-0">
+                <i class="bi bi-upload me-2 text-primary"></i>
+                {% trans "Gestionar Menús del Comedor" %}
+            </h1>
+            <a href="{% url 'comedor' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>
+                {% trans "Ver Página del Comedor" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Mostrar mensajes -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    <!-- Formulario de subida -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-cloud-upload me-2"></i>
+                    {% trans "Subir Nuevo Menú" %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Mes -->
+                    <div class="mb-3">
+                        <label for="{{ form.mes.id_for_label }}" class="form-label">
+                            {{ form.mes.label }}
+                        </label>
+                        {{ form.mes }}
+                        {% if form.mes.help_text %}
+                            <div class="form-text">{{ form.mes.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Opciones de subida -->
+                    <div class="mb-4">
+                        <h6 class="text-primary">{% trans "Opciones de Subida" %}</h6>
+                        <p class="text-muted small">{% trans "Elige una de las siguientes opciones:" %}</p>
+                        
+                        <!-- Opción 1: Menú completo -->
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-success">
+                                <i class="bi bi-file-earmark-pdf me-1"></i>
+                                {% trans "Opción 1: Menú Completo (Recomendado)" %}
+                            </h6>
+                            <p class="text-muted small">{% trans "Sube un PDF con ambos idiomas (se separará automáticamente)" %}</p>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.menu_completo.id_for_label }}" class="form-label">
+                                    {{ form.menu_completo.label }}
+                                </label>
+                                {{ form.menu_completo }}
+                                {% if form.menu_completo.help_text %}
+                                    <div class="form-text">{{ form.menu_completo.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Opción 2: Archivos separados -->
+                        <div class="border rounded p-3">
+                            <h6 class="text-info">
+                                <i class="bi bi-files me-1"></i>
+                                {% trans "Opción 2: Archivos Separados" %}
+                            </h6>
+                            <p class="text-muted small">{% trans "Sube los PDFs ya separados por idioma" %}</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.menu_castellano.id_for_label }}" class="form-label">
+                                        {{ form.menu_castellano.label }}
+                                    </label>
+                                    {{ form.menu_castellano }}
+                                    {% if form.menu_castellano.help_text %}
+                                        <div class="form-text">{{ form.menu_castellano.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.menu_euskera.id_for_label }}" class="form-label">
+                                        {{ form.menu_euskera.label }}
+                                    </label>
+                                    {{ form.menu_euskera }}
+                                    {% if form.menu_euskera.help_text %}
+                                        <div class="form-text">{{ form.menu_euskera.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sobrescribir -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.sobrescribir }}
+                            <label class="form-check-label" for="{{ form.sobrescribir.id_for_label }}">
+                                {{ form.sobrescribir.label }}
+                            </label>
+                        </div>
+                        {% if form.sobrescribir.help_text %}
+                            <div class="form-text">{{ form.sobrescribir.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Botón de envío -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-upload me-2"></i>
+                            {% trans "Subir Menús" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lista de menús existentes -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>
+                    {% trans "Menús Existentes" %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if menus_existentes %}
+                    {% for mes, archivos in menus_existentes.items %}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-primary mb-2">
+                                <i class="bi bi-calendar-month me-1"></i>
+                                {{ mes|title }}
+                            </h6>
+                            
+                            <div class="row">
+                                {% if archivos.castellano %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                            <div class="flex-grow-1">
+                                                <a href="{% url 'serve_pdf' filename=archivos.castellano.archivo %}" 
+                                                   target="_blank" 
+                                                   class="text-decoration-none">
+                                                    <strong>Castellano</strong>
+                                                </a>
+                                                <br>
+                                                <small class="text-muted">
+                                                    {{ archivos.castellano.fecha }}<br>
+                                                    {{ archivos.castellano.tamaño }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="text-muted">
+                                            <i class="bi bi-dash-circle me-2"></i>
+                                            <span>Castellano: No disponible</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if archivos.euskera %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                            <div class="flex-grow-1">
+                                                <a href="{% url 'serve_pdf' filename=archivos.euskera.archivo %}" 
+                                                   target="_blank" 
+                                                   class="text-decoration-none">
+                                                    <strong>Euskera</strong>
+                                                </a>
+                                                <br>
+                                                <small class="text-muted">
+                                                    {{ archivos.euskera.fecha }}<br>
+                                                    {{ archivos.euskera.tamaño }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="text-muted">
+                                            <i class="bi bi-dash-circle me-2"></i>
+                                            <span>Euskera: No disponible</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-folder2-open display-4 text-muted mb-3"></i>
+                        <h6 class="text-muted">{% trans "No hay menús disponibles" %}</h6>
+                        <p class="text-muted">{% trans "Sube el primer menú usando el formulario de la izquierda" %}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información adicional -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    {% trans "Información Importante" %}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">{% trans "Formato de Archivos" %}</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "Solo archivos PDF" %}</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "Tamaño máximo: 10MB" %}</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "Nombres automáticos: menu_[mes]_[idioma].pdf" %}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">{% trans "Funcionamiento" %}</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "La página web se actualiza automáticamente" %}</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "Siempre muestra el menú más reciente" %}</li>
+                            <li><i class="bi bi-check-circle text-success me-2"></i>{% trans "PDFs completos se separan automáticamente" %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mejorar UX del formulario
+    const menuCompleto = document.getElementById('{{ form.menu_completo.id_for_label }}');
+    const menuCastellano = document.getElementById('{{ form.menu_castellano.id_for_label }}');
+    const menuEuskera = document.getElementById('{{ form.menu_euskera.id_for_label }}');
+    
+    // Deshabilitar archivos separados cuando se selecciona completo
+    if (menuCompleto) {
+        menuCompleto.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                menuCastellano.disabled = true;
+                menuEuskera.disabled = true;
+                menuCastellano.parentElement.style.opacity = '0.5';
+                menuEuskera.parentElement.style.opacity = '0.5';
+            } else {
+                menuCastellano.disabled = false;
+                menuEuskera.disabled = false;
+                menuCastellano.parentElement.style.opacity = '1';
+                menuEuskera.parentElement.style.opacity = '1';
+            }
+        });
+    }
+    
+    // Deshabilitar completo cuando se seleccionan separados
+    function checkSeparateFiles() {
+        if (menuCastellano.files.length > 0 || menuEuskera.files.length > 0) {
+            menuCompleto.disabled = true;
+            menuCompleto.parentElement.style.opacity = '0.5';
+        } else {
+            menuCompleto.disabled = false;
+            menuCompleto.parentElement.style.opacity = '1';
+        }
+    }
+    
+    if (menuCastellano) menuCastellano.addEventListener('change', checkSeparateFiles);
+    if (menuEuskera) menuEuskera.addEventListener('change', checkSeparateFiles);
+});
+</script>
+{% endblock %}

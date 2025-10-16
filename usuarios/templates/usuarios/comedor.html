@@ -31,6 +31,12 @@
                 <i class="bi bi-cup-hot me-2 text-warning"></i>
                 {% trans "Comedor Escolar" %}
             </h1>
+            {% if user.is_staff %}
+                <a href="{% url 'gestionar_menus' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-gear me-1"></i>
+                    {% trans "Gestionar Menús" %}
+                </a>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -56,18 +62,11 @@
                 <div class="row text-center">
                     <div class="col-md-12 mb-3">
                         <h6 class="text-primary mb-3">
-                            <i class="bi bi-telephone me-1"></i>
+                            <i class="bi bi-info-circle me-1"></i>
                             {% trans "Información de Contacto" %}
                         </h6>
                         
                         <div class="d-flex justify-content-center flex-wrap gap-4">
-                            <div class="text-center">
-                                <i class="bi bi-telephone fs-4 text-primary mb-2 d-block"></i>
-                                <a href="tel:{{ menu_info.contacto_empresa.telefono }}" class="text-decoration-none">
-                                    {{ menu_info.contacto_empresa.telefono }}
-                                </a>
-                            </div>
-                            
                             <div class="text-center">
                                 <i class="bi bi-envelope fs-4 text-primary mb-2 d-block"></i>
                                 <a href="mailto:{{ menu_info.contacto_empresa.email }}" class="text-decoration-none">

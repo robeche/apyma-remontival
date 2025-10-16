@@ -15,6 +15,7 @@ from .forms import ContactoForm, ActividadForm, NoticiaForm
 from .models import Contacto, Actividad, Noticia
 import os
 import mimetypes
+from datetime import datetime
 
 def admin_redirect_view(request):
     """Redirigir admin a pythonanywhere donde funciona"""
@@ -609,14 +610,120 @@ def comedor(request):
         'descripcion': 'Empresa especializada en catering escolar con más de 15 años de experiencia. Elaboramos menús equilibrados y adaptados a las necesidades nutricionales de los escolares.',
         'contacto_empresa': {
             'nombre': 'El Gusto de Crecer',
-            'telefono': '986 123 456',
-            'email': 'info@elgustodecrecer.es',
+            'email': 'elgustodecrecer@aramark.es',
             'web': 'www.elgustodecrecer.es'
         },
         'menus_disponibles': menus_disponibles
     }
     
     return render(request, 'usuarios/comedor.html', {'menu_info': menu_info})
+
+@login_required
+def gestionar_menus(request):
+    """Vista para gestionar menús del comedor (solo staff)"""
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permisos para acceder a esta página.')
+        return redirect('comedor')
+    
+    media_dir = os.path.join(settings.MEDIA_ROOT, 'comedor')
+    
+    # Crear directorio si no existe
+    os.makedirs(media_dir, exist_ok=True)
+    
+    if request.method == 'POST':
+        if 'upload' in request.POST:
+            # Manejar subida de archivos
+            return handle_menu_upload(request, media_dir)
+        elif 'delete' in request.POST:
+            # Manejar eliminación de archivos
+            return handle_menu_delete(request, media_dir)
+    
+    # Obtener lista de menús existentes
+    pdf_files = []
+    if os.path.exists(media_dir):
+        files = [f for f in os.listdir(media_dir) if f.endswith('.pdf')]
+        for file in sorted(files):
+            file_path = os.path.join(media_dir, file)
+            file_stat = os.stat(file_path)
+            pdf_files.append({
+                'nombre': file,
+                'tamaño': file_stat.st_size,
+                'fecha_mod': datetime.fromtimestamp(file_stat.st_mtime),
+                'url': f'/comedor/pdf/{file}/'
+            })
+    
+    context = {
+        'menus_existentes': pdf_files,
+        'total_archivos': len(pdf_files)
+    }
+    
+    return render(request, 'usuarios/gestionar_menus.html', context)
+
+def handle_menu_upload(request, media_dir):
+    """Maneja la subida de archivos de menú"""
+    try:
+        uploaded_files = request.FILES.getlist('menu_files')
+        
+        if not uploaded_files:
+            messages.error(request, 'No se seleccionaron archivos para subir.')
+            return redirect('gestionar_menus')
+        
+        success_count = 0
+        for uploaded_file in uploaded_files:
+            # Validar que sea un PDF
+            if not uploaded_file.name.endswith('.pdf'):
+                messages.warning(request, f'Archivo {uploaded_file.name} no es un PDF y fue omitido.')
+                continue
+            
+            # Validar tamaño (máximo 10MB)
+            if uploaded_file.size > 10 * 1024 * 1024:
+                messages.warning(request, f'Archivo {uploaded_file.name} es demasiado grande (máximo 10MB).')
+                continue
+            
+            # Limpiar nombre del archivo
+            safe_name = uploaded_file.name.replace(' ', '_').lower()
+            file_path = os.path.join(media_dir, safe_name)
+            
+            # Guardar archivo
+            with open(file_path, 'wb+') as destination:
+                for chunk in uploaded_file.chunks():
+                    destination.write(chunk)
+            
+            success_count += 1
+            messages.success(request, f'Archivo {safe_name} subido correctamente.')
+        
+        if success_count > 0:
+            messages.success(request, f'Se subieron {success_count} archivos exitosamente.')
+        
+    except Exception as e:
+        messages.error(request, f'Error subiendo archivos: {e}')
+    
+    return redirect('gestionar_menus')
+
+def handle_menu_delete(request, media_dir):
+    """Maneja la eliminación de archivos de menú"""
+    try:
+        file_to_delete = request.POST.get('file_name')
+        
+        if not file_to_delete:
+            messages.error(request, 'No se especificó archivo para eliminar.')
+            return redirect('gestionar_menus')
+        
+        file_path = os.path.join(media_dir, file_to_delete)
+        
+        # Verificar que el archivo existe y está dentro del directorio permitido
+        if not os.path.exists(file_path) or not os.path.commonpath([file_path, media_dir]) == media_dir:
+            messages.error(request, 'Archivo no encontrado o acceso denegado.')
+            return redirect('gestionar_menus')
+        
+        # Eliminar archivo
+        os.remove(file_path)
+        messages.success(request, f'Archivo {file_to_delete} eliminado correctamente.')
+        
+    except Exception as e:
+        messages.error(request, f'Error eliminando archivo: {e}')
+    
+    return redirect('gestionar_menus')
 
 @xframe_options_exempt
 @cache_control(max_age=3600)  # Cache por 1 hora
@@ -977,3 +1084,177 @@ def obtener_noticia(request, noticia_id):
         return JsonResponse(data)
     except Noticia.DoesNotExist:
         return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
+
+
+def get_existing_menus():
+    """Obtiene la lista de menús existentes"""
+    import re
+    from datetime import datetime
+    
+    media_root = getattr(settings, 'MEDIA_ROOT', '')
+    comedor_dir = os.path.join(media_root, 'comedor')
+    
+    if not os.path.exists(comedor_dir):
+        return {}
+    
+    pdf_files = [f for f in os.listdir(comedor_dir) if f.endswith('.pdf')]
+    menus_por_mes = {}
+    
+    for pdf_file in pdf_files:
+        match = re.match(r'menu_(\w+)_(castellano|euskera)\.pdf', pdf_file, re.IGNORECASE)
+        
+        if match:
+            mes, idioma = match.groups()
+            
+            if mes not in menus_por_mes:
+                menus_por_mes[mes] = {
+                    'castellano': None,
+                    'euskera': None,
+                    'fecha_modificacion': None
+                }
+            
+            file_path = os.path.join(comedor_dir, pdf_file)
+            file_mtime = os.path.getmtime(file_path)
+            file_date = datetime.fromtimestamp(file_mtime)
+            file_size = os.path.getsize(file_path)
+            
+            menus_por_mes[mes][idioma.lower()] = {
+                'archivo': pdf_file,
+                'fecha': file_date.strftime('%d/%m/%Y %H:%M'),
+                'tamaño': f'{file_size:,} bytes'
+            }
+            
+            # Actualizar fecha de modificación del mes (la más reciente)
+            if (menus_por_mes[mes]['fecha_modificacion'] is None or 
+                file_mtime > menus_por_mes[mes]['fecha_modificacion']):
+                menus_por_mes[mes]['fecha_modificacion'] = file_mtime
+    
+    # Ordenar por fecha de modificación (más recientes primero)
+    return dict(sorted(
+        menus_por_mes.items(), 
+        key=lambda x: x[1]['fecha_modificacion'] or 0, 
+        reverse=True
+    ))
+
+
+def process_menu_upload(form_data):
+    """Procesa la subida de menús"""
+    mes = form_data['mes']
+    menu_castellano = form_data.get('menu_castellano')
+    menu_euskera = form_data.get('menu_euskera')
+    menu_completo = form_data.get('menu_completo')
+    sobrescribir = form_data.get('sobrescribir', False)
+    
+    media_root = getattr(settings, 'MEDIA_ROOT', '')
+    comedor_dir = os.path.join(media_root, 'comedor')
+    
+    # Crear directorio si no existe
+    os.makedirs(comedor_dir, exist_ok=True)
+    
+    archivos_procesados = []
+    
+    try:
+        # Caso 1: Menú completo (separar páginas)
+        if menu_completo:
+            temp_path = os.path.join(comedor_dir, f'temp_{mes}_completo.pdf')
+            
+            # Guardar archivo temporal
+            with open(temp_path, 'wb') as f:
+                for chunk in menu_completo.chunks():
+                    f.write(chunk)
+            
+            # Separar páginas
+            success = split_menu_pdf_upload(temp_path, mes, sobrescribir)
+            
+            # Eliminar archivo temporal
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+            
+            if success:
+                archivos_procesados.extend([f'menu_{mes}_castellano.pdf', f'menu_{mes}_euskera.pdf'])
+            else:
+                return {'success': False, 'message': 'Error separando el PDF completo'}
+        
+        # Caso 2: Archivos separados
+        else:
+            if menu_castellano:
+                archivo_path = os.path.join(comedor_dir, f'menu_{mes}_castellano.pdf')
+                
+                if os.path.exists(archivo_path) and not sobrescribir:
+                    return {'success': False, 'message': f'El menú de {mes} en castellano ya existe. Marca "sobrescribir" si quieres reemplazarlo.'}
+                
+                with open(archivo_path, 'wb') as f:
+                    for chunk in menu_castellano.chunks():
+                        f.write(chunk)
+                
+                archivos_procesados.append(f'menu_{mes}_castellano.pdf')
+            
+            if menu_euskera:
+                archivo_path = os.path.join(comedor_dir, f'menu_{mes}_euskera.pdf')
+                
+                if os.path.exists(archivo_path) and not sobrescribir:
+                    return {'success': False, 'message': f'El menú de {mes} en euskera ya existe. Marca "sobrescribir" si quieres reemplazarlo.'}
+                
+                with open(archivo_path, 'wb') as f:
+                    for chunk in menu_euskera.chunks():
+                        f.write(chunk)
+                
+                archivos_procesados.append(f'menu_{mes}_euskera.pdf')
+        
+        if archivos_procesados:
+            return {
+                'success': True, 
+                'message': f'Menús subidos correctamente: {", ".join(archivos_procesados)}'
+            }
+        else:
+            return {'success': False, 'message': 'No se procesó ningún archivo'}
+    
+    except Exception as e:
+        return {'success': False, 'message': f'Error procesando archivos: {str(e)}'}
+
+
+def split_menu_pdf_upload(pdf_path, mes, sobrescribir=False):
+    """Separa un PDF de menú en castellano y euskera para uploads"""
+    try:
+        from pypdf import PdfReader, PdfWriter
+        
+        # Leer el PDF
+        reader = PdfReader(pdf_path)
+        total_pages = len(reader.pages)
+        
+        if total_pages < 2:
+            return False
+        
+        comedor_dir = os.path.dirname(pdf_path)
+        
+        # Crear PDF para castellano (primera página)
+        castellano_path = os.path.join(comedor_dir, f'menu_{mes}_castellano.pdf')
+        
+        if os.path.exists(castellano_path) and not sobrescribir:
+            return False
+        
+        writer_castellano = PdfWriter()
+        writer_castellano.add_page(reader.pages[0])
+        
+        with open(castellano_path, 'wb') as output_file:
+            writer_castellano.write(output_file)
+        
+        # Crear PDF para euskera (segunda página)
+        euskera_path = os.path.join(comedor_dir, f'menu_{mes}_euskera.pdf')
+        
+        if os.path.exists(euskera_path) and not sobrescribir:
+            # Si castellano se creó pero euskera no por sobrescribir, eliminar castellano
+            if os.path.exists(castellano_path):
+                os.remove(castellano_path)
+            return False
+        
+        writer_euskera = PdfWriter()
+        writer_euskera.add_page(reader.pages[1])
+        
+        with open(euskera_path, 'wb') as output_file:
+            writer_euskera.write(output_file)
+        
+        return True
+        
+    except Exception as e:
+        return False
