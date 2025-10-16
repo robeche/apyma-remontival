@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
+from django_recaptcha.fields import ReCaptchaField
 from .models import Actividad, Noticia
 
 class ContactoForm(forms.Form):
@@ -49,6 +50,12 @@ class ContactoForm(forms.Form):
             'rows': 6,
             'placeholder': _('Escribe tu mensaje aquí...'),
         })
+    )
+    
+    # Campo reCAPTCHA
+    captcha = ReCaptchaField(
+        label=_('Verificación de seguridad'),
+        help_text=_('Marca la casilla para verificar que no eres un robot')
     )
     
     def clean_mensaje(self):

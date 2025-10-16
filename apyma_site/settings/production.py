@@ -163,3 +163,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # Headers de cache para archivos estáticos - TOTALMENTE DESHABILITADO
 WHITENOISE_MAX_AGE = 0
 WHITENOISE_SKIP_COMPRESS_EXTENSIONS = []
+
+# Google reCAPTCHA Configuration - VARIABLES DE ENTORNO
+# En PythonAnywhere: Files → /home/tuusuario → .env
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY', default='')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY', default='')
+
+# Verificar que las claves de reCAPTCHA estén configuradas
+if not RECAPTCHA_PUBLIC_KEY or not RECAPTCHA_PRIVATE_KEY:
+    print("⚠️  ADVERTENCIA: Claves de reCAPTCHA no configuradas en variables de entorno")
+    print("   Configura RECAPTCHA_PUBLIC_KEY y RECAPTCHA_PRIVATE_KEY en .env")
+else:
+    print("✅ reCAPTCHA configurado correctamente desde variables de entorno")

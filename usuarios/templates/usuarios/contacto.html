@@ -113,6 +113,24 @@
                         </div>
                     </div>
 
+                    <!-- Verificación reCAPTCHA -->
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="bi bi-shield-check"></i> {{ form.captcha.label }}
+                        </label>
+                        {{ form.captcha }}
+                        {% if form.captcha.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.captcha.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i> {% trans "Marca la casilla para verificar que no eres un robot" %}
+                        </div>
+                    </div>
+
                     <!-- Botón de envío -->
                     <div class="text-end">
                         <button type="submit" class="btn btn-primary-modern btn-modern btn-lg">
