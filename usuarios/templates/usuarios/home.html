@@ -77,93 +77,117 @@
 </div>
 
 <!-- Servicios -->
-<div class="card card-modern fade-in-up">
-    <div class="card-header card-header-modern">
-        <h2><i class="bi bi-gear-fill"></i> {% trans "Servicios de la Apyma" %}</h2>
-    </div>
-    <div class="card-body card-body-modern">
-        <div class="row g-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="service-card h-100">
-                    <h3><i class="bi bi-trophy-fill text-primary"></i> {% trans "Extraescolares" %}</h3>
-                    <p>{% trans "Amplia oferta de actividades extraescolares: deportes, idiomas, música, informática y mucho más." %}</p>
-                    <p><strong><i class="bi bi-clock"></i> {% trans "Horario" %}:</strong> 16:00 - 17:00 / 17:00 - 18:00</p>
-                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Ver actividades" %}</a>
-                </div>
+<div class="row g-4">
+    <!-- Columna de Noticias -->
+    <div class="col-lg-6">
+        <div class="card card-modern fade-in-up h-100">
+            <div class="card-header card-header-modern">
+                <h2><i class="bi bi-newspaper"></i> {% trans "Últimas Noticias" %}</h2>
             </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="service-card h-100">
-                    <h3><i class="bi bi-sunrise-fill text-info"></i> {% trans "Aula Matinal" %}</h3>
-                    <p>{% trans "Servicio de acogida temprana para facilitar la conciliación familiar." %}</p>
-                    <p><strong><i class="bi bi-clock"></i> {% trans "Horario" %}:</strong> 07:30 - 09:00</p>
-                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Solicitar plaza" %}</a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="service-card h-100">
-                    <h3><i class="bi bi-calendar-event-fill text-success"></i> {% trans "Actividades y Eventos" %}</h3>
-                    <p>{% trans "Organizamos festivales, excursiones, talleres para familias y actividades especiales durante el curso." %}</p>
-                    <p><strong><i class="bi bi-star-fill"></i> {% trans "Próximo evento" %}:</strong> {% trans "Fiesta de Otoño" %}</p>
-                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Ver calendario" %}</a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="service-card h-100">
-                    <h3><i class="bi bi-book-fill text-secondary"></i> {% trans "Apoyo Educativo" %}</h3>
-                    <p>{% trans "Colaboramos con el centro en proyectos educativos y proporcionamos recursos adicionales para el aprendizaje." %}</p>
-                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Conocer proyectos" %}</a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="service-card h-100">
-                    <h3><i class="bi bi-people-fill text-secondary"></i> {% trans "Participación Familiar" %}</h3>
-                    <p>{% trans "Fomentamos la participación de las familias en la vida escolar y representamos sus intereses." %}</p>
-                    <a href="#" class="btn btn-success-modern btn-modern">{% trans "Únete a nosotros" %}</a>
-                </div>
+            <div class="card-body card-body-modern">
+                {% if noticias_recientes %}
+                    {% for noticia in noticias_recientes %}
+                        <div class="news-item mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                            <div class="d-flex">
+                                {% if noticia.imagen %}
+                                    <div class="flex-shrink-0 me-3">
+                                        <img src="{{ noticia.imagen.url }}" 
+                                             alt="{{ noticia.titulo }}" 
+                                             class="rounded news-thumbnail"
+                                             style="width: 80px; height: 60px; object-fit: cover;">
+                                    </div>
+                                {% endif %}
+                                <div class="flex-grow-1">
+                                    <h5 class="news-title mb-1">
+                                        <a href="{% url 'noticia_detalle' noticia.id %}" class="text-decoration-none">
+                                            {% get_current_language as LANGUAGE_CODE %}
+                                            {% if LANGUAGE_CODE == 'eu' and noticia.titulo_eu %}
+                                                {{ noticia.titulo_eu }}
+                                            {% else %}
+                                                {{ noticia.titulo }}
+                                            {% endif %}
+                                        </a>
+                                    </h5>
+                                    <p class="text-muted small mb-1">
+                                        <i class="bi bi-calendar3"></i> {{ noticia.fecha_publicacion|date:"d/m/Y" }}
+                                    </p>
+                                    <p class="news-summary mb-0">
+                                        {% if LANGUAGE_CODE == 'eu' and noticia.resumen_eu %}
+                                            {{ noticia.resumen_eu|truncatewords:15 }}
+                                        {% else %}
+                                            {{ noticia.resumen|truncatewords:15 }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'noticias' %}" class="btn btn-primary-modern btn-modern">
+                            <i class="bi bi-arrow-right"></i> {% trans "Ver todas las noticias" %}
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-newspaper" style="font-size: 3rem; opacity: 0.3;"></i>
+                        <p class="mt-2">{% trans "No hay noticias disponibles" %}</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
-</div>
 
-<!-- Área de Socios -->
-<div class="card card-modern fade-in-up position-relative">
-    <!-- Banner En Construcción -->
-    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
-         style="background-color: rgba(255, 255, 255, 0.85); z-index: 10; border-radius: inherit;">
-        <div class="text-center">
-            <div class="mb-3">
-                <i class="bi bi-tools" style="font-size: 4rem; color: #ffc107;"></i>
+    <!-- Columna de Actividades -->
+    <div class="col-lg-6">
+        <div class="card card-modern fade-in-up h-100">
+            <div class="card-header card-header-modern">
+                <h2><i class="bi bi-calendar-event"></i> {% trans "Próximas Actividades" %}</h2>
             </div>
-            <h3 class="text-warning mb-2">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                {% trans "En Construcción" %}
-            </h3>
-            <p class="text-muted mb-0">
-                {% trans "Esta sección estará disponible próximamente" %}
-            </p>
-            <small class="text-muted">
-                {% trans "Estamos trabajando para ofrecerte la mejor experiencia" %}
-            </small>
-        </div>
-    </div>
-    
-    <!-- Contenido original (visible a través del banner) -->
-    <div class="card-header card-header-modern">
-        <h2><i class="bi bi-person-lock"></i> {% trans "Área de Socios/as" %}</h2>
-    </div>
-    <div class="card-body card-body-modern text-center">
-        <p class="lead">{% trans "Si ya eres socio/a de la Apyma, accede a tu área personal para gestionar inscripciones, pagos y servicios exclusivos." %}</p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
-            <button class="btn btn-primary-modern btn-modern btn-lg" disabled>
-                <i class="bi bi-box-arrow-in-right"></i> {% trans "Acceder al área de socios/as" %}
-            </button>
-            <button class="btn btn-success-modern btn-modern btn-lg" disabled>
-                <i class="bi bi-person-plus"></i> {% trans "Hacerse socio/a" %}
-            </button>
+            <div class="card-body card-body-modern">
+                {% if actividades_proximas %}
+                    {% for actividad in actividades_proximas %}
+                        <div class="activity-item mb-3 {% if not forloop.last %}border-bottom pb-3{% endif %}">
+                            <div class="d-flex">
+                                {% if actividad.imagen %}
+                                    <div class="flex-shrink-0 me-3">
+                                        <img src="{{ actividad.imagen.url }}" 
+                                             alt="{{ actividad.titulo }}" 
+                                             class="rounded activity-thumbnail"
+                                             style="width: 80px; height: 60px; object-fit: cover;">
+                                    </div>
+                                {% endif %}
+                                <div class="flex-grow-1">
+                                    <h5 class="activity-title mb-1">
+                                        <a href="{% url 'actividad_detalle' actividad.id %}" class="text-decoration-none">
+                                            {{ actividad.titulo|default:actividad.get_tipo_actividad_display }}
+                                        </a>
+                                    </h5>
+                                    <p class="text-muted small mb-1">
+                                        <i class="bi bi-calendar3"></i> {{ actividad.fecha|date:"d/m/Y" }}
+                                        <i class="bi bi-clock ms-2"></i> {{ actividad.hora_comienzo|time:"H:i" }}
+                                        {% if actividad.donde %}
+                                            <i class="bi bi-geo-alt ms-2"></i> {{ actividad.donde }}
+                                        {% endif %}
+                                    </p>
+                                    <p class="activity-description mb-0">
+                                        {{ actividad.descripcion|truncatewords:15 }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'actividades' %}" class="btn btn-success-modern btn-modern">
+                            <i class="bi bi-arrow-right"></i> {% trans "Ver todas las actividades" %}
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-calendar-event" style="font-size: 3rem; opacity: 0.3;"></i>
+                        <p class="mt-2">{% trans "No hay actividades programadas" %}</p>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
@@ -184,6 +208,55 @@
 @media (min-width: 769px) and (max-width: 992px) {
     .carousel-responsive-img {
         height: 400px !important;
+    }
+}
+
+/* Estilos para noticias y actividades */
+.news-item, .activity-item {
+    transition: all 0.3s ease;
+}
+
+.news-item:hover, .activity-item:hover {
+    background-color: rgba(0, 123, 255, 0.02);
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.news-title a, .activity-title a {
+    color: #333;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.news-title a:hover, .activity-title a:hover {
+    color: #007bff;
+}
+
+.news-summary, .activity-description {
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.news-thumbnail, .activity-thumbnail {
+    border: 1px solid #e9ecef;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .news-thumbnail, .activity-thumbnail {
+        width: 60px !important;
+        height: 45px !important;
+    }
+    
+    .news-title, .activity-title {
+        font-size: 0.9rem;
+    }
+    
+    .news-summary, .activity-description {
+        font-size: 0.8rem;
     }
 }
 </style>

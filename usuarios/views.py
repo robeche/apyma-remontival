@@ -191,7 +191,25 @@ def admin_login_view(request):
 
 def home(request):
     """Página de inicio pública con información de la Apyma"""
-    return render(request, 'usuarios/home.html')
+    from django.utils import timezone
+    
+    # Obtener las últimas 5 noticias publicadas
+    noticias_recientes = Noticia.objects.filter(
+        publicada=True,
+        fecha_publicacion__lte=timezone.now()
+    ).order_by('-fecha_publicacion')[:5]
+    
+    # Obtener las próximas 5 actividades
+    actividades_proximas = Actividad.objects.filter(
+        fecha__gte=timezone.now().date()
+    ).order_by('fecha', 'hora_comienzo')[:5]
+    
+    context = {
+        'noticias_recientes': noticias_recientes,
+        'actividades_proximas': actividades_proximas,
+    }
+    
+    return render(request, 'usuarios/home.html', context)
 
 @login_required
 def dashboard(request):
