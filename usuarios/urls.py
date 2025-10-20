@@ -15,6 +15,7 @@ urlpatterns = [
     path('comedor/gestionar/', views.gestionar_menus, name='gestionar_menus'),
     path('comedor/pdf/<str:filename>/', views.serve_pdf, name='serve_pdf'),
     path('comedor/gestionar/', views.gestionar_menus, name='gestionar_menus'),
+    path('extraescolares/', views.extraescolares, name='extraescolares'),
     path('actividades/', views.actividades, name='actividades'),
     path('actividades/crear/', views.crear_actividad, name='crear_actividad'),
     path('actividades/<int:actividad_id>/', views.detalle_actividad, name='detalle_actividad'),

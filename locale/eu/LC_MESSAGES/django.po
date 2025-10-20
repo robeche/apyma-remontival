@@ -472,3 +472,78 @@ msgstr "Helbide honetara erantzungo dizugu"
 
 msgid "Cuéntanos en qué podemos ayudarte"
 msgstr "Kontaiguzu nola lagun zaitzakegun"
+
+msgid "Actividades Extraescolares"
+msgstr "Eskolaz Kanpoko Jarduerak"
+
+msgid "Descubre las actividades que ofrecemos para enriquecer la experiencia educativa de nuestros alumnos"
+msgstr "Aurkitu gure ikasleen hezkuntza esperientzia aberasteko eskaintzen ditugun jarduerak"
+
+msgid "Organización y Gestión"
+msgstr "Antolaketa eta Kudeaketa"
+
+msgid "¡Importante!"
+msgstr "Garrantzitsua!"
+
+msgid "Es la APYMA quien gestiona y organiza todas las actividades extraescolares del centro."
+msgstr "APYMA da ikastetxeko eskolaz kanpoko jarduera guztiak kudeatzen eta antolatzen dituena."
+
+msgid "Si estás interesado/a en alguna actividad en concreto o quieres ofrecer una nueva actividad, puedes ponerte en contacto con nosotros a través de nuestra"
+msgstr "Jarduera zehatz batean interesatuta bazaude edo jarduera berri bat eskaini nahi baduzu, gurekin harremanetan jar zaitezke gure"
+
+msgid "sección de contacto"
+msgstr "kontaktu atalaren"
+
+msgid "Plazo de Inscripción"
+msgstr "Izen-emate Epea"
+
+msgid "Actividades Disponibles Este Año"
+msgstr "Aurten Eskuragarri Dauden Jarduerak"
+
+msgid "Inscripción"
+msgstr "Izen-ematea"
+
+msgid "Plazos de inscripción"
+msgstr "Izen-emate epeak"
+
+msgid "¿Listo para apuntarte?"
+msgstr "Prest izen emateko?"
+
+msgid "Completa el formulario de inscripción para reservar tu plaza en las actividades extraescolares."
+msgstr "Bete izen-emate formularioa eskolaz kanpoko jardueretan zure tokia erreserbatzeko."
+
+msgid "Completa el formulario de inscripción para reservar tu plaza."
+msgstr "Bete izen-emate formularioa zure tokia erreserbatzeko."
+
+msgid "Formulario de Inscripción"
+msgstr "Izen-emate Formularioa"
+
+msgid "Se abrirá en una nueva ventana"
+msgstr "Leiho berri batean irekiko da"
+
+msgid "¿Necesitas ayuda?"
+msgstr "Laguntza behar duzu?"
+
+msgid "Consulta los horarios disponibles"
+msgstr "Kontsultatu eskuragarri dauden ordutegiak"
+
+msgid "Pregunta sobre precios y descuentos"
+msgstr "Galdetu prezio eta deskontuei buruz"
+
+msgid "Propón nuevas actividades"
+msgstr "Proposatu jarduera berriak"
+
+msgid "Solicita más información"
+msgstr "Eskatu informazio gehiago"
+
+msgid "Contáctanos"
+msgstr "Jarri gurekin harremanetan"
+
+msgid "Inscríbete pronto, las plazas son limitadas"
+msgstr "Eman izena laster, tokiak mugatuak dira"
+
+msgid "Consulta si hay descuentos por varios hermanos"
+msgstr "Kontsultatu anai-arrebak badaude deskonturik dagoen"
+
+msgid "Las actividades comenzarán en octubre"
+msgstr "Jarduerak urrian hasiko dira"

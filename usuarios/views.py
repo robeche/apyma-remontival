@@ -677,6 +677,47 @@ def gestionar_menus(request):
     
     return render(request, 'usuarios/gestionar_menus.html', context)
 
+def extraescolares(request):
+    """Vista para mostrar información de las actividades extraescolares"""
+    
+    # Lista de extraescolares disponibles
+    extraescolares_disponibles = [
+        {
+            'nombre': 'TEATRO',
+            'icono': 'bi-masks'
+        },
+        {
+            'nombre': 'TALLER DE CREATIVIDAD', 
+            'icono': 'bi-palette'
+        },
+        {
+            'nombre': 'ROBÓTICA',
+            'icono': 'bi-robot'
+        },
+        {
+            'nombre': 'PATINAJE',
+            'icono': 'bi-lightning'
+        },
+        {
+            'nombre': 'JUDO',
+            'icono': 'bi-person-arms-up'
+        },
+        {
+            'nombre': 'TALLER DE COSTURA',
+            'icono': 'bi-scissors'
+        }
+    ]
+    
+    # Información general
+    info_extraescolares = {
+        'plazo_inicio': '25 de Agosto',
+        'plazo_fin': '16 de Septiembre',
+        'formulario_url': 'https://docs.google.com/forms/d/e/1FAIpQLScuN-0ExifKUNCfpzrv-vWdFYoG0NbepxXGRkstMfOFwWUgSw/viewform?usp=dialog',
+        'extraescolares': extraescolares_disponibles
+    }
+    
+    return render(request, 'usuarios/extraescolares.html', {'info': info_extraescolares})
+
 def handle_menu_upload(request, media_dir):
     """Maneja la subida de archivos de menú"""
     try:

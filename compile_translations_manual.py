@@ -14,9 +14,18 @@ django.setup()
 def compile_translations():
     """Compila las traducciones usando Django"""
     try:
+        # Configurar PATH temporal para msgfmt
+        import os
+        original_path = os.environ.get('PATH', '')
+        os.environ['PATH'] = original_path + ';C:\\tools\\msys64\\usr\\bin'
+        
         # Intentar usar el comando de Django
         call_command('compilemessages', verbosity=2)
         print("✓ Traducciones compiladas exitosamente usando Django")
+        
+        # Restaurar PATH original
+        os.environ['PATH'] = original_path
+        
     except Exception as e:
         print(f"Error al compilar traducciones: {e}")
         

@@ -1,0 +1,250 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Extraescolares" %} - Apyma Remontival{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans "Inicio" %}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Extraescolares" %}</li>
+    </ol>
+</nav>
+
+<div class="container">
+
+    <!-- Plazo de inscripción e Inscripción -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-calendar-check text-success"></i> {% trans "Inscripción" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <!-- Primera fila: Formulario de inscripción -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-clipboard-check text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="mb-3">{% trans "¿Listo para apuntarte?" %}</h5>
+                        <p class="text-muted mb-4">
+                            {% trans "Completa el formulario de inscripción para reservar tu plaza." %}
+                        </p>
+                        <a href="{{ info.formulario_url }}" target="_blank" class="btn btn-success-modern btn-modern btn-lg">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>
+                            {% trans "Formulario de Inscripción" %}
+                        </a>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                {% trans "Se abrirá en una nueva ventana" %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Segunda fila: Plazos de inscripción -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <h6 class="text-muted">{% trans "Plazos de inscripción" %}</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="bi bi-calendar-plus text-success mb-2" style="font-size: 2rem;"></i>
+                                <h5 class="text-success">{% trans "Inicio" %}</h5>
+                                <p class="fw-bold mb-0">{{ info.plazo_inicio }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center p-3 bg-light rounded">
+                                <i class="bi bi-calendar-x text-danger mb-2" style="font-size: 2rem;"></i>
+                                <h5 class="text-danger">{% trans "Fin" %}</h5>
+                                <p class="fw-bold mb-0">{{ info.plazo_fin }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extraescolares disponibles -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-list-stars text-warning"></i> {% trans "Actividades Disponibles Este Año" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                {% for extraescolar in info.extraescolares %}
+                <div class="col-md-4 col-lg-2 mb-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi {{ extraescolar.icono }} text-primary mb-3" style="font-size: 3rem;"></i>
+                            <h5 class="card-title fw-bold">{{ extraescolar.nombre }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Información de gestión -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-info-circle text-primary"></i> {% trans "Organización y Gestión" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="alert alert-info mb-4">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                <strong>{% trans "¡Importante!" %}</strong>
+            </div>
+            <p class="mb-3">
+                {% trans "Es la APYMA quien gestiona y organiza todas las actividades extraescolares del centro." %}
+            </p>
+            <p class="mb-3">
+                {% trans "Si estás interesado/a en alguna actividad en concreto o quieres ofrecer una nueva actividad, puedes ponerte en contacto con nosotros a través de nuestra" %}
+                <a href="{% url 'contacto' %}" class="text-decoration-none fw-bold">
+                    {% trans "sección de contacto" %}
+                </a>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h4><i class="bi bi-question-circle text-info"></i> {% trans "¿Necesitas ayuda?" %}</h4>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                <div class="col-lg-8">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Consulta los horarios disponibles" %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Pregunta sobre precios y descuentos" %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Propón nuevas actividades" %}
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Solicita más información" %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
+                    <a href="{% url 'contacto' %}" class="btn btn-outline-primary btn-modern btn-lg">
+                        <i class="bi bi-envelope me-2"></i>
+                        {% trans "Contáctanos" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS personalizado -->
+<style>
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.1) 0%, rgba(var(--bs-success-rgb), 0.1) 100%);
+    border-radius: 20px;
+    padding: 4rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-icon {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-modern {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header-modern {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid var(--bs-primary);
+    color: #212529 !important;
+}
+
+.card-header-modern h3,
+.card-header-modern h4 {
+    color: #212529 !important;
+    margin-bottom: 0;
+}
+
+.card-header-modern i {
+    color: inherit !important;
+}
+
+.btn-modern {
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-success-modern {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+}
+
+.btn-success-modern:hover {
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+}
+</style>
+
+{% endblock %}
