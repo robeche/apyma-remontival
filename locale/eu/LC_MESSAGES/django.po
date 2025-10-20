@@ -205,3 +205,270 @@ msgstr "Albistea editatu"
 
 msgid "Eliminar noticia"
 msgstr "Albistea ezabatu"
+
+msgid "Error al cargar la noticia"
+msgstr "Errorea albistea kargatzean"
+
+msgid "Error al cargar la actividad"
+msgstr "Errorea jarduera kargatzean"
+
+msgid "Últimas Noticias"
+msgstr "Azken Albisteak"
+
+msgid "Próximas Actividades"
+msgstr "Hurrengo Jarduerak"
+
+msgid "No hay actividades programadas"
+msgstr "Ez dago jarduerarik programatuta"
+
+msgid "No hay actividades programadas para este día"
+msgstr "Ez dago jarduerarik programatuta egun honetarako"
+
+msgid "Error de conexión"
+msgstr "Konexio errorea"
+
+msgid "Nombre"
+msgstr "Izena"
+
+msgid "Email"
+msgstr "Emaila"
+
+msgid "Teléfono"
+msgstr "Telefonoa"
+
+msgid "Mensaje"
+msgstr "Mezua"
+
+msgid "Enviar"
+msgstr "Bidali"
+
+msgid "Enviar mensaje"
+msgstr "Mezua bidali"
+
+msgid "Tu mensaje ha sido enviado"
+msgstr "Zure mezua bidali da"
+
+msgid "Error al enviar el mensaje"
+msgstr "Errorea mezua bidaltzean"
+
+msgid "Gestión del Comedor"
+msgstr "Jangelaren Kudeaketa"
+
+msgid "Descargar menú"
+msgstr "Menua deskargatu"
+
+msgid "Menú no disponible"
+msgstr "Menua ez dago eskuragarri"
+
+msgid "Área de Socios"
+msgstr "Kideen Eremua"
+
+msgid "Iniciar Sesión"
+msgstr "Saioa Hasi"
+
+msgid "Usuario"
+msgstr "Erabiltzailea"
+
+msgid "Contraseña"
+msgstr "Pasahitza"
+
+msgid "¿Olvidaste tu contraseña?"
+msgstr "Pasahitza ahaztu duzu?"
+
+msgid "¿No tienes cuenta?"
+msgstr "Ez duzu konturik?"
+
+msgid "Regístrate aquí"
+msgstr "Hemen eman izena"
+
+msgid "Panel de Control"
+msgstr "Kontrol Panela"
+
+msgid "Bienvenido"
+msgstr "Ongi etorri"
+
+msgid "Estadísticas"
+msgstr "Estatistikak"
+
+msgid "Total de noticias"
+msgstr "Albiste guztiak"
+
+msgid "Total de actividades"
+msgstr "Jarduera guztiak"
+
+msgid "Acciones rápidas"
+msgstr "Ekintza azkarrak"
+
+msgid "Gestionar noticias"
+msgstr "Albisteak kudeatu"
+
+msgid "Gestionar actividades"
+msgstr "Jarduerak kudeatu"
+
+msgid "Ver página web"
+msgstr "Web orria ikusi"
+
+msgid "Ver todas las actividades"
+msgstr "Jarduera guztiak ikusi"
+
+msgid "Haz clic en un día del calendario para ver sus actividades"
+msgstr "Egin klik egutegiko egun batean haren jarduerak ikusteko"
+
+msgid "Accede a tu área personal para gestionar las actividades de tus hijos, extraescolares y servicios exclusivos para socios."
+msgstr "Sartu zure eremu pertsonalean zure seme-alaben jarduerak, eskolaz kanpokoak eta bazkideentzako zerbitzu esklusiboak kudeatzeko."
+
+msgid "Registrarse"
+msgstr "Eman izena"
+
+msgid "Registro"
+msgstr "Erregistroa"
+
+msgid "Regístrate para acceder al área de socios/as y gestionar las actividades de tus hijos en el CP Remontival IP."
+msgstr "Eman izena bazkideen eremura sartzeko eta CP Remontival IP-eko zure seme-alaben jarduerak kudeatzeko."
+
+msgid "Confirmar contraseña"
+msgstr "Pasahitza berretsi"
+
+msgid "Acepto los términos y condiciones"
+msgstr "Baldintzak eta terminoak onartzen ditut"
+
+msgid "Crear cuenta"
+msgstr "Kontua sortu"
+
+msgid "¿Ya tienes cuenta?"
+msgstr "Badaukazu konturik?"
+
+msgid "Inicia sesión aquí"
+msgstr "Hemen hasi saioa"
+
+msgid "Tipo"
+msgstr "Mota"
+
+msgid "Fecha"
+msgstr "Data"
+
+msgid "Hora"
+msgstr "Ordua"
+
+msgid "Lugar"
+msgstr "Lekua"
+
+msgid "Descripción"
+msgstr "Deskribapena"
+
+msgid "Actualizar"
+msgstr "Eguneratu"
+
+msgid "Eliminar"
+msgstr "Ezabatu"
+
+msgid "Guardar"
+msgstr "Gorde"
+
+msgid "Salir"
+msgstr "Irten"
+
+msgid "Inicio de sesión"
+msgstr "Saioa hastea"
+
+msgid "Cerrar sesión"
+msgstr "Saioa itxi"
+
+msgid "Mi perfil"
+msgstr "Nire profila"
+
+msgid "Configuración"
+msgstr "Konfigurazioa"
+
+msgid "Administración"
+msgstr "Administrazioa"
+
+msgid "Volver"
+msgstr "Itzuli"
+
+msgid "Volver al inicio"
+msgstr "Hasierara itzuli"
+
+msgid "Página no encontrada"
+msgstr "Orrialdea ez da aurkitu"
+
+msgid "Error interno del servidor"
+msgstr "Zerbitzariaren barne errorea"
+
+msgid "No tienes permisos para acceder a esta página"
+msgstr "Ez duzu orrialde honetara sartzeko baimenik"
+
+msgid "Datos personales"
+msgstr "Datu pertsonalak"
+
+msgid "Apellidos"
+msgstr "Abizenak"
+
+msgid "Fecha de nacimiento"
+msgstr "Jaiotze data"
+
+msgid "Dirección"
+msgstr "Helbidea"
+
+msgid "Ciudad"
+msgstr "Hiria"
+
+msgid "Código postal"
+msgstr "Posta kodea"
+
+msgid "Provincia"
+msgstr "Probintzia"
+
+msgid "Contacto - Apyma Remontival"
+msgstr "Kontaktua - Apyma Remontival"
+
+msgid "Envíanos un mensaje"
+msgstr "Bidali mezu bat"
+
+msgid "Mínimo 10 caracteres. Sé lo más específico posible para ayudarnos a responder mejor."
+msgstr "Gutxienez 10 karaktere. Izan zehatza hobeto erantzuten laguntzeko."
+
+msgid "Marca la casilla para verificar que no eres un robot"
+msgstr "Markatu laukia robot bat ez zarela egiaztatzeko"
+
+msgid "Información de contacto"
+msgstr "Kontaktu informazioa"
+
+msgid "Tiempo de respuesta"
+msgstr "Erantzun denbora"
+
+msgid "Normalmente respondemos en 24-48 horas laborables"
+msgstr "Normalean 24-48 ordu langiletan erantzuten dugu"
+
+msgid "Web oficial del colegio"
+msgstr "Ikastetxearen web ofiziala"
+
+msgid "Consejos"
+msgstr "Aholkuak"
+
+msgid "Sé específico/a en tu consulta"
+msgstr "Izan zehatz zure kontsultan"
+
+msgid "Indica si eres socio/a de la Apyma"
+msgstr "Adierazi Apymako kidea zaren"
+
+msgid "Para emergencias, contacta directamente con el colegio"
+msgstr "Larrialdietarako, jarri zuzenean harremanetan ikastetxearekin"
+
+msgid "Asunto"
+msgstr "Gaia"
+
+msgid "Nombre y apellidos"
+msgstr "Izena eta abizenak"
+
+msgid "Email de contacto"
+msgstr "Kontaktu emaila"
+
+msgid "Verificación de seguridad"
+msgstr "Segurtasun egiaztapena"
+
+msgid "Te responderemos a esta dirección"
+msgstr "Helbide honetara erantzungo dizugu"
+
+msgid "Cuéntanos en qué podemos ayudarte"
+msgstr "Kontaiguzu nola lagun zaitzakegun"

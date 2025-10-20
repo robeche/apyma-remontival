@@ -1103,6 +1103,47 @@ def obtener_noticia(request, noticia_id):
     except Noticia.DoesNotExist:
         return JsonResponse({'error': 'Noticia no encontrada'}, status=404)
 
+def obtener_noticia_publica(request, noticia_id):
+    """Vista pública para obtener los datos de una noticia para mostrar en modal"""
+    try:
+        from django.utils import timezone
+        
+        noticia = Noticia.objects.get(
+            id=noticia_id,
+            publicada=True,
+            fecha_publicacion__lte=timezone.now()
+        )
+        
+        # Obtener idioma actual
+        from django.utils.translation import get_language
+        idioma_actual = get_language()
+        
+        # Seleccionar título y contenido según idioma
+        if idioma_actual == 'eu' and noticia.titulo_eu:
+            titulo = noticia.titulo_eu
+            resumen = noticia.resumen_eu or noticia.resumen
+            contenido = noticia.contenido_eu or noticia.contenido
+        else:
+            titulo = noticia.titulo
+            resumen = noticia.resumen
+            contenido = noticia.contenido
+        
+        data = {
+            'success': True,
+            'noticia': {
+                'id': noticia.id,
+                'titulo': titulo,
+                'resumen': resumen,
+                'contenido': contenido,
+                'fecha_publicacion': noticia.fecha_publicacion.strftime('%d %B %Y'),
+                'imagen': noticia.imagen.url if noticia.imagen else None,
+                'destacada': getattr(noticia, 'destacada', False)
+            }
+        }
+        return JsonResponse(data)
+    except Noticia.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Noticia no encontrada'}, status=404)
+
 
 def get_existing_menus():
     """Obtiene la lista de menús existentes"""

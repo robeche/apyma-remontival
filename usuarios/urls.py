@@ -26,6 +26,7 @@ urlpatterns = [
     path('noticias/<int:noticia_id>/editar/', views.editar_noticia, name='editar_noticia'),
     path('noticias/<int:noticia_id>/eliminar/', views.eliminar_noticia, name='eliminar_noticia'),
     path('noticias/<int:noticia_id>/obtener/', views.obtener_noticia, name='obtener_noticia'),
+    path('noticia/<int:noticia_id>/', views.obtener_noticia_publica, name='obtener_noticia_publica'),
     path('debug-redirect/', views.debug_redirect, name='debug_redirect'),
     path('debug-headers/', views.debug_headers_cookies, name='debug_headers'),  # TEMPORAL DEBUG
     path('test-session/', views.test_session, name='test_session'),  # TEMPORAL SESSION TEST
