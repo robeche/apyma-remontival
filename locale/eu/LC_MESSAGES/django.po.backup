@@ -581,62 +581,29 @@ msgstr "Eskatu dezakezu honen bidez"
 msgid "formulario"
 msgstr "inprimakia"
 
-msgid "Aula matinal"
-msgstr "Goizeko gela"
+msgid "Aula de madrugadores"
+msgstr "Goiztar gela"
 
-msgid "Horario de acogida matinal antes del inicio de las clases"
-msgstr "Eskolak hasi aurretik goizeko harrera ordutegia"
+msgid "Cuidado antes del horario escolar"
+msgstr "Eskola ordutegi aurretik zaintzea"
 
-msgid "¿Necesitas el aula matinal?"
-msgstr "Goizeko gela behar duzu?"
+msgid "Horario"
+msgstr "Ordutegia"
 
-msgid "Completa el formulario para solicitar plaza en el aula matinal."
-msgstr "Bete inprimakia goizeko gelan plaza eskatzeko."
+msgid "Precio"
+msgstr "Prezioa"
+
+msgid "¿Necesitas el aula de madrugadores?"
+msgstr "Goiztar gela behar duzu?"
+
+msgid "Completa el formulario para solicitar plaza en el aula de madrugadores."
+msgstr "Bete inprimakia goiztar gelan plaza eskatzeko."
 
 msgid "Solicitar Plaza"
 msgstr "Plaza Eskatu"
 
-msgid "Recuerda que para acceder al aula matinal es necesario que seas socio de la APYMA."
-msgstr "Gogoratu goizeko gelara sartzeko APYMAko bazkide izan behar duzula."
-
-msgid "Horario de Acogida"
-msgstr "Harrera-ordutegia"
-
-msgid "De 7:30 a 9:00 inicio de las clases. Se revisará inicio según demanda."
-msgstr "7:30etik 9:00etara eskolen hasiera. Eskaeraren arabera berrikusiko da."
-
-msgid "Duración del Servicio"
-msgstr "Zerbitzuaren Iraupena"
-
-msgid "Todo el año iniciándose el 8 de septiembre"
-msgstr "Urte osoan, irailaren 8an hasita"
-
-msgid "El precio aproximado 60€ mes (realizado la media de los meses ya que todos los meses no son iguales)."
-msgstr "Hileko 60 € inguruko prezioa (hilabeteen batez bestekoa eginda, hilabete guztiak ez baitira berdinak)."
-
-msgid "Segundo hijo/a y siguientes 50€"
-msgstr "Bigarren seme-alaba eta hurrengoak 50€"
-
-msgid "Bonos de 5 días 40€"
-msgstr "5 eguneko bonuak 40€"
-
-msgid "Día suelto 10€"
-msgstr "Egun soltea 10€"
-
-msgid "Nuevos socios/as"
-msgstr "Bazkide berriak"
-
-msgid "Rellena si no eres socio/a y quieres usar el servicio"
-msgstr "Bete bazkide ez bazara eta zerbitzua erabili nahi baduzu"
-
-msgid "Clica para darte de alta APYMA Remontival"
-msgstr "Egin klik APYMA Remontival-en alta emateko"
-
-msgid "Los datos son almacenados en el fichero Acogida Matinal 25-26 que es gestionado por la Apyma Remontival para la gestión del servicio."
-msgstr "Datuak Remontival Guraso Elkarteak zerbitzua kudeatzeko, Goizeko Harrera 25-26 fitxategian gordetzen dira."
-
-msgid "Puede corregir o solicitar su baja dirigiéndose a la asociación APYMA Remontival en apymaremontival@gmail.com."
-msgstr "Remontival Guraso Elkartera dezakezu, apymaremontival@gmail.com helbidean."
+msgid "Recuerda que para acceder al aula de madrugadores es necesario que seas socio de la APYMA."
+msgstr "Gogoratu goiztar gelara sartzeko APYMAko bazkide izan behar duzula."
 
 msgid "Detalles del Servicio"
 msgstr "Zerbitzuaren Xehetasunak"
@@ -652,6 +619,9 @@ msgstr "Kokalekua"
 
 msgid "Responsable"
 msgstr "Arduraduna"
+
+msgid "Actividades"
+msgstr "Jarduerak"
 
 msgid "Normas y Consideraciones"
 msgstr "Arauak eta Kontuan hartzekoak"

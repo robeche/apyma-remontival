@@ -764,6 +764,46 @@ def extraescolares(request):
     
     return render(request, 'usuarios/extraescolares.html', {'info': info_extraescolares})
 
+def aula_madrugadores(request):
+    """Vista para mostrar información del aula matinal"""
+    
+    # Información del aula matinal
+    info_aula = {
+        'titulo': 'Aula Matinal',
+        'descripcion': 'Horario de acogida matinal antes del inicio de las clases',
+        'horario': {
+            'inicio': '7:30',
+            'fin': '9:00',
+            'descripcion': 'De 7:30 a 9:00 inicio de las clases. Se revisará inicio según demanda.'
+        },
+        'duracion': {
+            'titulo': 'Duración del Servicio',
+            'descripcion': 'Todo el año iniciándose el 8 de septiembre'
+        },
+        'precio': {
+            'mensual': '60€ mes (aproximado)',
+            'descripcion': 'El precio aproximado 60€ mes (realizado la media de los meses ya que todos los meses no son iguales).',
+            'segundo_hijo': 'Segundo hijo/a y siguientes 50€',
+            'bonos': 'Bonos de 5 días 40€',
+            'dia_suelto': 'Día suelto 10€'
+        },
+        'formulario_url': 'https://docs.google.com/forms/d/e/1FAIpQLSfDQ10es2Ebc1kElngP37ihbCe4fyJAj6ozX-F-OGdzmzCwrg/viewform?usp=dialog',
+        'contacto': 'apymaremontival@gmail.com',
+        'datos_privacidad': {
+            'almacenamiento': 'Los datos son almacenados en el fichero Acogida Matinal 25-26 que es gestionado por la Apyma Remontival para la gestión del servicio.',
+            'modificacion': 'Puede corregir o solicitar su baja dirigiéndose a la asociación APYMA Remontival en apymaremontival@gmail.com.'
+        },
+        'nuevos_socios': {
+            'titulo': 'Nuevos socios/as',
+            'descripcion': 'Rellena si no eres socio/a y quieres usar el servicio',
+            'enlace_texto': 'Clica para darte de alta APYMA Remontival'
+        }
+    }
+    
+    return render(request, 'usuarios/aula_madrugadores.html', {'info': info_aula})
+    
+    return render(request, 'usuarios/aula_madrugadores.html', {'info': info_aula})
+
 def handle_menu_upload(request, media_dir):
     """Maneja la subida de archivos de menú"""
     try:

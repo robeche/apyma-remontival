@@ -1,0 +1,325 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Aula matinal" %} - Apyma Remontival{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans "Inicio" %}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{% trans "Aula matinal" %}</li>
+    </ol>
+</nav>
+
+<div class="container">
+
+    <!-- Información principal -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-sunrise text-warning"></i> {% trans "Aula matinal" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-sunrise text-warning" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="mb-3">{% trans "Horario de acogida matinal antes del inicio de las clases" %}</h4>
+                        <p class="text-muted mb-4 lead">
+                            {{ info.descripcion }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Información básica -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card border-0 bg-light h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-clock text-primary mb-3" style="font-size: 2.5rem;"></i>
+                            <h5 class="text-primary">{% trans "Horario de Acogida" %}</h5>
+                            <p class="fw-bold mb-1">{{ info.horario.inicio }} - {{ info.horario.fin }}</p>
+                            <p class="text-muted mb-0">{% trans "De 7:30 a 9:00 inicio de las clases. Se revisará inicio según demanda." %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card border-0 bg-light h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-currency-euro text-success mb-3" style="font-size: 2.5rem;"></i>
+                            <h5 class="text-success">{% trans "Precio" %}</h5>
+                            <p class="fw-bold fs-4 text-success mb-1">{{ info.precio.mensual }}</p>
+                            <div class="small text-muted">
+                                <p class="mb-1">{% trans "Segundo hijo/a y siguientes 50€" %}</p>
+                                <p class="mb-1">{% trans "Bonos de 5 días 40€" %}</p>
+                                <p class="mb-0">{% trans "Día suelto 10€" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Duración del servicio -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-calendar-range text-info"></i> {% trans "Duración del Servicio" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="text-center">
+                <i class="bi bi-calendar-range text-info mb-3" style="font-size: 3rem;"></i>
+                <h5 class="mb-3">{% trans "Todo el año iniciándose el 8 de septiembre" %}</h5>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevos socios -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-person-plus text-warning"></i> {% trans "Nuevos socios/as" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="text-center">
+                <i class="bi bi-person-plus text-warning mb-3" style="font-size: 3rem;"></i>
+                <h5 class="mb-3">{% trans "Rellena si no eres socio/a y quieres usar el servicio" %}</h5>
+                <a href="#" class="btn btn-warning-modern btn-modern btn-lg">
+                    <i class="bi bi-clipboard2-plus me-2"></i>
+                    {% trans "Clica para darte de alta APYMA Remontival" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inscripción -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-clipboard-check text-success"></i> {% trans "Inscripción" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-clipboard-check text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="mb-3">{% trans "¿Necesitas el aula matinal?" %}</h5>
+                        <p class="text-muted mb-4">
+                            {% trans "Completa el formulario para solicitar plaza en el aula matinal." %}
+                        </p>
+                        <a href="{{ info.formulario_url }}" target="_blank" class="btn btn-success-modern btn-modern btn-lg">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>
+                            {% trans "Solicitar Plaza" %}
+                        </a>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                {% trans "Se abrirá en una nueva ventana" %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aviso sobre requisito de ser socio -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-warning border-warning">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-3 mt-1" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <strong>{% trans "¡Importante!" %}</strong>
+                                <p class="mb-2 mt-1">
+                                    {% trans "Recuerda que para acceder al aula matinal es necesario que seas socio de la APYMA." %}
+                                </p>
+                                <p class="mb-2">
+                                    {% trans "Los datos son almacenados en el fichero Acogida Matinal 25-26 que es gestionado por la Apyma Remontival para la gestión del servicio." %}
+                                </p>
+                                <p class="mb-2">
+                                    {% trans "Puede corregir o solicitar su baja dirigiéndose a la asociación APYMA Remontival en apymaremontival@gmail.com." %}
+                                </p>
+                                <p class="mb-0">
+                                    {% trans "Puedes solicitarlo mediante este" %}
+                                    <a href="https://forms.gle/781gPFtLM6yyVZyz5" target="_blank" class="alert-link fw-bold text-decoration-none">
+                                        {% trans "formulario" %}
+                                        <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalles del servicio -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-info-circle text-primary"></i> {% trans "Detalles del Servicio" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5><i class="bi bi-people text-secondary me-2"></i>{% trans "Información General" %}</h5>
+                    <ul class="list-unstyled ms-4">
+                        <li class="mb-2">
+                            <strong>{% trans "Edad mínima" %}:</strong> {{ info.edad_minima }}
+                        </li>
+                        <li class="mb-2">
+                            <strong>{% trans "Ubicación" %}:</strong> {{ info.ubicacion }}
+                        </li>
+                        <li class="mb-2">
+                            <strong>{% trans "Responsable" %}:</strong> {{ info.responsable }}
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <h5><i class="bi bi-list-stars text-warning me-2"></i>{% trans "Actividades" %}</h5>
+                    <ul class="list-unstyled ms-4">
+                        {% for actividad in info.actividades %}
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {{ actividad }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Normas y consideraciones -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-shield-check text-info"></i> {% trans "Normas y Consideraciones" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="list-unstyled">
+                        {% for norma in info.normas %}
+                        <li class="mb-3">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right-circle text-primary me-3 mt-1"></i>
+                                <span>{{ norma }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h4><i class="bi bi-question-circle text-info"></i> {% trans "¿Necesitas ayuda?" %}</h4>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                <div class="col-lg-8">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Consulta sobre horarios y disponibilidad" %}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Pregunta sobre actividades y servicios" %}
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {% trans "Solicita más información" %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 text-center d-flex align-items-center justify-content-center">
+                    <a href="{% url 'contacto' %}" class="btn btn-outline-primary btn-modern btn-lg">
+                        <i class="bi bi-envelope me-2"></i>
+                        {% trans "Contáctanos" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS personalizado -->
+<style>
+.hover-card {
+    transition: all 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.card-modern {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card-header-modern {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 3px solid #dee2e6;
+}
+
+.card-body-modern {
+    background: #ffffff;
+}
+
+.card-header-modern h3,
+.card-header-modern h4 {
+    color: #212529 !important;
+    margin-bottom: 0;
+}
+
+.card-header-modern i {
+    color: inherit !important;
+}
+
+.btn-modern {
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-success-modern {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+}
+
+.btn-success-modern:hover {
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+{% endblock %}
