@@ -15,6 +15,34 @@
 
 <div class="container">
 
+    <!-- Extraescolares disponibles -->
+    <div class="card card-modern mb-4 fade-in-up">
+        <div class="card-header card-header-modern">
+            <h3><i class="bi bi-list-stars text-warning"></i> {% trans "Actividades Disponibles Este Año" %}</h3>
+        </div>
+        <div class="card-body card-body-modern">
+            <div class="row">
+                {% for extraescolar in info.extraescolares %}
+                <div class="col-md-4 col-lg-2 mb-3">
+                    <div class="card h-100 border-0 shadow-sm hover-card {% if extraescolar.detalles %}clickable-card{% endif %}" 
+                         {% if extraescolar.detalles %}data-bs-toggle="modal" data-bs-target="#modal{{ forloop.counter }}"{% endif %}>
+                        <div class="card-body text-center p-4">
+                            <i class="bi {{ extraescolar.icono }} text-primary mb-3" style="font-size: 3rem;"></i>
+                            <h5 class="card-title fw-bold {% if extraescolar.detalles %}clickable-title{% endif %}">{{ extraescolar.nombre }}</h5>
+                            {% if extraescolar.detalles %}
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    {% trans "Clic para más info" %}
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     <!-- Plazo de inscripción e Inscripción -->
     <div class="card card-modern mb-4 fade-in-up">
         <div class="card-header card-header-modern">
@@ -46,6 +74,30 @@
                 </div>
             </div>
             
+            <!-- Aviso sobre requisito de ser socio -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-warning border-warning">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-exclamation-triangle-fill text-warning me-3 mt-1" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <strong>{% trans "¡Importante!" %}</strong>
+                                <p class="mb-2 mt-1">
+                                    {% trans "Recuerda que para inscribir a tu hija o hijo en las extraescolares es necesario que seas socio de la APYMA." %}
+                                </p>
+                                <p class="mb-0">
+                                    {% trans "Puedes solicitarlo mediante este" %}
+                                    <a href="https://forms.gle/781gPFtLM6yyVZyz5" target="_blank" class="alert-link fw-bold text-decoration-none">
+                                        {% trans "formulario" %}
+                                        <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Segunda fila: Plazos de inscripción -->
             <div class="row">
                 <div class="col-12">
@@ -69,27 +121,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Extraescolares disponibles -->
-    <div class="card card-modern mb-4 fade-in-up">
-        <div class="card-header card-header-modern">
-            <h3><i class="bi bi-list-stars text-warning"></i> {% trans "Actividades Disponibles Este Año" %}</h3>
-        </div>
-        <div class="card-body card-body-modern">
-            <div class="row">
-                {% for extraescolar in info.extraescolares %}
-                <div class="col-md-4 col-lg-2 mb-3">
-                    <div class="card h-100 border-0 shadow-sm hover-card">
-                        <div class="card-body text-center p-4">
-                            <i class="bi {{ extraescolar.icono }} text-primary mb-3" style="font-size: 3rem;"></i>
-                            <h5 class="card-title fw-bold">{{ extraescolar.nombre }}</h5>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
         </div>
     </div>
@@ -154,6 +185,99 @@
     </div>
 </div>
 
+<!-- Modales para detalles de extraescolares -->
+{% for extraescolar in info.extraescolares %}
+    {% if extraescolar.detalles %}
+    <div class="modal fade" id="modal{{ forloop.counter }}" tabindex="-1" aria-labelledby="modalLabel{{ forloop.counter }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel{{ forloop.counter }}">
+                        <i class="bi {{ extraescolar.icono }} me-2"></i>
+                        {{ extraescolar.nombre }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-primary mb-3">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        {% trans "Información Detallada" %}
+                                    </h6>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-building text-success me-2"></i>
+                                                <strong>{% trans "Impartida por" %}:</strong>
+                                            </div>
+                                            <p class="ms-4 mb-0">
+                                                {% if extraescolar.detalles.url %}
+                                                    <a href="{{ extraescolar.detalles.url }}" target="_blank" class="text-decoration-none">
+                                                        {{ extraescolar.detalles.impartida_por }}
+                                                        <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                                    </a>
+                                                {% else %}
+                                                    {{ extraescolar.detalles.impartida_por }}
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-calendar text-warning me-2"></i>
+                                                <strong>{% trans "Día" %}:</strong>
+                                            </div>
+                                            <p class="ms-4 mb-0">{{ extraescolar.detalles.horario_dia }}</p>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-clock text-info me-2"></i>
+                                                <strong>{% trans "Horario" %}:</strong>
+                                            </div>
+                                            <p class="ms-4 mb-0">{{ extraescolar.detalles.horario_hora }}</p>
+                                        </div>
+                                        
+                                        <div class="col-md-6 mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-people text-secondary me-2"></i>
+                                                <strong>{% trans "Edad" %}:</strong>
+                                            </div>
+                                            <p class="ms-4 mb-0">{{ extraescolar.detalles.edad }}</p>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="bi bi-currency-euro text-success me-2"></i>
+                                                <strong>{% trans "Precio" %}:</strong>
+                                            </div>
+                                            <p class="ms-4 mb-0 fw-bold text-success fs-5">{{ extraescolar.detalles.precio }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ info.formulario_url }}" target="_blank" class="btn btn-success btn-modern">
+                        <i class="bi bi-clipboard-check me-2"></i>
+                        {% trans "Inscribirse" %}
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {% trans "Cerrar" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+
 <!-- CSS personalizado -->
 <style>
 .hover-card {
@@ -163,6 +287,25 @@
 .hover-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+.clickable-card {
+    cursor: pointer;
+}
+
+.clickable-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    border: 2px solid var(--bs-primary) !important;
+}
+
+.clickable-title {
+    color: var(--bs-primary);
+    transition: color 0.3s ease;
+}
+
+.clickable-card:hover .clickable-title {
+    color: var(--bs-success);
 }
 
 .hero-section {

@@ -547,3 +547,36 @@ msgstr "Kontsultatu anai-arrebak badaude deskonturik dagoen"
 
 msgid "Las actividades comenzarán en octubre"
 msgstr "Jarduerak urrian hasiko dira"
+
+msgid "Clic para más info"
+msgstr "Egin klik informazio gehiagorako"
+
+msgid "Información Detallada"
+msgstr "Informazio Zehatza"
+
+msgid "Impartida por"
+msgstr "Emana:"
+
+msgid "Día"
+msgstr "Eguna"
+
+msgid "Horario"
+msgstr "Ordutegia"
+
+msgid "Edad"
+msgstr "Adina"
+
+msgid "Precio"
+msgstr "Prezioa"
+
+msgid "Inscribirse"
+msgstr "Eman izena"
+
+msgid "Recuerda que para inscribir a tu hija o hijo en las extraescolares es necesario que seas socio de la APYMA."
+msgstr "Gogoratu zure alaba edo semea eskola ondoko jardueretan izena emateko APYMAko bazkide izan behar duzula."
+
+msgid "Puedes solicitarlo mediante este"
+msgstr "Eskatu dezakezu honen bidez"
+
+msgid "formulario"
+msgstr "inprimakia"

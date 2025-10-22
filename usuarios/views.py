@@ -684,27 +684,73 @@ def extraescolares(request):
     extraescolares_disponibles = [
         {
             'nombre': 'TEATRO',
-            'icono': 'bi-masks'
+            'icono': 'bi-mask',
+            'detalles': {
+                'impartida_por': 'María Araiz',
+                'horario_dia': 'Jueves/Osteguna',
+                'horario_hora': '16:30 - 17:30',
+                'edad': 'A partir de 4ºE.P./LH 4 mailatik aurrera',
+                'precio': '30€/mes'
+            }
         },
         {
             'nombre': 'TALLER DE CREATIVIDAD', 
-            'icono': 'bi-palette'
+            'icono': 'bi-palette',
+            'detalles': {
+                'impartida_por': 'Alaitz López Lameiro',
+                'horario_dia': 'Jueves/Osteguna',
+                'horario_hora': 'Mediodía después de la comida',
+                'edad': 'Todas las edades/Adin guztiak',
+                'precio': '35€/mes + material inicial',
+                'idiomas': 'Euskera - Castellano',
+                'descripcion': 'Taller de creación artística donde los participantes pueden explorar diferentes técnicas y materiales para desarrollar su creatividad y habilidades artísticas.',
+                'descripcion_eu': 'Arte sormen tailerra, parte-hartzaileek teknika eta material ezberdinak esploratu ditzaketen beren sormena eta arte trebetasunak garatzeko.'
+            }
         },
         {
             'nombre': 'ROBÓTICA',
-            'icono': 'bi-robot'
+            'icono': 'bi-robot',
+            'detalles': {
+                'impartida_por': 'DiscoverBricks',
+                'url': 'https://discoverbricks.es/',
+                'horario_dia': 'Viernes/Ostirala',
+                'horario_hora': '16:30 - 17:30',
+                'edad': 'A partir de 1ºE.P. / LH 1 mailatik aurrera',
+                'precio': '36€/mes'
+            }
         },
         {
             'nombre': 'PATINAJE',
-            'icono': 'bi-lightning'
+            'icono': 'bi-lightning',
+            'detalles': {
+                'impartida_por': 'Manu Goñi',
+                'horario_dia': 'Miércoles/Asteazkena',
+                'horario_hora': '15:00 - 16:30',
+                'edad': 'A partir de 2º E.I. / HH 4 urtetik aurrera',
+                'precio': '20€/mes'
+            }
         },
         {
             'nombre': 'JUDO',
-            'icono': 'bi-person-arms-up'
+            'icono': 'bi-trophy',
+            'detalles': {
+                'impartida_por': 'Andrés López Moreno',
+                'horario_dia': 'Lunes-Jueves / Astelehena - Osteguna',
+                'horario_hora': '16:30 - 17:30',
+                'edad': 'A partir de 3º E.I. / HH 5 Urtetik aurrera',
+                'precio': '34€/mes'
+            }
         },
         {
             'nombre': 'TALLER DE COSTURA',
-            'icono': 'bi-scissors'
+            'icono': 'bi-scissors',
+            'detalles': {
+                'impartida_por': 'María Leorza',
+                'horario_dia': 'Lunes o Martes/Astelehena edo Asteartea',
+                'horario_hora': 'Mediodía después de la comida',
+                'edad': 'A partir de 3º E.I./HH 5 urtetik aurrera',
+                'precio': '30€/mes + material inicial'
+            }
         }
     ]
     
