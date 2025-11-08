@@ -686,7 +686,8 @@ def extraescolares(request):
             'nombre': 'TEATRO',
             'icono': 'bi-mask',
             'detalles': {
-                'impartida_por': 'María Araiz',
+                'impartida_por': '1º Trimestre: María Araiz | 2º y 3º Trimestre: Beatriz Cornago',
+                'impartida_por_eu': '1. Hiruhilabetea: María Araiz | 2. eta 3. Hiruhilabetea: Beatriz Cornago',
                 'horario_dia': 'Jueves/Osteguna',
                 'horario_hora': '16:30 - 17:30',
                 'edad': 'A partir de 4ºE.P./LH 4 mailatik aurrera',
@@ -694,14 +695,19 @@ def extraescolares(request):
             }
         },
         {
-            'nombre': 'TALLER DE CREATIVIDAD', 
+            'nombre': 'TALLER DE CREATIVIDAD',
+            'nombre_es': 'Creación artística',
+            'nombre_eu': 'Sormen Tailerra',
             'icono': 'bi-palette',
             'detalles': {
-                'impartida_por': 'Alaitz López Lameiro',
+                'impartida_por': 'Alatz López Lameiro',
                 'horario_dia': 'Jueves/Osteguna',
-                'horario_hora': 'Mediodía después de la comida',
-                'edad': 'Todas las edades/Adin guztiak',
-                'precio': '35€/mes + material inicial',
+                'horario_hora': '13:50-14:50 (Para los que comen en el primer turno)',
+                'horario_hora_eu': '13:50-14:50 (Txandan bazkaltzen dutenentzat)',
+                'edad': 'Infantil y 1º, 2º y 3º de primaria',
+                'edad_eu': 'Haur Hezkuntza eta Lehen Hezkuntzako 1., 2. eta 3. mailak.',
+                'precio': '35€/mes aprox (Según inscritos)',
+                'precio_eu': '35€/hilabetea gutxi gorabehera (Inskribatuen arabera)',
                 'idiomas': 'Euskera - Castellano',
                 'descripcion': 'Taller de creación artística donde los participantes pueden explorar diferentes técnicas y materiales para desarrollar su creatividad y habilidades artísticas.',
                 'descripcion_eu': 'Arte sormen tailerra, parte-hartzaileek teknika eta material ezberdinak esploratu ditzaketen beren sormena eta arte trebetasunak garatzeko.'
@@ -723,9 +729,9 @@ def extraescolares(request):
             'nombre': 'PATINAJE',
             'icono': 'bi-lightning',
             'detalles': {
-                'impartida_por': 'Manu Goñi',
+                'impartida_por': 'Manu Goñi (Artedeslizarte)',
                 'horario_dia': 'Miércoles/Asteazkena',
-                'horario_hora': '15:00 - 16:30',
+                'horario_hora': '15:30 - 16:30',
                 'edad': 'A partir de 2º E.I. / HH 4 urtetik aurrera',
                 'precio': '20€/mes'
             }
@@ -734,22 +740,29 @@ def extraescolares(request):
             'nombre': 'JUDO',
             'icono': 'bi-trophy',
             'detalles': {
-                'impartida_por': 'Andrés López Moreno',
+                'impartida_por': 'Andrés Moreno',
                 'horario_dia': 'Lunes-Jueves / Astelehena - Osteguna',
                 'horario_hora': '16:30 - 17:30',
                 'edad': 'A partir de 3º E.I. / HH 5 Urtetik aurrera',
-                'precio': '34€/mes'
+                'precio': 'Sólo un día: 20€/mes | Los dos días: 34€/mes',
+                'precio_eu': 'Egun bat bakarrik: 20€/hilabetea | 2 egunak: 34€/hilabetea'
             }
         },
         {
             'nombre': 'TALLER DE COSTURA',
+            'nombre_es': 'Costura Creativa',
+            'nombre_eu': 'Costura Creativa',
             'icono': 'bi-scissors',
             'detalles': {
                 'impartida_por': 'María Leorza',
-                'horario_dia': 'Lunes o Martes/Astelehena edo Asteartea',
-                'horario_hora': 'Mediodía después de la comida',
-                'edad': 'A partir de 3º E.I./HH 5 urtetik aurrera',
-                'precio': '30€/mes + material inicial'
+                'horario_dia': 'Lunes mediodía',
+                'horario_dia_eu': 'Astelehena eguerdian',
+                'horario_hora': '13:50-14:50 (Para los que comen en el primer turno)',
+                'horario_hora_eu': '13:50-14:50 (1. txandan bazkaltzen dutenentzat)',
+                'edad': 'Infantil y 1º, 2º y 3º de primaria',
+                'edad_eu': 'Haur Hezkuntza eta Lehen Hezkuntzako 1., 2. eta 3. mailak.',
+                'precio': '35€/mes + material inicial',
+                'precio_eu': '35€/hilabetea + hasierako materiala'
             }
         }
     ]

@@ -661,3 +661,9 @@ msgstr "Ordutegiez eta eskuragarritasunaz kontsultatu"
 
 msgid "Pregunta sobre actividades y servicios"
 msgstr "Jarduerez eta zerbitzuez galdetu"
+
+msgid "Inscripciones cerradas. Se abrirá nuevo plazo en Diciembre"
+msgstr "Izen-emateak itxita. Epe berria irekiko da Abenduan"
+
+msgid "Inscripciones temporalmente cerradas"
+msgstr "Izen-emateak behin-behinean itxita"
