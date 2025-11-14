@@ -11,7 +11,7 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.cache import cache_control
-from .forms import ContactoForm, ActividadForm, NoticiaForm
+from .forms import ActividadForm, NoticiaForm
 from .models import Contacto, Actividad, Noticia
 import os
 import mimetypes
@@ -226,68 +226,70 @@ def register(request):
 		form = UserCreationForm()
 	return render(request, 'usuarios/register.html', {'form': form})
 
-def contacto(request):
-	"""Vista para el formulario de contacto con la Apyma"""
-	if request.method == 'POST':
-		form = ContactoForm(request.POST)
-		if form.is_valid():
-			# Extraer datos del formulario
-			nombre = form.cleaned_data['nombre_apellidos']
-			asunto = form.cleaned_data['asunto']
-			email_contacto = form.cleaned_data.get('email_contacto', '')
-			mensaje = form.cleaned_data['mensaje']
-			
-			# Guardar en base de datos
-			contacto_obj = Contacto.objects.create(
-				nombre_apellidos=nombre,
-				asunto=asunto,
-				email_contacto=email_contacto,
-				mensaje=mensaje
-			)
-			
-			# Enviar email a la Apyma
-			try:
-				asunto_legible = contacto_obj.get_asunto_display_value()
-				
-				# Crear el contenido del email
-				email_subject = f"Nuevo mensaje de contacto: {asunto_legible}"
-				email_body = f"""
-Nuevo mensaje recibido a través del formulario de contacto:
-
-DATOS DEL REMITENTE:
-- Nombre: {nombre}
-- Email: {email_contacto if email_contacto else 'No proporcionado'}
-- Asunto: {asunto_legible}
-
-MENSAJE:
-{mensaje}
-
----
-Enviado desde el sitio web de la Apyma Remontival
-Fecha: {contacto_obj.fecha_envio.strftime('%d/%m/%Y a las %H:%M')}
-ID del mensaje: {contacto_obj.id}
-				"""
-				
-				send_mail(
-					email_subject,
-					email_body,
-					settings.DEFAULT_FROM_EMAIL,
-					[settings.CONTACT_EMAIL],
-					fail_silently=False,
-				)
-				
-				messages.success(request, _('¡Gracias por contactarnos! Hemos recibido tu mensaje y te responderemos pronto.'))
-				
-			except Exception as e:
-				# Si falla el envío del email, pero se guardó en BD
-				messages.warning(request, _('Tu mensaje se ha guardado correctamente, pero hubo un problema al enviar la notificación. Nos pondremos en contacto contigo pronto.'))
-				print(f"Error enviando email: {e}")  # Para debug
-			
-			return redirect('contacto')
-	else:
-		form = ContactoForm()
-	
-	return render(request, 'usuarios/contacto.html', {'form': form})
+# Vista de contacto eliminada - ahora se usa modal en base.html
+# El modal muestra directamente el email sin formulario para evitar spam
+# def contacto(request):
+# 	"""Vista para el formulario de contacto con la Apyma"""
+# 	if request.method == 'POST':
+# 		form = ContactoForm(request.POST)
+# 		if form.is_valid():
+# 			# Extraer datos del formulario
+# 			nombre = form.cleaned_data['nombre_apellidos']
+# 			asunto = form.cleaned_data['asunto']
+# 			email_contacto = form.cleaned_data.get('email_contacto', '')
+# 			mensaje = form.cleaned_data['mensaje']
+# 			
+# 			# Guardar en base de datos
+# 			contacto_obj = Contacto.objects.create(
+# 				nombre_apellidos=nombre,
+# 				asunto=asunto,
+# 				email_contacto=email_contacto,
+# 				mensaje=mensaje
+# 			)
+# 			
+# 			# Enviar email a la Apyma
+# 			try:
+# 				asunto_legible = contacto_obj.get_asunto_display_value()
+# 				
+# 				# Crear el contenido del email
+# 				email_subject = f"Nuevo mensaje de contacto: {asunto_legible}"
+# 				email_body = f"""
+# Nuevo mensaje recibido a través del formulario de contacto:
+# 
+# DATOS DEL REMITENTE:
+# - Nombre: {nombre}
+# - Email: {email_contacto if email_contacto else 'No proporcionado'}
+# - Asunto: {asunto_legible}
+# 
+# MENSAJE:
+# {mensaje}
+# 
+# ---
+# Enviado desde el sitio web de la Apyma Remontival
+# Fecha: {contacto_obj.fecha_envio.strftime('%d/%m/%Y a las %H:%M')}
+# ID del mensaje: {contacto_obj.id}
+# 				"""
+# 				
+# 				send_mail(
+# 					email_subject,
+# 					email_body,
+# 					settings.DEFAULT_FROM_EMAIL,
+# 					[settings.CONTACT_EMAIL],
+# 					fail_silently=False,
+# 				)
+# 				
+# 				messages.success(request, _('¡Gracias por contactarnos! Hemos recibido tu mensaje y te responderemos pronto.'))
+# 				
+# 			except Exception as e:
+# 				# Si falla el envío del email, pero se guardó en BD
+# 				messages.warning(request, _('Tu mensaje se ha guardado correctamente, pero hubo un problema al enviar la notificación. Nos pondremos en contacto contigo pronto.'))
+# 				print(f"Error enviando email: {e}")  # Para debug
+# 			
+# 			return redirect('contacto')
+# 	else:
+# 		form = ContactoForm()
+# 	
+# 	return render(request, 'usuarios/contacto.html', {'form': form})
 
 
 def logout_view(request):
