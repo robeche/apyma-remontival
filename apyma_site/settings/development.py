@@ -3,9 +3,10 @@ Configuración de desarrollo - Apyma Remontival
 """
 
 from .base import *
+from decouple import config
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-3l_-#m55wi-naqwxq9*^rpx&_v_zf8=9nz34krep70-8v^gfda"
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-3l_-#m55wi-naqwxq9*^rpx&_v_zf8=9nz34krep70-8v^gfda")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -21,18 +22,22 @@ DATABASES = {
 }
 
 # Email Configuration para desarrollo
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apymaremontivaladm@gmail.com'  # Nueva cuenta de la Apyma
-EMAIL_HOST_PASSWORD = 'sqwx lhjv amix nxoz'  # Contraseña de aplicación
-DEFAULT_FROM_EMAIL = 'Apyma Remontival <apymaremontivaladm@gmail.com>'
+# Para desarrollo, usa el backend de consola para ver emails en terminal
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Google reCAPTCHA Configuration - CLAVES DE PRUEBA
-# Estas claves funcionan en cualquier dominio para testing
-RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Test key
-RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'  # Test key
+# Si necesitas probar SMTP real, configura variables de entorno
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+# DEFAULT_FROM_EMAIL = f'Apyma Remontival <{config("EMAIL_HOST_USER", default="")}'>'
+
+# Google reCAPTCHA Configuration - CLAVES DE PRUEBA (públicas de Google)
+# Estas claves de prueba funcionan en cualquier dominio para testing
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY', default='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY', default='6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')
 
 # Para desarrollo, también puedes usar el backend de consola para ver emails en terminal
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

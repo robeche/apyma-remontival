@@ -33,6 +33,13 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Environment variables (CRITICAL - NEVER COMMIT)
+.env
+.env.local
+.env.production
+.env.*.local
+*.env
+
 # Flask stuff:
 instance/
 .webassets-cache

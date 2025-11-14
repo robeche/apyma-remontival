@@ -667,3 +667,26 @@ msgstr "Izen-emateak itxita. Epe berria irekiko da Abenduan"
 
 msgid "Inscripciones temporalmente cerradas"
 msgstr "Izen-emateak behin-behinean itxita"
+
+msgid "Contacto Apyma"
+msgstr "Apyma Kontaktua"
+
+msgid "Correo electrónico:"
+msgstr "Posta elektronikoa:"
+
+msgid "Enviar correo"
+msgstr "Posta bidali"
+
+msgid "Por favor, sé conciso:"
+msgstr "Mesedez, laburra izan:"
+
+msgid "Indica claramente el tema en el asunto del correo"
+msgstr "Adierazi argi gaia postalaren gaia atalean"
+
+msgid "Incluye tu nombre y apellidos"
+msgstr "Sartu zure izena eta abizenak"
+
+msgid "Tiempo de respuesta habitual: 24-48 horas laborables"
+msgstr "Ohiko erantzun denbora: 24-48 ordu lanorduetan"
+
+

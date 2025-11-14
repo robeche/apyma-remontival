@@ -64,7 +64,7 @@ SECRET_KEY=tu_clave_secreta_super_larga_y_segura_aqui
 DEBUG=False
 ALLOWED_HOSTS=yourusername.pythonanywhere.com
 EMAIL_HOST_USER=apymaremontivaladm@gmail.com
-EMAIL_HOST_PASSWORD=sqwx lhjv amix nxoz
+EMAIL_HOST_PASSWORD=tu-contraseña-de-aplicacion-de-gmail
 ```
 
 ### 7. Configurar archivos estáticos

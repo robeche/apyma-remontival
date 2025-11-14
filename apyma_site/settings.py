@@ -153,13 +153,19 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apymaremontivaladm@gmail.com'  # Nueva cuenta de la Apyma
-EMAIL_HOST_PASSWORD = 'sqwx lhjv amix nxoz'  # Contraseña de aplicación
-DEFAULT_FROM_EMAIL = 'Apyma Remontival <apymaremontivaladm@gmail.com>'
-
-# Email de destino para mensajes de contacto
-CONTACT_EMAIL = 'apymaremontival@gmail.com'
+# IMPORTANTE: Las credenciales deben estar en variables de entorno (.env)
+# NO incluir credenciales directamente en el código
+try:
+    from decouple import config
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+    DEFAULT_FROM_EMAIL = f'Apyma Remontival <{EMAIL_HOST_USER}>'
+    CONTACT_EMAIL = config('CONTACT_EMAIL', default='apymaremontival@gmail.com')
+except ImportError:
+    # Fallback si python-decouple no está instalado
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    print("WARNING: python-decouple no instalado. Emails se mostrarán en consola.")
