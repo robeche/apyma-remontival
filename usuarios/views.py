@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.cache import cache_control
 from .forms import ActividadForm, NoticiaForm, ConcursoDibujoForm
-from .models import Contacto, Actividad, Noticia, ConcursoDibujo, Socio
+from .models import Contacto, Actividad, Noticia, ConcursoDibujo, Socio, ConsejoEducativo
 import os
 import mimetypes
 from datetime import datetime
@@ -397,7 +397,7 @@ def actividades(request):
 
 
 def concurso_navideno(request):
-    """Vista para el Concurso navideño. Abierto a todos."""
+    """Vista para el Concurso de dibujo 'Día de invierno'. Abierto a todos."""
     mostrar_modal = False
     if request.method == 'POST':
         form = ConcursoDibujoForm(request.POST, request.FILES)
@@ -412,10 +412,52 @@ def concurso_navideno(request):
     # Obtener dibujos aceptados para el carrousel
     dibujos_aceptados = ConcursoDibujo.objects.filter(aceptado=True).order_by('-fecha_envio')
 
-    return render(request, 'usuarios/concurso_navideno.html', {
+    return render(request, 'usuarios/concurso_invierno.html', {
         'form': form, 
         'mostrar_modal': mostrar_modal,
         'dibujos_aceptados': dibujos_aceptados
+    })
+
+
+def consejos_educativos(request):
+    """Vista para mostrar la lista de consejos educativos"""
+    consejos = ConsejoEducativo.objects.filter(activo=True).order_by('orden', '-fecha_publicacion')
+    
+    # Obtener el idioma actual
+    from django.utils.translation import get_language
+    language = get_language()
+    
+    return render(request, 'usuarios/consejos_educativos.html', {
+        'consejos': consejos,
+        'language': language
+    })
+
+
+def consejo_detalle(request, slug):
+    """Vista para mostrar el detalle de un consejo educativo (HTML independiente)"""
+    from django.shortcuts import get_object_or_404
+    
+    consejo = get_object_or_404(ConsejoEducativo, slug=slug, activo=True)
+    
+    # Construir la ruta completa al archivo HTML
+    archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', consejo.archivo_html)
+    
+    # Verificar que el archivo existe
+    if not os.path.exists(archivo_path):
+        raise Http404(_("El contenido del consejo no está disponible"))
+    
+    # Leer el contenido HTML
+    with open(archivo_path, 'r', encoding='utf-8') as f:
+        contenido_html = f.read()
+    
+    # Obtener el idioma actual
+    from django.utils.translation import get_language
+    language = get_language()
+    
+    return render(request, 'usuarios/consejo_detalle.html', {
+        'consejo': consejo,
+        'contenido_html': contenido_html,
+        'language': language
     })
 
 

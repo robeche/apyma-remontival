@@ -503,3 +503,111 @@ class Noticia(models.Model):
             self.slug = slug
         
         super().save(*args, **kwargs)
+
+
+class ConsejoEducativo(models.Model):
+    """Modelo para consejos educativos con páginas HTML independientes"""
+    titulo = models.CharField(
+        max_length=200,
+        verbose_name=_('Título'),
+        help_text=_('Título del consejo educativo')
+    )
+    
+    titulo_eu = models.CharField(
+        max_length=200,
+        verbose_name=_('Título (Euskera)'),
+        help_text=_('Título en euskera'),
+        blank=True,
+        null=True
+    )
+    
+    descripcion = models.TextField(
+        verbose_name=_('Descripción corta'),
+        help_text=_('Breve descripción que aparece en la tarjeta')
+    )
+    
+    descripcion_eu = models.TextField(
+        verbose_name=_('Descripción corta (Euskera)'),
+        help_text=_('Descripción en euskera'),
+        blank=True,
+        null=True
+    )
+    
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        verbose_name=_('URL amigable'),
+        help_text=_('Se genera automáticamente del título')
+    )
+    
+    archivo_html = models.CharField(
+        max_length=500,
+        verbose_name=_('Ruta del archivo HTML'),
+        help_text=_('Ruta relativa desde media/consejos/, ej: habitos-estudio.html')
+    )
+    
+    imagen = models.ImageField(
+        upload_to='consejos/',
+        verbose_name=_('Imagen de portada'),
+        help_text=_('Imagen que aparece en la tarjeta'),
+        blank=True,
+        null=True
+    )
+    
+    fecha_publicacion = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name=_('Fecha de publicación')
+    )
+    
+    fecha_modificacion = models.DateTimeField(
+        auto_now=True,
+        verbose_name=_('Última modificación')
+    )
+    
+    activo = models.BooleanField(
+        default=True,
+        verbose_name=_('Activo'),
+        help_text=_('Solo los consejos activos son visibles')
+    )
+    
+    orden = models.IntegerField(
+        default=0,
+        verbose_name=_('Orden'),
+        help_text=_('Orden de aparición (menor número aparece primero)')
+    )
+    
+    class Meta:
+        verbose_name = _('Consejo Educativo')
+        verbose_name_plural = _('Consejos Educativos')
+        ordering = ['orden', '-fecha_publicacion']
+    
+    def __str__(self):
+        return self.titulo
+    
+    def get_titulo_localized(self, language='es'):
+        """Obtiene el título en el idioma especificado"""
+        if language == 'eu' and self.titulo_eu:
+            return self.titulo_eu
+        return self.titulo
+    
+    def get_descripcion_localized(self, language='es'):
+        """Obtiene la descripción en el idioma especificado"""
+        if language == 'eu' and self.descripcion_eu:
+            return self.descripcion_eu
+        return self.descripcion
+    
+    def save(self, *args, **kwargs):
+        """Genera el slug automáticamente si no existe"""
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(self.titulo)
+            slug = base_slug
+            counter = 1
+            
+            while ConsejoEducativo.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            
+            self.slug = slug
+        
+        super().save(*args, **kwargs)

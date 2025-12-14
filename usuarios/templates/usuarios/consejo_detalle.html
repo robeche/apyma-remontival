@@ -1,0 +1,65 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+
+{% block title %}{{ consejo.get_titulo_localized }} - {% trans "Consejos educativos" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .consejo-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .consejo-contenido {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .btn-volver {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+    }
+    
+    .btn-volver:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Encabezado del consejo -->
+<div class="consejo-header">
+    <div class="container">
+        <a href="{% url 'consejos_educativos' %}" class="btn btn-light btn-sm mb-3">
+            <i class="bi bi-arrow-left"></i> {% trans "Volver" %}
+        </a>
+        <h1>{{ consejo.get_titulo_localized|safe }}</h1>
+        <p class="mb-0">
+            <small>
+                <i class="bi bi-calendar3"></i> 
+                {{ consejo.fecha_publicacion|date:"d/m/Y" }}
+            </small>
+        </p>
+    </div>
+</div>
+
+<!-- Contenido del consejo -->
+<div class="container mb-5">
+    <div class="consejo-contenido">
+        {{ contenido_html|safe }}
+    </div>
+    
+    <div class="text-center">
+        <a href="{% url 'consejos_educativos' %}" class="btn btn-volver btn-lg">
+            <i class="bi bi-arrow-left-circle me-2"></i>{% trans "Volver a consejos educativos" %}
+        </a>
+    </div>
+</div>
+{% endblock %}

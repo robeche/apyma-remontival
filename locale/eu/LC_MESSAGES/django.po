@@ -689,11 +689,77 @@ msgstr "Sartu zure izena eta abizenak"
 msgid "Tiempo de respuesta habitual: 24-48 horas laborables"
 msgstr "Ohiko erantzun denbora: 24-48 ordu lanorduetan"
 
+msgid "Concurso de Dibujo"
+msgstr "Marrazketa Lehiaketa"
+
+msgid "Concurso de Dibujo: Un día de invierno"
+msgstr "Marrazketa Lehiaketa: Neguko egun bat"
+
 msgid "Concurso navideño"
 msgstr "Gabonetako lehiaketa"
 
 msgid "Concurso navideño - Apyma Remontival"
 msgstr "Gabonetako lehiaketa - Apyma Remontival"
+
+msgid "Desde Apyma Remontival hemos organizado un concurso de dibujo para nuestras y nuestros pequeños artistas. ¡Anímate a participar y demuestra tu creatividad con el tema 'Un día de invierno'!"
+msgstr "Remontival Guraso elkartetik gure artista txikientzat marrazketa lehiaketa bat antolatu dugu. Animatu parte hartzera eta erakutsi zure sormena 'Neguko egun bat' gaiarekin!"
+
+msgid "Ver bases del concurso"
+msgstr "Ikusi lehiaketaren oinarriak"
+
+msgid "Bases del Concurso de Dibujo: Un día de invierno"
+msgstr "Marrazketa Lehiaketaren Oinarriak: Neguko egun bat"
+
+msgid "Bases del Concurso"
+msgstr "Lehiaketaren Oinarriak"
+
+msgid "Participantes"
+msgstr "Parte-hartzaileak"
+
+msgid "Podrá participar todo el alumnado del centro escolar, que la familia sea socia de Apyma."
+msgstr "Ikastetxeko ikasle guztiak parte har dezakete, familia Guraso elkarteko bazkidea bada."
+
+msgid "Temática"
+msgstr "Gaia"
+
+msgid "El tema central del concurso será 'Un día de invierno'. Los dibujos deberán reflejar una interpretación personal y original de esta temática."
+msgstr "Lehiaketaren gai nagusia 'Neguko egun bat' izango da. Marrazkiek gai honen interpretazio pertsonal eta originala islatu beharko dute."
+
+msgid "Técnica y formato"
+msgstr "Teknika eta formatua"
+
+msgid "Los trabajos deben ser originales e inéditos. Se puede utilizar cualquier técnica de dibujo o pintura (lápices de colores, ceras, acuarelas, temperas, etc.) incluso digital."
+msgstr "Lanak jatorrizkoak eta argitaragabeak izan behar dira. Edozein marrazketa edo margotze teknika erabil daiteke (kolore arkatza, argizaria, akuarela, tenplera, etab.), baita digitala ere."
+
+msgid "Presentación e identificación"
+msgstr "Aurkezpena eta identifikazioa"
+
+msgid "Cada estudiante podrá presentar un solo dibujo. Los datos del participante (nombre y apellidos, edad, curso, clase) deben indicarse en el reverso del dibujo, no en el anverso."
+msgstr "Ikasle bakoitzak marrazki bakarra aurkeztu ahal izango du. Parte-hartzailearen datuak (izena eta abizenak, adina, maila, gela) marrazkiaren atzeko aldean adierazi behar dira, ez aurrealdean."
+
+msgid "Plazo y lugar de entrega"
+msgstr "Epea eta entrega lekua"
+
+msgid "El plazo de presentación de los dibujos será desde el 20 de Diciembre hasta el 6 de Enero. Los trabajos se subirán a través de esta página web. No se admitirán obras fuera de plazo."
+msgstr "Marrazkiak aurkezteko epea abenduaren 20tik urtarrilaren 6ra bitartekoa izango da. Lanak web orri honen bidez igoko dira. Ez dira epez kanpoko lanik onartuko."
+
+msgid "Jurado y criterios de valoración"
+msgstr "Epaimahaia eta balorazio irizpideak"
+
+msgid "El jurado estará compuesto por miembros de la Apyma. Se valorarán la creatividad, la originalidad, la composición y la aplicación de la técnica. El fallo del jurado será inapelable y se hará público el 9 de Enero en la página web."
+msgstr "Epaimahaia Guraso elkarteko kideek osatuko dute. Sormena, originaltasuna, konposizioa eta teknikaren aplikazioa baloratuko dira. Epaimahaiak emandako epaia behin-betikoa izango da eta urtarrilaren 9an argitaratuko da web orrian."
+
+msgid "Premios"
+msgstr "Sariak"
+
+msgid "Se otorgará un premio por curso:"
+msgstr "Sari bat emango da maila bakoitzeko:"
+
+msgid "Propiedad intelectual y difusión"
+msgstr "Jabetza intelektuala eta hedapena"
+
+msgid "Los dibujos presentados quedarán en propiedad de Apyma, que se reserva el derecho de utilizarlos, reproducirlos o exponerlos (siempre mencionando al autor/a) con fines no comerciales. La participación en el concurso implica la aceptación de estas bases."
+msgstr "Aurkeztutako marrazkiak Guraso elkartearen jabetzakoak izango dira, eta horiek erabiltzeko, erreproduzitzeko edo erakusteko eskubidea gordeko du (beti egilea aipatuz) helburu ez-komertzialetan. Lehiaketan parte hartzeak oinarri hauek onartzea esan nahi du."
 
 msgid "Dibujos participantes"
 msgstr "Marrazkiak parte-hartzaileak"
@@ -774,7 +840,7 @@ msgid "Correo electrónico (socio)"
 msgstr "Posta elektronikoa (bazkidea)"
 
 msgid "Email del padre/madre socio de la Apyma"
-msgstr "Apymako gurasoen emaila"
+msgstr "Guraso elkarteko gurasoen emaila"
 
 msgid "¡Participación recibida!"
 msgstr "Parte-hartzea jaso da!"

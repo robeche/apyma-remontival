@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contacto, Socio, Actividad, Noticia, ConcursoDibujo
+from .models import Contacto, Socio, Actividad, Noticia, ConcursoDibujo, ConsejoEducativo
 
 @admin.register(Contacto)
 class ContactoAdmin(admin.ModelAdmin):
@@ -121,6 +121,34 @@ class ConcursoDibujoAdmin(admin.ModelAdmin):
     def get_socio_nombre(self, obj):
         return obj.socio.get_nombre_completo() if obj.socio else '-'
     get_socio_nombre.short_description = 'Socio'
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(ConsejoEducativo)
+class ConsejoEducativoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'orden', 'activo', 'fecha_publicacion', 'fecha_modificacion')
+    list_filter = ('activo', 'fecha_publicacion')
+    search_fields = ('titulo', 'titulo_eu', 'descripcion', 'descripcion_eu')
+    readonly_fields = ('fecha_publicacion', 'fecha_modificacion', 'slug')
+    list_editable = ('activo', 'orden')
+    date_hierarchy = 'fecha_publicacion'
+    
+    fieldsets = (
+        ('Información básica', {
+            'fields': ('titulo', 'titulo_eu', 'slug')
+        }),
+        ('Descripción', {
+            'fields': ('descripcion', 'descripcion_eu')
+        }),
+        ('Contenido', {
+            'fields': ('archivo_html', 'imagen')
+        }),
+        ('Configuración', {
+            'fields': ('orden', 'activo', 'fecha_publicacion', 'fecha_modificacion')
+        }),
+    )
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
