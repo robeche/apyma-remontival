@@ -734,8 +734,8 @@ msgstr "Lanak jatorrizkoak eta argitaragabeak izan behar dira. Edozein marrazket
 msgid "Presentación e identificación"
 msgstr "Aurkezpena eta identifikazioa"
 
-msgid "Cada estudiante podrá presentar un solo dibujo. Los datos del participante (nombre y apellidos, edad, curso, clase) deben indicarse en el reverso del dibujo, no en el anverso."
-msgstr "Ikasle bakoitzak marrazki bakarra aurkeztu ahal izango du. Parte-hartzailearen datuak (izena eta abizenak, adina, maila, gela) marrazkiaren atzeko aldean adierazi behar dira, ez aurrealdean."
+msgid "Cada estudiante podrá presentar un solo dibujo. Los datos del participante (nombre y curso) se indicarán en el formulario de envío."
+msgstr "Ikasle bakoitzak marrazki bakarra aurkeztu ahal izango du. Parte-hartzailearen datuak (izena eta maila) bidalketa inprimakian adieraziko dira."
 
 msgid "Plazo y lugar de entrega"
 msgstr "Epea eta entrega lekua"
@@ -748,12 +748,6 @@ msgstr "Epaimahaia eta balorazio irizpideak"
 
 msgid "El jurado estará compuesto por miembros de la Apyma. Se valorarán la creatividad, la originalidad, la composición y la aplicación de la técnica. El fallo del jurado será inapelable y se hará público el 9 de Enero en la página web."
 msgstr "Epaimahaia Guraso elkarteko kideek osatuko dute. Sormena, originaltasuna, konposizioa eta teknikaren aplikazioa baloratuko dira. Epaimahaiak emandako epaia behin-betikoa izango da eta urtarrilaren 9an argitaratuko da web orrian."
-
-msgid "Premios"
-msgstr "Sariak"
-
-msgid "Se otorgará un premio por curso:"
-msgstr "Sari bat emango da maila bakoitzeko:"
 
 msgid "Propiedad intelectual y difusión"
 msgstr "Jabetza intelektuala eta hedapena"
