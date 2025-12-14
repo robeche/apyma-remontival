@@ -439,8 +439,25 @@ def consejo_detalle(request, slug):
     
     consejo = get_object_or_404(ConsejoEducativo, slug=slug, activo=True)
     
-    # Construir la ruta completa al archivo HTML
-    archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', consejo.archivo_html)
+    # Obtener el idioma actual
+    from django.utils.translation import get_language
+    language = get_language()
+    
+    # Determinar el archivo HTML según el idioma
+    archivo_base = consejo.archivo_html
+    if language == 'eu':
+        # Intentar cargar versión en euskera (reemplazar .html por -eu.html)
+        archivo_eu = archivo_base.replace('.html', '-eu.html')
+        archivo_path_eu = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_eu)
+        
+        # Si existe versión en euskera, usar esa; si no, usar la versión en español
+        if os.path.exists(archivo_path_eu):
+            archivo_path = archivo_path_eu
+        else:
+            archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_base)
+    else:
+        # Idioma español (por defecto)
+        archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_base)
     
     # Verificar que el archivo existe
     if not os.path.exists(archivo_path):
@@ -449,10 +466,6 @@ def consejo_detalle(request, slug):
     # Leer el contenido HTML
     with open(archivo_path, 'r', encoding='utf-8') as f:
         contenido_html = f.read()
-    
-    # Obtener el idioma actual
-    from django.utils.translation import get_language
-    language = get_language()
     
     return render(request, 'usuarios/consejo_detalle.html', {
         'consejo': consejo,
