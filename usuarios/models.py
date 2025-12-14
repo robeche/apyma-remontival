@@ -353,6 +353,37 @@ class Actividad(models.Model):
         return self.fecha < date.today()
 
 
+class ConcursoDibujo(models.Model):
+    """Modelo para almacenar participaciones del concurso navideño"""
+    CURSO_CHOICES = [
+        ('3_anos', _('3 años')),
+        ('4_anos', _('4 años')),
+        ('5_anos', _('5 años')),
+        ('1_primaria', _('1º Primaria')),
+        ('2_primaria', _('2º Primaria')),
+        ('3_primaria', _('3º Primaria')),
+        ('4_primaria', _('4º Primaria')),
+        ('5_primaria', _('5º Primaria')),
+        ('6_primaria', _('6º Primaria')),
+    ]
+    
+    socio = models.ForeignKey('Socio', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Socio'))
+    nombre_nino = models.CharField(max_length=200, verbose_name=_('Nombre del niño'))
+    curso = models.CharField(max_length=50, choices=CURSO_CHOICES, verbose_name=_('Curso'))
+    email = models.EmailField(verbose_name=_('Email de contacto'))
+    imagen = models.ImageField(upload_to='concurso_navidad/', verbose_name=_('Fotografía del dibujo'))
+    fecha_envio = models.DateTimeField(auto_now_add=True, verbose_name=_('Fecha de envío'))
+    aceptado = models.BooleanField(default=False, verbose_name=_('Dibujo aceptado'))
+
+    class Meta:
+        verbose_name = _('Participación concurso')
+        verbose_name_plural = _('Participaciones concurso')
+        ordering = ['-fecha_envio']
+
+    def __str__(self):
+        return f"{self.nombre_nino} ({self.curso}) - {self.fecha_envio.strftime('%d/%m/%Y') if self.fecha_envio else ''}"
+
+
 class Noticia(models.Model):
     """Modelo para las noticias de la APYMA"""
     

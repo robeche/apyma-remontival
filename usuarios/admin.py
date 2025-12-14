@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Contacto, Socio, Actividad, Noticia
+from .models import Contacto, Socio, Actividad, Noticia, ConcursoDibujo
 
 @admin.register(Contacto)
 class ContactoAdmin(admin.ModelAdmin):
@@ -95,6 +95,32 @@ class NoticiaAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(ConcursoDibujo)
+class ConcursoDibujoAdmin(admin.ModelAdmin):
+    list_display = ('nombre_nino', 'curso', 'email', 'get_socio_nombre', 'fecha_envio', 'aceptado')
+    list_filter = ('aceptado', 'curso', 'fecha_envio')
+    search_fields = ('nombre_nino', 'curso', 'email', 'socio__user__username', 'socio__apellidos_familia')
+    readonly_fields = ('fecha_envio',)
+    list_editable = ('aceptado',)
+    date_hierarchy = 'fecha_envio'
+    
+    fieldsets = (
+        ('Información del participante', {
+            'fields': ('socio', 'nombre_nino', 'curso', 'email')
+        }),
+        ('Participación', {
+            'fields': ('imagen', 'fecha_envio', 'aceptado')
+        }),
+    )
+    
+    def get_socio_nombre(self, obj):
+        return obj.socio.get_nombre_completo() if obj.socio else '-'
+    get_socio_nombre.short_description = 'Socio'
     
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

@@ -18,6 +18,7 @@ urlpatterns = [
     path('extraescolares/', views.extraescolares, name='extraescolares'),
     path('aula-madrugadores/', views.aula_madrugadores, name='aula_madrugadores'),
     path('actividades/', views.actividades, name='actividades'),
+    path('concurso-navideno/', views.concurso_navideno, name='concurso_navideno'),
     path('actividades/crear/', views.crear_actividad, name='crear_actividad'),
     path('actividades/<int:actividad_id>/', views.detalle_actividad, name='detalle_actividad'),
     path('actividades/<int:actividad_id>/editar/', views.actualizar_actividad, name='actualizar_actividad'),

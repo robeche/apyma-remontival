@@ -72,6 +72,10 @@ DB_USER=apyma_user
 DB_PASSWORD=password_seguro
 ```
 
+## COMO COMPILAR TRADUCCIONES
+(.venv) X:\Proyectos\ApymaRemontival>C:\gettext\bin\msgfmt.exe -o locale\eu\LC_MESSAGES\django.mo locale\eu\LC_MESSAGES\django.po
+
+
 ## 🌐 Despliegue
 
 ### PythonAnywhere (Recomendado)
@@ -117,6 +121,9 @@ ApymaRemontival/
 ├── locale/                  # Traducciones euskera
 └── manage.py
 ```
+
+
+
 
 ## 🤝 Contribuir
 

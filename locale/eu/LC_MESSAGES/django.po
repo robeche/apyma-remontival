@@ -689,4 +689,110 @@ msgstr "Sartu zure izena eta abizenak"
 msgid "Tiempo de respuesta habitual: 24-48 horas laborables"
 msgstr "Ohiko erantzun denbora: 24-48 ordu lanorduetan"
 
+msgid "Concurso navideño"
+msgstr "Gabonetako lehiaketa"
 
+msgid "Concurso navideño - Apyma Remontival"
+msgstr "Gabonetako lehiaketa - Apyma Remontival"
+
+msgid "Dibujos participantes"
+msgstr "Marrazkiak parte-hartzaileak"
+
+msgid "dibujo(s) participante(s)"
+msgstr "marrazki parte-hartzaile(ak)"
+
+msgid "Anterior"
+msgstr "Aurrekoa"
+
+msgid "Siguiente"
+msgstr "Hurrengoa"
+
+msgid "Aún no hay dibujos publicados. ¡Sé el primero en participar!"
+msgstr "Oraindik ez dago marrazkirik argitaratuta. Izan lehenengoa parte hartzen!"
+
+msgid "Bases"
+msgstr "Oinarriak"
+
+msgid "Imprescindible ser miembro de la apyma para poder participar"
+msgstr "Apymako kide izatea beharrezkoa parte hartzeko"
+
+msgid "Un dibujo por niño/a"
+msgstr "Marrazki bat haur bakoitzeko"
+
+msgid "Habrá un regalo por curso"
+msgstr "Opari bat egongo da ikastaro bakoitzeko"
+
+msgid "Completa el formulario con los datos del niño/a y sube una foto clara del dibujo navideño. Si tienes varios hijos, puedes enviar un dibujo por cada uno."
+msgstr "Bete inprimakia hauraren datuekin eta igo gabonetako marrazkiaren argazki argi bat. Seme-alaba bat baino gehiago badituzu, marrazki bat bidal dezakezu bakoitzeko."
+
+msgid "¿Quieres participar?"
+msgstr "Parte hartu nahi duzu?"
+
+msgid "Enviar participación"
+msgstr "Parte-hartzea bidali"
+
+msgid "Fotografía del dibujo"
+msgstr "Marrazkiaren argazkia"
+
+msgid "Nombre del niño"
+msgstr "Hauraren izena"
+
+msgid "Nombre completo del niño/a"
+msgstr "Hauraren izen osoa"
+
+msgid "Curso"
+msgstr "Maila"
+
+msgid "3 años"
+msgstr "3 urte"
+
+msgid "4 años"
+msgstr "4 urte"
+
+msgid "5 años"
+msgstr "5 urte"
+
+msgid "1º Primaria"
+msgstr "Lehen Hezkuntzako 1."
+
+msgid "2º Primaria"
+msgstr "Lehen Hezkuntzako 2."
+
+msgid "3º Primaria"
+msgstr "Lehen Hezkuntzako 3."
+
+msgid "4º Primaria"
+msgstr "Lehen Hezkuntzako 4."
+
+msgid "5º Primaria"
+msgstr "Lehen Hezkuntzako 5."
+
+msgid "6º Primaria"
+msgstr "Lehen Hezkuntzako 6."
+
+msgid "Correo electrónico (socio)"
+msgstr "Posta elektronikoa (bazkidea)"
+
+msgid "Email del padre/madre socio de la Apyma"
+msgstr "Apymako gurasoen emaila"
+
+msgid "¡Participación recibida!"
+msgstr "Parte-hartzea jaso da!"
+
+msgid "¡Gracias por participar!"
+msgstr "Eskerrik asko parte hartzeagatik!"
+
+msgid "Tu dibujo navideño se ha recibido correctamente."
+msgstr "Zure gabonetako marrazkia ongi jaso da."
+
+msgid "Tu dibujo será revisado antes de añadirse al museo, pero aparecerá a lo largo del día."
+msgstr "Zure marrazkia berrikusi egingo da museoari gehitu aurretik, baina egun osoan zehar agertuko da."
+
+msgid "Recuerda: habrá un regalo por curso"
+msgstr "Gogoratu: opari bat egongo da ikastaro bakoitzeko"
+
+msgid "Debes subir una fotografía del dibujo."
+msgstr "Marrazkiaren argazki bat igo behar duzu."
+
+msgid "¡Participación recibida! Tu dibujo se ha subido correctamente."
+msgstr "Parte-hartzea jaso da! Zure marrazkia ongi igo da."

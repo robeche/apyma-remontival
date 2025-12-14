@@ -166,3 +166,24 @@ class NoticiaForm(forms.ModelForm):
         self.fields['resumen_eu'].required = False
         self.fields['contenido_eu'].required = False
         self.fields['imagen'].required = False
+
+
+from .models import ConcursoDibujo
+
+
+class ConcursoDibujoForm(forms.ModelForm):
+    class Meta:
+        model = ConcursoDibujo
+        fields = ['imagen', 'nombre_nino', 'curso', 'email']
+        widgets = {
+            'imagen': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'nombre_nino': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Nombre completo del niño/a')}),
+            'curso': forms.Select(attrs={'class': 'form-select'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'tu.email@ejemplo.com'}),
+        }
+
+    def clean_imagen(self):
+        imagen = self.cleaned_data.get('imagen')
+        if not imagen:
+            raise forms.ValidationError(_('Debes subir una fotografía del dibujo.'))
+        return imagen

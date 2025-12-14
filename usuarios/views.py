@@ -11,8 +11,8 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.cache import cache_control
-from .forms import ActividadForm, NoticiaForm
-from .models import Contacto, Actividad, Noticia
+from .forms import ActividadForm, NoticiaForm, ConcursoDibujoForm
+from .models import Contacto, Actividad, Noticia, ConcursoDibujo, Socio
 import os
 import mimetypes
 from datetime import datetime
@@ -394,6 +394,29 @@ def actividades(request):
     }
     
     return render(request, 'usuarios/actividades.html', context)
+
+
+def concurso_navideno(request):
+    """Vista para el Concurso navideño. Abierto a todos."""
+    mostrar_modal = False
+    if request.method == 'POST':
+        form = ConcursoDibujoForm(request.POST, request.FILES)
+        if form.is_valid():
+            participacion = form.save()
+            messages.success(request, _('¡Participación recibida! Tu dibujo se ha subido correctamente.'))
+            mostrar_modal = True
+            form = ConcursoDibujoForm()  # Limpiar formulario
+    else:
+        form = ConcursoDibujoForm()
+
+    # Obtener dibujos aceptados para el carrousel
+    dibujos_aceptados = ConcursoDibujo.objects.filter(aceptado=True).order_by('-fecha_envio')
+
+    return render(request, 'usuarios/concurso_navideno.html', {
+        'form': form, 
+        'mostrar_modal': mostrar_modal,
+        'dibujos_aceptados': dibujos_aceptados
+    })
 
 
 @login_required
