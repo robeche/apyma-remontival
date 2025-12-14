@@ -862,3 +862,15 @@ msgstr "Marrazkiaren argazki bat igo behar duzu."
 
 msgid "¡Participación recibida! Tu dibujo se ha subido correctamente."
 msgstr "Parte-hartzea jaso da! Zure marrazkia ongi igo da."
+
+msgid "Consejos educativos"
+msgstr "Heziketa aholkuak"
+
+msgid "Consejos educativos - Apyma Remontival"
+msgstr "Heziketa aholkuak - Remontival Guraso Elkartea"
+
+msgid "Recursos, consejos y materiales útiles para familias"
+msgstr "Baliabideak, aholkuak eta familientzako material erabilgarriak"
+
+msgid "Volver a consejos educativos"
+msgstr "Heziketa aholkuetara itzuli"

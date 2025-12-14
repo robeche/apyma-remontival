@@ -1,7 +1,9 @@
 {% extends 'usuarios/base.html' %}
 {% load i18n %}
 
-{% block title %}{{ consejo.get_titulo_localized }} - {% trans "Consejos educativos" %}{% endblock %}
+{% block title %}
+{% if language == 'eu' and consejo.titulo_eu %}{{ consejo.titulo_eu }}{% else %}{{ consejo.titulo }}{% endif %} - {% trans "Consejos educativos" %}
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -40,7 +42,7 @@
         <a href="{% url 'consejos_educativos' %}" class="btn btn-light btn-sm mb-3">
             <i class="bi bi-arrow-left"></i> {% trans "Volver" %}
         </a>
-        <h1>{{ consejo.get_titulo_localized|safe }}</h1>
+        <h1>{% if language == 'eu' and consejo.titulo_eu %}{{ consejo.titulo_eu }}{% else %}{{ consejo.titulo }}{% endif %}</h1>
         <p class="mb-0">
             <small>
                 <i class="bi bi-calendar3"></i> 

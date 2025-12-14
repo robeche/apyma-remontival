@@ -554,6 +554,14 @@ class ConsejoEducativo(models.Model):
         null=True
     )
     
+    imagen_eu = models.ImageField(
+        upload_to='consejos/',
+        verbose_name=_('Imagen de portada (Euskera)'),
+        help_text=_('Imagen en euskera que aparece en la tarjeta'),
+        blank=True,
+        null=True
+    )
+    
     fecha_publicacion = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_('Fecha de publicación')

@@ -143,7 +143,7 @@ class ConsejoEducativoAdmin(admin.ModelAdmin):
             'fields': ('descripcion', 'descripcion_eu')
         }),
         ('Contenido', {
-            'fields': ('archivo_html', 'imagen')
+            'fields': ('archivo_html', 'imagen', 'imagen_eu')
         }),
         ('Configuración', {
             'fields': ('orden', 'activo', 'fecha_publicacion', 'fecha_modificacion')
