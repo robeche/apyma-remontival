@@ -177,7 +177,7 @@ class ConcursoDibujoForm(forms.ModelForm):
         fields = ['imagen', 'nombre_nino', 'curso', 'email']
         widgets = {
             'imagen': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
-            'nombre_nino': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Nombre completo del niño/a')}),
+            'nombre_nino': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Nombre y apellidos del niño/a')}),
             'curso': forms.Select(attrs={'class': 'form-select'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'tu.email@ejemplo.com'}),
         }
