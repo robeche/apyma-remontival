@@ -849,9 +849,9 @@ def extraescolares(request):
     
     # Información general
     info_extraescolares = {
-        'plazo_inicio': '25 de Agosto',
-        'plazo_fin': '16 de Septiembre',
-        'formulario_url': 'https://docs.google.com/forms/d/e/1FAIpQLScuN-0ExifKUNCfpzrv-vWdFYoG0NbepxXGRkstMfOFwWUgSw/viewform?usp=dialog',
+        'plazo_inicio': '19 de Diciembre',
+        'plazo_fin': '4 de Enero',
+        'formulario_url': 'https://forms.gle/9d3fNr4nRAXaRBPz6',
         'extraescolares': extraescolares_disponibles
     }
     

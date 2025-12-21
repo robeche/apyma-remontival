@@ -503,6 +503,12 @@ msgstr "Aurten Eskuragarri Dauden Jarduerak"
 msgid "Inscripción"
 msgstr "Izen-ematea"
 
+msgid "Reabierto plazo de inscripción"
+msgstr "Izen-emate epea berriz ireki da"
+
+msgid "Plazo de inscripción: 19 de Diciembre - 4 de Enero"
+msgstr "Izen-emate epea: Abenduaren 19 - Urtarrilaren 4"
+
 msgid "Plazos de inscripción"
 msgstr "Izen-emate epeak"
 
