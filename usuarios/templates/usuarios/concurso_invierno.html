@@ -5,203 +5,45 @@
 
 {% block extra_css %}
 <style>
-    /* Fondo invernal */
-    body {
-        background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%);
-    }
-
-    /* Animación de nieve */
-    @keyframes snowfall {
-        0% {
-            top: -10%;
-            opacity: 0.8;
-        }
-        100% {
-            top: 100%;
-            opacity: 0;
-        }
-    }
-
-    .snowflake {
-        position: fixed;
-        top: -10%;
-        z-index: 9999;
-        user-select: none;
-        cursor: default;
-        animation: snowfall linear infinite;
-        color: #b3d9ff;
-        font-size: 1.5em;
-        text-shadow: 0 0 5px rgba(179, 217, 255, 0.8);
-        pointer-events: none;
-    }
-
-    /* Título decorado */
-    .winter-title {
-        background: linear-gradient(135deg, #1976d2 0%, #64b5f6 50%, #bbdefb 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        animation: shimmer 3s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-        0%, 100% { filter: brightness(1); }
-        50% { filter: brightness(1.2); }
-    }
-
-    /* Tarjetas con borde invernal */
-    .winter-card {
-        border: 3px solid transparent;
-        border-image: linear-gradient(45deg, #1976d2, #64b5f6, #e3f2fd) 1;
-        box-shadow: 0 4px 20px rgba(25, 118, 210, 0.3);
-        position: relative;
-        overflow: visible;
-        background: rgba(255, 255, 255, 0.95);
-    }
-
-    .winter-card::before {
-        content: "❄️";
-        position: absolute;
-        top: -15px;
-        left: 10px;
-        font-size: 2rem;
-        z-index: 1;
-    }
-
-    .winter-card::after {
-        content: "⛷️";
-        position: absolute;
-        top: -15px;
-        right: 10px;
-        font-size: 2rem;
-        z-index: 1;
-    }
-
-    /* Botón invernal animado */
-    .btn-winter {
-        background: linear-gradient(135deg, #1976d2 0%, #64b5f6 100%);
-        border: none;
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-winter:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(25, 118, 210, 0.6);
-        background: linear-gradient(135deg, #64b5f6 0%, #1976d2 100%);
-        color: white;
-    }
-
-    .btn-winter::before {
-        content: "❄️";
-        position: absolute;
-        left: -20px;
-        animation: sparkle 2s linear infinite;
-    }
-
-    @keyframes sparkle {
-        0%, 100% { left: -20px; opacity: 0; }
-        50% { left: 50%; opacity: 1; }
-    }
-
-    /* Decoraciones en las esquinas */
-    .corner-decoration {
-        position: fixed;
-        font-size: 4rem;
-        opacity: 0.3;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .corner-decoration.top-left {
-        top: 80px;
-        left: 20px;
-    }
-
-    .corner-decoration.top-right {
-        top: 80px;
-        right: 20px;
-    }
-
-    .corner-decoration.bottom-left {
-        bottom: 20px;
-        left: 20px;
-    }
-
-    .corner-decoration.bottom-right {
-        bottom: 20px;
-        right: 20px;
-    }
-
-    /* Efecto en el carrusel */
-    .carousel-inner {
-        background: linear-gradient(135deg, #f8f9fa 0%, #fff 50%, #e3f2fd 100%);
-        border-radius: 10px;
-    }
-
-    /* Luces invernales */
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
-    }
-
-    .winter-lights {
-        display: flex;
-        justify-content: space-around;
-        padding: 10px 0;
-        margin-bottom: 20px;
-    }
-
-    .light {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        animation: blink 1.5s infinite;
-    }
-
+    body { background: linear-gradient(180deg, #e3f2fd 0%, #ffffff 100%); }
+    @keyframes snowfall { 0% { top: -10%; opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
+    .snowflake { position: fixed; top: -10%; z-index: 9999; user-select: none; cursor: default; animation: snowfall linear infinite; color: #b3d9ff; font-size: 1.5em; text-shadow: 0 0 5px rgba(179, 217, 255, 0.8); pointer-events: none; }
+    .winter-title { background: linear-gradient(135deg, #1976d2 0%, #64b5f6 50%, #bbdefb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); animation: shimmer 3s ease-in-out infinite; }
+    @keyframes shimmer { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.2); } }
+    .winter-card { border: 3px solid transparent; border-image: linear-gradient(45deg, #1976d2, #64b5f6, #e3f2fd) 1; box-shadow: 0 4px 20px rgba(25, 118, 210, 0.3); position: relative; overflow: visible; background: rgba(255, 255, 255, 0.95); }
+    .winter-card::before { content: "❄️"; position: absolute; top: -15px; left: 10px; font-size: 2rem; z-index: 1; }
+    .winter-card::after { content: "⛷️"; position: absolute; top: -15px; right: 10px; font-size: 2rem; z-index: 1; }
+    .btn-winter { background: linear-gradient(135deg, #1976d2 0%, #64b5f6 100%); border: none; color: white; font-weight: bold; box-shadow: 0 4px 15px rgba(25, 118, 210, 0.4); transition: all 0.3s ease; position: relative; overflow: hidden; }
+    .btn-winter:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(25, 118, 210, 0.6); background: linear-gradient(135deg, #64b5f6 0%, #1976d2 100%); color: white; }
+    .btn-winter::before { content: "❄️"; position: absolute; left: -20px; animation: sparkle 2s linear infinite; }
+    @keyframes sparkle { 0%, 100% { left: -20px; opacity: 0; } 50% { left: 50%; opacity: 1; } }
+    .corner-decoration { position: fixed; font-size: 4rem; opacity: 0.3; z-index: 1; pointer-events: none; }
+    .corner-decoration.top-left { top: 80px; left: 20px; }
+    .corner-decoration.top-right { top: 80px; right: 20px; }
+    .corner-decoration.bottom-left { bottom: 20px; left: 20px; }
+    .corner-decoration.bottom-right { bottom: 20px; right: 20px; }
+    .carousel-inner { background: linear-gradient(135deg, #f8f9fa 0%, #fff 50%, #e3f2fd 100%); border-radius: 10px; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .winter-lights { display: flex; justify-content: space-around; padding: 10px 0; margin-bottom: 20px; }
+    .light { width: 10px; height: 10px; border-radius: 50%; animation: blink 1.5s infinite; }
     .light:nth-child(1) { background: #1976d2; animation-delay: 0s; }
     .light:nth-child(2) { background: #64b5f6; animation-delay: 0.3s; }
     .light:nth-child(3) { background: #bbdefb; animation-delay: 0.6s; }
     .light:nth-child(4) { background: #90caf9; animation-delay: 0.9s; }
     .light:nth-child(5) { background: #1976d2; animation-delay: 1.2s; }
-    
-    .bases-list {
-        list-style: none;
-        padding-left: 0;
-    }
-    
-    .bases-list li {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #e3f2fd;
-    }
-    
-    .bases-list li:last-child {
-        border-bottom: none;
-    }
-    
-    .bases-title {
-        font-weight: bold;
-        color: #1976d2;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
+    .bases-list { list-style: none; padding-left: 0; }
+    .bases-list li { padding: 0.75rem 0; border-bottom: 1px solid #e3f2fd; }
+    .bases-list li:last-child { border-bottom: none; }
+    .bases-title { font-weight: bold; color: #1976d2; margin-bottom: 0.5rem; display: block; }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Decoraciones en las esquinas -->
 <div class="corner-decoration top-left">❄️</div>
 <div class="corner-decoration top-right">⛄</div>
 <div class="corner-decoration bottom-left">🎿</div>
 <div class="corner-decoration bottom-right">🏔️</div>
 
-<!-- Copos de nieve -->
 <div class="snowflake" style="left: 10%; animation-duration: 10s;">❄</div>
 <div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 1s;">❅</div>
 <div class="snowflake" style="left: 30%; animation-duration: 15s; animation-delay: 2s;">❆</div>
@@ -213,7 +55,6 @@
 <div class="snowflake" style="left: 90%; animation-duration: 13s; animation-delay: 3s;">❆</div>
 
 <div class="container">
-    <!-- Luces invernales -->
     <div class="winter-lights">
         <div class="light"></div>
         <div class="light"></div>
@@ -233,7 +74,6 @@
         </p>
     </div>
 
-    <!-- Botones de acción -->
     <div class="text-center mb-5">
         <button type="button" class="btn btn-winter btn-lg px-4 py-3" data-bs-toggle="modal" data-bs-target="#basesModal" style="font-size: 1.3rem;">
             📋 <i class="bi bi-file-text me-2"></i>{% trans "Ver bases del concurso" %}
@@ -243,7 +83,6 @@
         </span>
     </div>
 
-    <!-- Carrousel de dibujos aceptados -->
     {% if dibujos_aceptados %}
     <div class="card mb-4 shadow winter-card">
         <div class="card-body">
@@ -253,17 +92,14 @@
             <div id="carouselDibujos" class="carousel slide carousel-dark" data-bs-ride="carousel">
                 <div class="carousel-indicators">
                     {% for dibujo in dibujos_aceptados %}
-                    <button type="button" data-bs-target="#carouselDibujos" data-bs-slide-to="{{ forloop.counter0 }}" 
-                            {% if forloop.first %}class="active" aria-current="true"{% endif %} 
-                            aria-label="Slide {{ forloop.counter }}"></button>
+                    <button type="button" data-bs-target="#carouselDibujos" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
                     {% endfor %}
                 </div>
                 <div class="carousel-inner" style="min-height: 400px;">
                     {% for dibujo in dibujos_aceptados %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
                         <div class="d-flex justify-content-center align-items-center" style="min-height: 400px; background-color: #f8f9fa;">
-                            <img src="{{ dibujo.imagen.url }}" class="img-fluid" alt="Dibujo invernal" 
-                                 style="max-height: 600px; max-width: 100%; object-fit: contain;">
+                            <img src="{{ dibujo.imagen.url }}" class="img-fluid" alt="Dibujo invernal" style="max-height: 600px; max-width: 100%; object-fit: contain;">
                         </div>
                     </div>
                     {% endfor %}
@@ -274,82 +110,54 @@
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselDibujos" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <!-- Formulario deshabilitado: el concurso ha finalizado -->
-                    <div class="alert alert-secondary text-center mt-4" role="alert">
-                        <i class="bi bi-slash-circle me-2"></i>
-                        {% trans "El formulario de envío está deshabilitado porque el concurso ha finalizado." %}
-                    </div>
+                    <span class="visually-hidden">{% trans "Siguiente" %}</span>
+                </button>
+            </div>
+            <p class="text-center text-muted mt-3 mb-0">
+                <small>{{ dibujos_aceptados.count }} {% trans "dibujo(s) participante(s)" %}</small>
+            </p>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        {% trans "Aún no hay dibujos publicados. El concurso ya está cerrado." %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="modal fade" id="basesModal" tabindex="-1" aria-labelledby="basesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
             <div class="modal-header" style="background: linear-gradient(135deg, #1976d2 0%, #64b5f6 100%); color: white;">
-                <h5 class="modal-title" id="confirmacionModalLabel">
-                    <i class="bi bi-check-circle-fill me-2"></i>{% trans "¡Participación recibida!" %}
+                <h5 class="modal-title" id="basesModalLabel">
+                    <i class="bi bi-file-text me-2"></i>{% trans "Bases del Concurso de Dibujo: Un día de invierno" %}
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body text-center">
-                <i class="bi bi-palette" style="font-size: 4rem; color: #1976d2;"></i>
-                <h4 class="mt-3">{% trans "¡Gracias por participar!" %}</h4>
-                <p class="text-muted">
-                    {% trans "Tu dibujo se ha recibido correctamente." %}
-                </p>
-                <div class="alert alert-info mt-3" role="alert">
-                    <i class="bi bi-clock-history me-2"></i>
-                    <strong>{% trans "Tu dibujo será revisado antes de añadirse a la galería, pero aparecerá a lo largo del día." %}</strong>
-                </div>
-                <p class="text-muted small">
-                    {% trans "Recuerda: habrá un premio por curso. El fallo del jurado se publicará el 9 de Enero." %}
-                </p>
+            <div class="modal-body">
+                <ul class="bases-list">
+                    <li><span class="bases-title">1ª {% trans "Participantes" %}</span>{% trans "Podrá participar todo el alumnado del centro escolar, que la familia sea socia de Apyma." %}</li>
+                    <li><span class="bases-title">2ª {% trans "Temática" %}</span>{% trans "El tema central del concurso será 'Un día de invierno'. Los dibujos deberán reflejar una interpretación personal y original de esta temática." %}</li>
+                    <li><span class="bases-title">3ª {% trans "Técnica y formato" %}</span>{% trans "Los trabajos deben ser originales e inéditos. Se puede utilizar cualquier técnica de dibujo o pintura (lápices de colores, ceras, acuarelas, temperas, etc.) incluso digital." %}</li>
+                    <li><span class="bases-title">4ª {% trans "Presentación e identificación" %}</span>{% trans "Cada estudiante podrá presentar un solo dibujo. Los datos del participante (nombre y curso) se indicarán en el formulario de envío." %}</li>
+                    <li><span class="bases-title">5ª {% trans "Plazo y lugar de entrega" %}</span>{% trans "El plazo de presentación de los dibujos será desde el 20 de Diciembre hasta el 6 de Enero. Los trabajos se subirán a través de esta página web. No se admitirán obras fuera de plazo." %}</li>
+                    <li><span class="bases-title">6ª {% trans "Jurado y criterios de valoración" %}</span>{% trans "El jurado estará compuesto por miembros de la Apyma. Se valorarán la creatividad, la originalidad, la composición y la aplicación de la técnica. El fallo del jurado será inapelable y se hará público el 9 de Enero en la página web." %}</li>
+                    <li><span class="bases-title">7ª {% trans "Premios" %}</span>{% trans "Se otorgará un juego de mesa al ganador de cada curso." %}</li>
+                    <li><span class="bases-title">8ª {% trans "Propiedad intelectual y difusión" %}</span>{% trans "Los dibujos presentados quedarán en propiedad de Apyma, que se reserva el derecho de utilizarlos, reproducirlos o exponerlos (siempre mencionando al autor/a) con fines no comerciales. La participación en el concurso implica la aceptación de estas bases." %}</li>
+                </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-winter" data-bs-dismiss="modal">
-                    <i class="bi bi-check2 me-1"></i>{% trans "Cerrar" %}
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i>{% trans "Cerrar" %}</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal de carga -->
-<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center py-5">
-                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">{% trans "Cargando..." %}</span>
-                </div>
-                <h5 class="mb-2">{% trans "Subiendo tu dibujo..." %}</h5>
-                <p class="text-muted mb-0">{% trans "Por favor, espera unos segundos" %}</p>
-                <div class="mt-3">
-                    <small class="text-muted">❄️ ☃️ 🎨 ❄️ ☃️</small>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="alert alert-secondary text-center mt-4" role="alert">
+    <i class="bi bi-slash-circle me-2"></i>
+    {% trans "El formulario de envío está deshabilitado porque el concurso ha finalizado." %}
 </div>
 
-{% if mostrar_modal %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var modal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
-        modal.show();
-    });
-</script>
-{% endif %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var form = document.getElementById('formConcurso');
-        var loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-        
-        form.addEventListener('submit', function(e) {
-            // Mostrar modal de carga
-            loadingModal.show();
-            
-            // Deshabilitar el botón de envío para evitar doble envío
-            var submitBtn = form.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-            }
-        });
-    });
-</script>
 {% endblock %}
+        animation: blink 1.5s infinite;
