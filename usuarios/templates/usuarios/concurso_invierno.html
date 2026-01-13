@@ -101,6 +101,9 @@
                         <div class="d-flex justify-content-center align-items-center" style="min-height: 400px; background-color: #f8f9fa;">
                             <img src="{{ dibujo.imagen.url }}" class="img-fluid" alt="Dibujo invernal" style="max-height: 600px; max-width: 100%; object-fit: contain;">
                         </div>
+                        <div class="text-center mt-2 mb-3 text-muted small">
+                            {% trans "Código" %}: {{ dibujo.id }}
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
