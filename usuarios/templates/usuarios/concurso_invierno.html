@@ -229,18 +229,18 @@
     <div class="alert alert-primary text-center mx-auto mb-5" style="max-width: 800px; border: none; background: linear-gradient(135deg, rgba(25, 118, 210, 0.1) 0%, rgba(100, 181, 246, 0.1) 100%); border-left: 4px solid #1976d2;">
         <p class="mb-0" style="font-size: 1.1rem; color: #1565c0;">
             <i class="bi bi-info-circle-fill me-2"></i>
-            {% trans "Desde Apyma Remontival hemos organizado un concurso de dibujo para nuestras y nuestros pequeños artistas. ¡Anímate a participar y demuestra tu creatividad con el tema 'Un día de invierno'!" %}
+            {% trans "El concurso ha finalizado. Gracias por todas las participaciones, pronto comunicaremos los resultados." %}
         </p>
     </div>
 
     <!-- Botones de acción -->
     <div class="text-center mb-5">
-        <button type="button" class="btn btn-winter btn-lg px-4 py-3 me-3" data-bs-toggle="modal" data-bs-target="#basesModal" style="font-size: 1.3rem;">
+        <button type="button" class="btn btn-winter btn-lg px-4 py-3" data-bs-toggle="modal" data-bs-target="#basesModal" style="font-size: 1.3rem;">
             📋 <i class="bi bi-file-text me-2"></i>{% trans "Ver bases del concurso" %}
         </button>
-        <button type="button" class="btn btn-winter btn-lg px-4 py-3" data-bs-toggle="modal" data-bs-target="#formularioModal" style="font-size: 1.3rem;">
-            🎨 <i class="bi bi-pencil-square me-2"></i>{% trans "¿Quieres participar?" %} ❄️
-        </button>
+        <span class="badge bg-secondary fs-6 align-middle ms-3 px-3 py-2">
+            {% trans "Inscripciones cerradas" %}
+        </span>
     </div>
 
     <!-- Carrousel de dibujos aceptados -->
@@ -285,7 +285,7 @@
     {% else %}
     <div class="alert alert-info text-center" role="alert">
         <i class="bi bi-info-circle me-2"></i>
-        {% trans "Aún no hay dibujos publicados. ¡Sé el primero en participar!" %}
+        {% trans "Aún no hay dibujos publicados. El concurso ya está cerrado." %}
     </div>
     {% endif %}
 </div>
