@@ -1,0 +1,59 @@
+{% extends "usuarios/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Votación - Concurso de Dibujo" %}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4 text-center">{% trans "Votaciones del concurso de invierno" %}</h1>
+    <p class="text-center text-muted" style="max-width: 720px; margin: 0 auto 2rem auto;">
+        {% trans "Selecciona un curso para ver los dibujos participantes. Los nombres y datos personales no se muestran." %}
+    </p>
+
+    {% if cursos_opciones %}
+    <form method="get" class="row g-3 align-items-center justify-content-center mb-4">
+        <div class="col-auto">
+            <label for="curso" class="col-form-label fw-semibold">{% trans "Curso" %}</label>
+        </div>
+        <div class="col-auto">
+            <select id="curso" name="curso" class="form-select" onchange="this.form.submit()">
+                {% for curso in cursos_opciones %}
+                    <option value="{{ curso.code }}" {% if curso.code == curso_seleccionado %}selected{% endif %}>
+                        {{ curso.label }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">{% trans "Ver dibujos" %}</button>
+        </div>
+    </form>
+
+    {% if dibujos %}
+    <div class="row g-4">
+        {% for dibujo in dibujos %}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <div class="ratio ratio-4x3 bg-light d-flex align-items-center justify-content-center">
+                    <img src="{{ dibujo.imagen.url }}" alt="Dibujo del curso" class="img-fluid" style="object-fit: contain; max-height: 100%;">
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-muted small mb-0">{% trans "Dibujo del curso seleccionado" %}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <i class="bi bi-info-circle me-2"></i>{% trans "No hay dibujos disponibles para este curso." %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{% trans "Aún no hay cursos con dibujos disponibles para votar." %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -19,6 +19,7 @@ urlpatterns = [
     path('aula-madrugadores/', views.aula_madrugadores, name='aula_madrugadores'),
     path('actividades/', views.actividades, name='actividades'),
     path('concurso-invierno/', views.concurso_navideno, name='concurso_invierno'),
+    path('concurso-invierno/votacion/', views.concurso_votacion, name='concurso_votacion'),
     path('actividades/crear/', views.crear_actividad, name='crear_actividad'),
     path('actividades/<int:actividad_id>/', views.detalle_actividad, name='detalle_actividad'),
     path('actividades/<int:actividad_id>/editar/', views.actualizar_actividad, name='actualizar_actividad'),

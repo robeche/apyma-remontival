@@ -398,24 +398,48 @@ def actividades(request):
 
 def concurso_navideno(request):
     """Vista para el Concurso de dibujo 'Día de invierno'. Abierto a todos."""
-    mostrar_modal = False
+    concurso_cerrado = True
     if request.method == 'POST':
-        form = ConcursoDibujoForm(request.POST, request.FILES)
-        if form.is_valid():
-            participacion = form.save()
-            messages.success(request, _('¡Participación recibida! Tu dibujo se ha subido correctamente.'))
-            mostrar_modal = True
-            form = ConcursoDibujoForm()  # Limpiar formulario
-    else:
-        form = ConcursoDibujoForm()
+        messages.info(request, _('El concurso ha finalizado. No se aceptan nuevas participaciones.'))
+        return redirect('concurso_invierno')
 
     # Obtener dibujos aceptados para el carrousel
     dibujos_aceptados = ConcursoDibujo.objects.filter(aceptado=True).order_by('-fecha_envio')
 
     return render(request, 'usuarios/concurso_invierno.html', {
-        'form': form, 
-        'mostrar_modal': mostrar_modal,
-        'dibujos_aceptados': dibujos_aceptados
+        'dibujos_aceptados': dibujos_aceptados,
+        'concurso_cerrado': concurso_cerrado
+    })
+
+
+def concurso_votacion(request):
+    """Vista interna para visualizar dibujos por curso sin mostrar datos personales."""
+    base_qs = ConcursoDibujo.objects.filter(aceptado=True)
+
+    # Cursos disponibles en este concurso, ordenados según las opciones definidas en el modelo
+    orden_cursos = [opcion[0] for opcion in ConcursoDibujo.CURSO_CHOICES]
+    cursos_disponibles_set = set(base_qs.values_list('curso', flat=True))
+    cursos_disponibles = [c for c in orden_cursos if c in cursos_disponibles_set]
+    curso_labels = dict(ConcursoDibujo.CURSO_CHOICES)
+    cursos_opciones = [
+        {
+            'code': code,
+            'label': curso_labels.get(code, code)
+        }
+        for code in cursos_disponibles
+    ]
+
+    curso_seleccionado = request.GET.get('curso') if cursos_disponibles else None
+    if curso_seleccionado not in cursos_disponibles:
+        curso_seleccionado = cursos_disponibles[0] if cursos_disponibles else None
+
+    dibujos = base_qs.filter(curso=curso_seleccionado) if curso_seleccionado else []
+
+    return render(request, 'usuarios/concurso_votacion.html', {
+        'cursos_opciones': cursos_opciones,
+        'curso_labels': curso_labels,
+        'curso_seleccionado': curso_seleccionado,
+        'dibujos': dibujos,
     })
 
 
