@@ -34,7 +34,10 @@
         {% for dibujo in dibujos %}
         <div class="col-12 col-sm-6 col-lg-4">
             <div class="card h-100 shadow-sm">
-                <div class="ratio ratio-4x3 bg-light d-flex align-items-center justify-content-center">
+                <div class="ratio ratio-4x3 bg-light d-flex align-items-center justify-content-center position-relative">
+                    {% if dibujo.ganador %}
+                    <img src="{{ dibujo.imagen.storage.url('concurso_navidad/MedallaConcurso.png') }}" alt="{% trans "Dibujo ganador" %}" class="position-absolute top-0 start-0 m-2" style="width: 72px; height: 72px; object-fit: contain;">
+                    {% endif %}
                     <img src="{{ dibujo.imagen.url }}" alt="Dibujo del curso" class="img-fluid" style="object-fit: contain; max-height: 100%;">
                 </div>
                 <div class="card-body">

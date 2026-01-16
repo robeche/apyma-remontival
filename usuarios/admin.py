@@ -102,11 +102,11 @@ class NoticiaAdmin(admin.ModelAdmin):
 
 @admin.register(ConcursoDibujo)
 class ConcursoDibujoAdmin(admin.ModelAdmin):
-    list_display = ('nombre_nino', 'curso', 'email', 'get_socio_nombre', 'fecha_envio', 'aceptado')
-    list_filter = ('aceptado', 'curso', 'fecha_envio')
+    list_display = ('nombre_nino', 'curso', 'email', 'get_socio_nombre', 'fecha_envio', 'aceptado', 'ganador')
+    list_filter = ('aceptado', 'ganador', 'curso', 'fecha_envio')
     search_fields = ('nombre_nino', 'curso', 'email', 'socio__user__username', 'socio__apellidos_familia')
     readonly_fields = ('fecha_envio',)
-    list_editable = ('aceptado',)
+    list_editable = ('aceptado', 'ganador')
     date_hierarchy = 'fecha_envio'
     
     fieldsets = (
@@ -114,7 +114,7 @@ class ConcursoDibujoAdmin(admin.ModelAdmin):
             'fields': ('socio', 'nombre_nino', 'curso', 'email')
         }),
         ('Participación', {
-            'fields': ('imagen', 'fecha_envio', 'aceptado')
+            'fields': ('imagen', 'fecha_envio', 'aceptado', 'ganador')
         }),
     )
     

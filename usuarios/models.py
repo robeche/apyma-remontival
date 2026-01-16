@@ -374,6 +374,7 @@ class ConcursoDibujo(models.Model):
     imagen = models.ImageField(upload_to='concurso_navidad/', verbose_name=_('Fotografía del dibujo'))
     fecha_envio = models.DateTimeField(auto_now_add=True, verbose_name=_('Fecha de envío'))
     aceptado = models.BooleanField(default=False, verbose_name=_('Dibujo aceptado'))
+    ganador = models.BooleanField(default=False, verbose_name=_('Dibujo ganador'))
 
     class Meta:
         verbose_name = _('Participación concurso')
