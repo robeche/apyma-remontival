@@ -7,7 +7,7 @@
 <div class="container my-4">
     <h1 class="mb-4 text-center">{% trans "Votaciones del concurso de invierno" %}</h1>
     <p class="text-center text-muted" style="max-width: 720px; margin: 0 auto 2rem auto;">
-        {% trans "Selecciona un curso para ver los dibujos participantes. Los nombres y datos personales no se muestran." %}
+        {% trans "Selecciona un curso para ver los dibujos participantes con su nombre y correo de contacto." %}
     </p>
 
     {% if cursos_opciones %}
@@ -38,6 +38,8 @@
                     <img src="{{ dibujo.imagen.url }}" alt="Dibujo del curso" class="img-fluid" style="object-fit: contain; max-height: 100%;">
                 </div>
                 <div class="card-body">
+                    <p class="card-text fw-semibold mb-1">{{ dibujo.nombre_nino }}</p>
+                    <p class="card-text text-muted small mb-1">{% trans "Correo" %}: <a href="mailto:{{ dibujo.email }}">{{ dibujo.email }}</a></p>
                     <p class="card-text text-muted small mb-0">{% trans "Código" %}: {{ dibujo.id }}</p>
                 </div>
             </div>
