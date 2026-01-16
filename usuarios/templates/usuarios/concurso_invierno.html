@@ -1,5 +1,5 @@
 {% extends 'usuarios/base.html' %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}{% trans "Concurso de Dibujo - Día de invierno - Apyma Remontival" %}{% endblock %}
 
@@ -98,7 +98,11 @@
                 <div class="carousel-inner" style="min-height: 400px;">
                     {% for dibujo in dibujos_aceptados %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="d-flex justify-content-center align-items-center" style="min-height: 400px; background-color: #f8f9fa;">
+                        <div class="d-flex justify-content-center align-items-center position-relative" style="min-height: 400px; background-color: #f8f9fa;">
+                            {% if dibujo.ganador %}
+                            {% get_media_prefix as media_prefix %}
+                            <img src="{{ media_prefix }}concurso_navidad/MedallaConcurso.png" alt="{% trans 'Dibujo ganador' %}" class="position-absolute top-0 start-0 m-3" style="width: 96px; height: 96px; object-fit: contain;">
+                            {% endif %}
                             <img src="{{ dibujo.imagen.url }}" class="img-fluid" alt="Dibujo invernal" style="max-height: 600px; max-width: 100%; object-fit: contain;">
                         </div>
                         <div class="text-center mt-2 mb-3 text-muted small">
