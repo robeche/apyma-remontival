@@ -361,7 +361,7 @@ function mostrarNoticiaModal(noticiaId) {
             // Contenido principal
             contenido += `
                 <div class="content">
-                    ${data.noticia.contenido.replace(/\n/g, '<br>')}
+                    ${urlizeText(data.noticia.contenido)}
                 </div>
             `;
             
@@ -395,6 +395,29 @@ function mostrarNoticiaModal(noticiaId) {
 }
 
 // Funciones auxiliares
+// Función para convertir URLs en enlaces clicables
+function urlizeText(text) {
+    // Escapar HTML para seguridad
+    const div = document.createElement('div');
+    div.textContent = text;
+    let escapedText = div.innerHTML;
+    
+    // Patrón para detectar URLs
+    const urlPattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    const wwwPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    
+    // Reemplazar URLs con protocolo
+    escapedText = escapedText.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    
+    // Reemplazar URLs que comienzan con www
+    escapedText = escapedText.replace(wwwPattern, '$1<a href="http://$2" target="_blank" rel="noopener noreferrer">$2</a>');
+    
+    // Convertir saltos de línea
+    escapedText = escapedText.replace(/\n/g, '<br>');
+    
+    return escapedText;
+}
+
 function getCSRFToken() {
     const metaToken = document.querySelector('meta[name="csrf-token"]');
     if (metaToken) {
