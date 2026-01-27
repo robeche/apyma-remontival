@@ -874,3 +874,37 @@ msgstr "Baliabideak, aholkuak eta familientzako material erabilgarriak"
 
 msgid "Volver a consejos educativos"
 msgstr "Heziketa aholkuetara itzuli"
+
+# Estatutos
+msgid "Estatutos"
+msgstr "Estatutuak"
+
+msgid "Estatutos de la Apyma"
+msgstr "Apyma-ren estatutuak"
+
+msgid "Consulta y descarga la versión vigente y la propuesta de los nuevos estatutos."
+msgstr "Ikusi eta deskargatu estatutuen indarreko bertsioa eta proposamen berria."
+
+msgid "Actualizado"
+msgstr "Eguneratua"
+
+msgid "El documento todavía no está disponible en el sistema."
+msgstr "Dokumentua oraindik ez dago sisteman eskuragarri."
+
+msgid "Abrir"
+msgstr "Ireki"
+
+msgid "Descargar"
+msgstr "Deskargatu"
+
+msgid "Estatutos vigentes"
+msgstr "Indarreko estatutuak"
+
+msgid "Versión actualmente en vigor de la asociación."
+msgstr "Elkartean indarrean dagoen bertsioa."
+
+msgid "Propuesta de nuevos estatutos"
+msgstr "Estatutu berrien proposamena"
+
+msgid "Borrador propuesto para la próxima actualización."
+msgstr "Hurrengo eguneraketarako proposatutako zirriborroa."
