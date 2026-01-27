@@ -167,7 +167,7 @@
                             {% endif %}
 
                             <div class="content">
-                                {{ noticia.contenido_localizado|linebreaks }}
+                                {{ noticia.contenido_localizado|urlize|linebreaks }}
                             </div>
                         </div>
                         <div class="modal-footer">
