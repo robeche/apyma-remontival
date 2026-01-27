@@ -9,6 +9,8 @@ urlpatterns = [
     path('area-socios/', auth_views.LoginView.as_view(template_name='usuarios/login.html'), name='login'),  # Sin success_url
     path('logout/', views.logout_view, name='logout'),
     path('register/', views.register, name='register'),
+    path('estatutos/', views.estatutos, name='estatutos'),
+    path('documentos/<str:filename>/', views.serve_documento, name='serve_documento'),
     # path('dashboard/', views.dashboard, name='dashboard'),  # Temporalmente deshabilitado
     # path('contacto/', views.contacto, name='contacto'),  # Eliminado - ahora se usa modal
     path('comedor/', views.comedor, name='comedor'),

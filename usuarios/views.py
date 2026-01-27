@@ -301,6 +301,51 @@ def logout_view(request):
     return redirect('home')
 
 
+def estatutos(request):
+    """Vista pública para consultar y descargar los estatutos"""
+    documentos_dir = os.path.join(settings.MEDIA_ROOT, 'documentos')
+    os.makedirs(documentos_dir, exist_ok=True)
+
+    archivos = [
+        {
+            'key': 'vigentes',
+            'titulo': _('Estatutos vigentes'),
+            'descripcion': _('Versión actualmente en vigor de la asociación.'),
+            'filename': 'EstatutosActuales.pdf',
+            'icon': 'bi-shield-check'
+        },
+        {
+            'key': 'propuesta',
+            'titulo': _('Propuesta de nuevos estatutos'),
+            'descripcion': _('Borrador propuesto para la próxima actualización.'),
+            'filename': 'EstatuosNuevos.pdf',
+            'icon': 'bi-lightning-charge'
+        }
+    ]
+
+    documentos = []
+    for item in archivos:
+        file_path = os.path.join(documentos_dir, item['filename'])
+        disponible = os.path.exists(file_path)
+
+        documentos.append({
+            'key': item['key'],
+            'titulo': item['titulo'],
+            'descripcion': item['descripcion'],
+            'filename': item['filename'],
+            'icon': item['icon'],
+            'available': disponible,
+            'size': os.path.getsize(file_path) if disponible else 0,
+            'updated_at': datetime.fromtimestamp(os.path.getmtime(file_path)) if disponible else None,
+        })
+
+    context = {
+        'documentos': documentos,
+    }
+
+    return render(request, 'usuarios/estatutos.html', context)
+
+
 def actividades(request):
     """Vista para mostrar el calendario de actividades"""
     from datetime import datetime, timedelta
@@ -986,6 +1031,36 @@ def handle_menu_delete(request, media_dir):
         messages.error(request, f'Error eliminando archivo: {e}')
     
     return redirect('gestionar_menus')
+
+@cache_control(max_age=3600)
+def serve_documento(request, filename):
+    """Sirve PDFs almacenados en media/documentos con opción de descarga"""
+    safe_name = os.path.basename(filename)
+
+    if not safe_name.lower().endswith('.pdf'):
+        raise Http404("Archivo no permitido")
+
+    documentos_dir = os.path.join(settings.MEDIA_ROOT, 'documentos')
+    file_path = os.path.join(documentos_dir, safe_name)
+
+    # Validaciones de existencia y contención en el directorio permitido
+    if not os.path.exists(file_path):
+        raise Http404("Archivo no encontrado")
+
+    if os.path.commonpath([file_path, documentos_dir]) != documentos_dir:
+        raise Http404("Acceso denegado")
+
+    # Determinar content-type
+    content_type, _ = mimetypes.guess_type(file_path)
+    content_type = content_type or 'application/pdf'
+
+    with open(file_path, 'rb') as pdf_file:
+        content = pdf_file.read()
+
+    disposition = 'attachment' if request.GET.get('download') == '1' else 'inline'
+    response = HttpResponse(content, content_type=content_type)
+    response['Content-Disposition'] = f'{disposition}; filename="{safe_name}"'
+    return response
 
 @xframe_options_exempt
 @cache_control(max_age=3600)  # Cache por 1 hora

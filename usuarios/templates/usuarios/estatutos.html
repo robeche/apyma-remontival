@@ -1,0 +1,91 @@
+{% extends 'usuarios/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Estatutos" %} - {% trans "Apyma Remontival" %}{% endblock %}
+
+{% block content %}
+<style>
+    .pdf-iframe {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+    }
+
+    .ratio-4x3 {
+        min-height: 540px;
+    }
+
+    @media (max-width: 768px) {
+        .ratio-4x3 {
+            min-height: 380px;
+        }
+    }
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-start align-items-md-center flex-column flex-md-row gap-3 mb-4">
+            <div>
+                <h1 class="h2 mb-2">
+                    <i class="bi bi-file-earmark-text me-2 text-success"></i>
+                    {% trans "Estatutos de la Apyma" %}
+                </h1>
+                <p class="text-muted mb-0">{% trans "Consulta y descarga la versión vigente y la propuesta de los nuevos estatutos." %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for doc in documentos %}
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light">
+                <div>
+                    <h5 class="mb-1">
+                        <i class="bi {{ doc.icon }} me-2 text-success"></i>
+                        {{ doc.titulo }}
+                    </h5>
+                    {% if doc.updated_at %}
+                    <small class="text-muted">
+                        <i class="bi bi-clock me-1"></i>
+                        {% trans "Actualizado" %}: {{ doc.updated_at|date:"d/m/Y H:i" }}
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <p class="text-muted">{{ doc.descripcion }}</p>
+
+                {% if doc.available %}
+                <div class="ratio ratio-4x3 mb-3">
+                    <iframe src="{% url 'serve_documento' doc.filename %}#toolbar=1&navpanes=0&view=FitH" 
+                            title="{{ doc.titulo }}"
+                            class="pdf-iframe"
+                            loading="lazy">
+                    </iframe>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-success" href="{% url 'serve_documento' doc.filename %}" target="_blank">
+                        <i class="bi bi-eye me-1"></i>{% trans "Abrir" %}
+                    </a>
+                    <a class="btn btn-outline-secondary" href="{% url 'serve_documento' doc.filename %}?download=1">
+                        <i class="bi bi-download me-1"></i>{% trans "Descargar" %}
+                        {% if doc.size %}
+                            ({{ doc.size|filesizeformat }})
+                        {% endif %}
+                    </a>
+                </div>
+                {% else %}
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <div>{% trans "El documento todavía no está disponible en el sistema." %}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
