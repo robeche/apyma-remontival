@@ -11,8 +11,8 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.cache import cache_control
-from .forms import ActividadForm, NoticiaForm, ConcursoDibujoForm
-from .models import Contacto, Actividad, Noticia, ConcursoDibujo, Socio, ConsejoEducativo
+from .forms import ActividadForm, NoticiaForm, ConcursoDibujoForm, ConsejoEducativoForm
+from .models import Contacto, Actividad, Noticia, ConcursoDibujo, Socio, ConsejoEducativo, ConsejoImagen
 import os
 import mimetypes
 from datetime import datetime
@@ -505,42 +505,153 @@ def consejos_educativos(request):
 def consejo_detalle(request, slug):
     """Vista para mostrar el detalle de un consejo educativo (HTML independiente)"""
     from django.shortcuts import get_object_or_404
-    
+
     consejo = get_object_or_404(ConsejoEducativo, slug=slug, activo=True)
-    
+
     # Obtener el idioma actual
     from django.utils.translation import get_language
     language = get_language()
-    
-    # Determinar el archivo HTML según el idioma
-    archivo_base = consejo.archivo_html
-    if language == 'eu':
-        # Intentar cargar versión en euskera (reemplazar .html por -eu.html)
-        archivo_eu = archivo_base.replace('.html', '-eu.html')
-        archivo_path_eu = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_eu)
-        
-        # Si existe versión en euskera, usar esa; si no, usar la versión en español
-        if os.path.exists(archivo_path_eu):
-            archivo_path = archivo_path_eu
+
+    # Prioridad 1: contenido almacenado en base de datos
+    if language == 'eu' and consejo.contenido_html_eu:
+        contenido_html = consejo.contenido_html_eu
+    elif consejo.contenido_html:
+        contenido_html = consejo.contenido_html
+    elif consejo.archivo_html:
+        # Fallback: leer desde archivo en media/consejos/
+        archivo_base = consejo.archivo_html
+        if language == 'eu':
+            archivo_eu = archivo_base.replace('.html', '-eu.html')
+            archivo_path_eu = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_eu)
+            if os.path.exists(archivo_path_eu):
+                archivo_path = archivo_path_eu
+            else:
+                archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_base)
         else:
             archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_base)
+
+        if not os.path.exists(archivo_path):
+            raise Http404(_("El contenido del consejo no está disponible"))
+
+        with open(archivo_path, 'r', encoding='utf-8') as f:
+            contenido_html = f.read()
     else:
-        # Idioma español (por defecto)
-        archivo_path = os.path.join(settings.MEDIA_ROOT, 'consejos', archivo_base)
-    
-    # Verificar que el archivo existe
-    if not os.path.exists(archivo_path):
         raise Http404(_("El contenido del consejo no está disponible"))
-    
-    # Leer el contenido HTML
-    with open(archivo_path, 'r', encoding='utf-8') as f:
-        contenido_html = f.read()
-    
+
     return render(request, 'usuarios/consejo_detalle.html', {
         'consejo': consejo,
         'contenido_html': contenido_html,
         'language': language
     })
+
+
+@login_required
+def crear_consejo(request):
+    """Crear un nuevo consejo educativo con editor HTML (solo staff)"""
+    if not request.user.is_staff:
+        messages.error(request, _('No tienes permisos para crear consejos educativos.'))
+        return redirect('consejos_educativos')
+
+    if request.method == 'POST':
+        form = ConsejoEducativoForm(request.POST, request.FILES)
+        if form.is_valid():
+            consejo = form.save()
+            messages.success(request, _('Consejo creado. Ya puedes subir imágenes y redactar el contenido.'))
+            return redirect('editar_consejo', slug=consejo.slug)
+    else:
+        form = ConsejoEducativoForm()
+
+    return render(request, 'usuarios/consejo_form.html', {
+        'form': form,
+        'accion': 'crear',
+        'titulo_pagina': _('Nuevo consejo educativo'),
+    })
+
+
+@login_required
+def editar_consejo(request, slug):
+    """Editar un consejo educativo existente con editor HTML (solo staff)"""
+    from django.shortcuts import get_object_or_404
+    if not request.user.is_staff:
+        messages.error(request, _('No tienes permisos para editar consejos educativos.'))
+        return redirect('consejo_detalle', slug=slug)
+
+    consejo = get_object_or_404(ConsejoEducativo, slug=slug)
+
+    if request.method == 'POST':
+        form = ConsejoEducativoForm(request.POST, request.FILES, instance=consejo)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Consejo educativo actualizado correctamente.'))
+            return redirect('consejo_detalle', slug=consejo.slug)
+    else:
+        form = ConsejoEducativoForm(instance=consejo)
+
+    imagenes = consejo.imagenes.all()
+    return render(request, 'usuarios/consejo_form.html', {
+        'form': form,
+        'consejo': consejo,
+        'imagenes': imagenes,
+        'accion': 'editar',
+        'titulo_pagina': _('Editar consejo educativo'),
+        'media_url': settings.MEDIA_URL,
+    })
+
+
+@login_required
+@require_POST
+def eliminar_consejo(request, slug):
+    """Eliminar un consejo educativo (solo staff)"""
+    from django.shortcuts import get_object_or_404
+    if not request.user.is_staff:
+        messages.error(request, _('No tienes permisos para eliminar consejos educativos.'))
+        return redirect('consejo_detalle', slug=slug)
+
+    consejo = get_object_or_404(ConsejoEducativo, slug=slug)
+    consejo.delete()
+    messages.success(request, _('Consejo educativo eliminado correctamente.'))
+    return redirect('consejos_educativos')
+
+
+@login_required
+def subir_imagen_consejo(request, slug):
+    """Sube una imagen asociada a un consejo (AJAX, solo staff)"""
+    from django.shortcuts import get_object_or_404
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'Sin permisos'}, status=403)
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
+
+    consejo = get_object_or_404(ConsejoEducativo, slug=slug)
+    archivo = request.FILES.get('imagen')
+    if not archivo:
+        return JsonResponse({'success': False, 'error': 'No se recibió ningún archivo'}, status=400)
+
+    nombre = request.POST.get('nombre', '')
+    img = ConsejoImagen.objects.create(consejo=consejo, imagen=archivo, nombre=nombre)
+    return JsonResponse({
+        'success': True,
+        'id': img.id,
+        'url': img.imagen.url,
+        'nombre': img.nombre or img.imagen.name.split('/')[-1],
+        'filename': img.imagen.name.split('/')[-1],
+    })
+
+
+@login_required
+@require_POST
+def eliminar_imagen_consejo(request, imagen_id):
+    """Elimina una imagen de consejo (AJAX, solo staff)"""
+    from django.shortcuts import get_object_or_404
+    if not request.user.is_staff:
+        return JsonResponse({'success': False, 'error': 'Sin permisos'}, status=403)
+
+    img = get_object_or_404(ConsejoImagen, id=imagen_id)
+    # Borrar el archivo físico
+    if img.imagen and os.path.exists(img.imagen.path):
+        os.remove(img.imagen.path)
+    img.delete()
+    return JsonResponse({'success': True})
 
 
 @login_required

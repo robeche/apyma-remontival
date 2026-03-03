@@ -104,6 +104,13 @@
 </div>
 
 <div class="container mb-5">
+    {% if user.is_staff %}
+    <div class="text-end mb-4">
+        <a href="{% url 'crear_consejo' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-2"></i>{% trans "Nuevo consejo" %}
+        </a>
+    </div>
+    {% endif %}
     {% if consejos %}
     <!-- Grid de tarjetas -->
     <div class="row g-4">
@@ -135,9 +142,16 @@
                             {{ consejo.descripcion|truncatewords:20 }}
                         {% endif %}
                     </p>
-                    <a href="{% url 'consejo_detalle' consejo.slug %}" class="btn btn-ver-consejo">
-                        <i class="bi bi-arrow-right-circle me-2"></i>{% trans "Ver más" %}
-                    </a>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'consejo_detalle' consejo.slug %}" class="btn btn-ver-consejo">
+                            <i class="bi bi-arrow-right-circle me-2"></i>{% trans "Ver más" %}
+                        </a>
+                        {% if user.is_staff %}
+                        <a href="{% url 'editar_consejo' consejo.slug %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

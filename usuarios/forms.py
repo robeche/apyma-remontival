@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
-from .models import Actividad, Noticia
+from .models import Actividad, Noticia, ConsejoEducativo
 
 class ContactoForm(forms.Form):
     ASUNTOS_CHOICES = [
@@ -187,3 +187,68 @@ class ConcursoDibujoForm(forms.ModelForm):
         if not imagen:
             raise forms.ValidationError(_('Debes subir una fotografía del dibujo.'))
         return imagen
+
+
+class ConsejoEducativoForm(forms.ModelForm):
+    class Meta:
+        model = ConsejoEducativo
+        fields = [
+            'titulo', 'titulo_eu',
+            'descripcion', 'descripcion_eu',
+            'contenido_html', 'contenido_html_eu',
+            'imagen', 'imagen_eu',
+            'orden', 'activo',
+        ]
+        widgets = {
+            'titulo': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Título en español')
+            }),
+            'titulo_eu': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Título en euskera')
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Descripción corta en español')
+            }),
+            'descripcion_eu': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': _('Descripción corta en euskera')
+            }),
+            'contenido_html': forms.Textarea(attrs={
+                'id': 'id_contenido_html',
+                'class': 'form-control codemirror-html',
+                'rows': 20,
+            }),
+            'contenido_html_eu': forms.Textarea(attrs={
+                'id': 'id_contenido_html_eu',
+                'class': 'form-control codemirror-html',
+                'rows': 20,
+            }),
+            'imagen': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'imagen_eu': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'orden': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+            'activo': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['titulo_eu'].required = False
+        self.fields['descripcion_eu'].required = False
+        self.fields['contenido_html_eu'].required = False
+        self.fields['imagen'].required = False
+        self.fields['imagen_eu'].required = False
+        self.fields['orden'].initial = 0

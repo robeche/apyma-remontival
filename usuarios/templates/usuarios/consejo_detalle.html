@@ -39,9 +39,21 @@
 <!-- Encabezado del consejo -->
 <div class="consejo-header">
     <div class="container">
-        <a href="{% url 'consejos_educativos' %}" class="btn btn-light btn-sm mb-3">
-            <i class="bi bi-arrow-left"></i> {% trans "Volver" %}
-        </a>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <a href="{% url 'consejos_educativos' %}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> {% trans "Volver" %}
+            </a>
+            {% if user.is_staff %}
+            <div class="d-flex gap-2">
+                <a href="{% url 'editar_consejo' consejo.slug %}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil me-1"></i>{% trans "Editar" %}
+                </a>
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminarDetalle">
+                    <i class="bi bi-trash me-1"></i>{% trans "Eliminar" %}
+                </button>
+            </div>
+            {% endif %}
+        </div>
         <h1>{% if language == 'eu' and consejo.titulo_eu %}{{ consejo.titulo_eu }}{% else %}{{ consejo.titulo }}{% endif %}</h1>
         <p class="mb-0">
             <small>
@@ -64,4 +76,30 @@
         </a>
     </div>
 </div>
+
+{% if user.is_staff %}
+<div class="modal fade" id="modalEliminarDetalle" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>{% trans "Eliminar consejo" %}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "¿Estás seguro/a de que quieres eliminar" %} <strong>{{ consejo.titulo }}</strong>?</p>
+                <p class="text-danger small">{% trans "Esta acción no se puede deshacer." %}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancelar" %}</button>
+                <form method="post" action="{% url 'eliminar_consejo' consejo.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>{% trans "Eliminar" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

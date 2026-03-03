@@ -544,7 +544,23 @@ class ConsejoEducativo(models.Model):
     archivo_html = models.CharField(
         max_length=500,
         verbose_name=_('Ruta del archivo HTML'),
-        help_text=_('Ruta relativa desde media/consejos/, ej: habitos-estudio.html')
+        help_text=_('Ruta relativa desde media/consejos/, ej: habitos-estudio.html'),
+        blank=True,
+        default=''
+    )
+    
+    contenido_html = models.TextField(
+        verbose_name=_('Contenido HTML'),
+        help_text=_('Contenido HTML del consejo (tiene prioridad sobre el archivo externo)'),
+        blank=True,
+        default=''
+    )
+    
+    contenido_html_eu = models.TextField(
+        verbose_name=_('Contenido HTML (Euskera)'),
+        help_text=_('Contenido HTML en euskera'),
+        blank=True,
+        default=''
     )
     
     imagen = models.ImageField(
@@ -613,10 +629,40 @@ class ConsejoEducativo(models.Model):
             slug = base_slug
             counter = 1
             
-            while ConsejoEducativo.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            
             self.slug = slug
         
         super().save(*args, **kwargs)
+
+
+def consejo_imagen_upload_to(instance, filename):
+    """Guarda las imágenes en media/consejos/<slug>/"""
+    return f"consejos/{instance.consejo.slug}/{filename}"
+
+
+class ConsejoImagen(models.Model):
+    """Imágenes adicionales asociadas a un consejo educativo"""
+    consejo = models.ForeignKey(
+        ConsejoEducativo,
+        on_delete=models.CASCADE,
+        related_name='imagenes',
+        verbose_name=_('Consejo')
+    )
+    imagen = models.ImageField(
+        upload_to=consejo_imagen_upload_to,
+        verbose_name=_('Imagen')
+    )
+    nombre = models.CharField(
+        max_length=200,
+        verbose_name=_('Nombre descriptivo'),
+        blank=True,
+        default=''
+    )
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Imagen de consejo')
+        verbose_name_plural = _('Imágenes de consejo')
+        ordering = ['fecha_subida']
+
+    def __str__(self):
+        return f"{self.consejo.titulo} – {self.imagen.name}"
